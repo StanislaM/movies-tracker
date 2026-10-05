@@ -1,0 +1,6 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 14, "column": 0}, "map": {"version":3,"sources":["file:///D:/web/movies-tracker/src/app/page.tsx"],"sourcesContent":["export default async function Home() {\n  return <div className=\"text-5xl\">Hello</div>;\n}\n"],"names":[],"mappings":";;;;;;AAAe,eAAe;IAC5B,qBAAO,6VAAC;QAAI,WAAU;kBAAW;;;;;;AACnC"}}]
+}
