@@ -16,11 +16,16 @@ const logoVariants = cva("", {
   },
 });
 
+type LogoProps = {
+  className?: string;
+};
+
 export default async function Logo({
+  className,
   size,
-}: VariantProps<typeof logoVariants>) {
+}: LogoProps & VariantProps<typeof logoVariants>) {
   return (
-    <Link href="/" className="group flex items-center gap-x-2">
+    <Link href="/" className={`group flex items-center gap-x-2 ${className}`}>
       <Image
         className={`${cn(logoVariants({ size }))} transition duration-700 group-hover:translate-x-24`}
         src="/logo.svg"

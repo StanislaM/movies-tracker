@@ -5,7 +5,7 @@ export default async function RegisterPage() {
     <div className="flex min-h-screen">
       {/* Title-image section */}
       <section className="flex min-h-screen w-3/5 flex-col justify-between bg-[url(/bg-auth.webp)] bg-center">
-        <Logo size="xl" />
+        <Logo size="xl" className="m-15" />
 
         <div className="from-background to-background/0 flex flex-col bg-linear-to-t p-15 pt-20">
           <h2 className="mb-8 font-serif text-5xl">
