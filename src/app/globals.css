@@ -130,3 +130,71 @@
     @apply font-sans;
     }
 }
+
+::view-transition-group(auth-image), ::view-transition-group(auth-form), ::view-transition-group(auth-switch-link) {
+  animation-duration: 500ms;
+  animation-timing-function: ease-in-out;
+}
+
+::view-transition-old(auth-image) {
+  animation: slide-out-left ease-in-out both;
+}
+
+::view-transition-new(auth-image) {
+  animation: slide-in-right ease-in-out both;
+}
+
+::view-transition-old(auth-form) {
+  animation: slide-out-left ease-in-out both;
+}
+
+::view-transition-new(auth-form) {
+  animation: slide-in-right ease-in-out both;
+}
+
+
+@keyframes slide-out-right {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes slide-in-left {
+  from {
+    transform: translateX(100%);
+  }
+}
+
+.animate-reveal {
+  animation: reveal-form 500ms ease-out;
+  animation-fill-mode: both;
+}
+
+@keyframes reveal-form {
+  from {
+    filter: blur(12px);
+  }
+  to {
+    filter: blur(0);
+  }
+}
+
+::view-transition-old(auth-switch-link) {
+  animation: fade-out 150ms ease-out both;
+}
+
+::view-transition-new(auth-switch-link) {
+  animation: fade-in 250ms ease-in both;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+}
