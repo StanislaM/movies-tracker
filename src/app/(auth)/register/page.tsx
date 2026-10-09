@@ -2,6 +2,7 @@ import Logo from "@/src/components/logo";
 import { ChevronLeft } from "lucide-react";
 import Link from "next/link";
 import { ViewTransition } from "react";
+import RegisterForm from "../_components/register-form";
 
 export default async function RegisterPage() {
   return (
@@ -46,11 +47,20 @@ export default async function RegisterPage() {
             </ViewTransition>
           </div>
 
-          {/* Form placeholder */}
-          <div className="bg-accent my-auto h-150 w-120">
-            <span className="bg-primary m-10">
-              Textasfdsafadsfafadsfdasfdsf
-            </span>
+          {/* Form */}
+          <div className="my-auto flex w-120 flex-col">
+            <h5 className="text-primary mb-2 text-xs font-bold tracking-widest uppercase">
+              Create your library
+            </h5>
+            <h2 className="mb-4 font-serif text-6xl font-medium">
+              Join Frame.
+            </h2>
+            <p className="text-muted-foreground mb-10 max-w-100 text-sm">
+              One place for every film you’re watching, saving, and
+              recommending.
+            </p>
+
+            <RegisterForm />
           </div>
         </section>
       </ViewTransition>
