@@ -131,7 +131,7 @@
     }
 }
 
-::view-transition-group(auth-image), ::view-transition-group(auth-form), ::view-transition-group(auth-switch-link) {
+::view-transition-group(auth-image), ::view-transition-group(auth-form), ::view-transition-group(auth-switch-link), ::view-transition-group(auth-switch-form) {
   animation-duration: 500ms;
   animation-timing-function: ease-in-out;
 }
@@ -166,13 +166,13 @@
 }
 
 .animate-reveal {
-  animation: reveal-form 500ms ease-out;
+  animation: reveal 500ms ease-out;
   animation-fill-mode: both;
 }
 
-@keyframes reveal-form {
+@keyframes reveal {
   from {
-    filter: blur(12px);
+    filter: blur(50px);
   }
   to {
     filter: blur(0);

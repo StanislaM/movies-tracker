@@ -48,20 +48,22 @@ export default async function RegisterPage() {
           </div>
 
           {/* Form */}
-          <div className="my-auto flex w-120 flex-col">
-            <h5 className="text-primary mb-2 text-xs font-bold tracking-widest uppercase">
-              Create your library
-            </h5>
-            <h2 className="mb-4 font-serif text-6xl font-medium">
-              Join Frame.
-            </h2>
-            <p className="text-muted-foreground mb-10 max-w-100 text-sm">
-              One place for every film you’re watching, saving, and
-              recommending.
-            </p>
+          <ViewTransition name="auth-switch-form">
+            <div className="animate-reveal my-auto flex w-120 flex-col">
+              <h5 className="text-primary mb-2 text-xs font-bold tracking-widest uppercase">
+                Create your library
+              </h5>
+              <h2 className="mb-4 font-serif text-6xl font-medium">
+                Join Frame.
+              </h2>
+              <p className="text-muted-foreground mb-10 max-w-100 text-sm">
+                One place for every film you’re watching, saving, and
+                recommending.
+              </p>
 
-            <RegisterForm />
-          </div>
+              <RegisterForm />
+            </div>
+          </ViewTransition>
         </section>
       </ViewTransition>
     </div>
