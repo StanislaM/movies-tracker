@@ -11,8 +11,10 @@ import {
 } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
+import { register } from "@/src/features/auth/auth";
+import { RegisterData } from "@/src/types";
 
-const registerFormSchema = z
+export const registerFormSchema = z
   .object({
     name: z
       .string()
@@ -49,8 +51,15 @@ export default function RegisterForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof registerFormSchema>) {
+  async function onSubmit(data: z.infer<typeof registerFormSchema>) {
     console.log(data);
+    const body: RegisterData = {
+      email: data.email,
+      name: data.name,
+      password: data.password,
+    };
+    const res = await register(body);
+    console.log(res.isOk, res.data, res.errorMessage);
   }
 
   return (
@@ -155,6 +164,7 @@ export default function RegisterForm() {
       </FieldGroup>
 
       <Button
+        disabled={form.formState.isSubmitting}
         type="submit"
         className="text-background w-full py-6 font-bold"
         size="lg"
