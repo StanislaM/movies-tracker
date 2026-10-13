@@ -1,1 +1,19 @@
 // use prisma-8
+model User {
+  id           Uuid      @id @default(uuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  imgUrl       String?
+  createdAt    DateTime  @default(now())
+
+  sessions     Session[]
+}
+
+model Session {
+  tokenHash String   @id @unique
+  userId    Uuid
+  expiresAt DateTime
+
+  user      User     @relation(fields: [userId], references: [id])
+}
