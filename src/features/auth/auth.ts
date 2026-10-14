@@ -9,10 +9,12 @@ import {
   RegisterResponseData,
 } from "@/src/types";
 import { db } from "@/src/prisma/db";
+import { isSqlQueryError } from "@/src/lib/utils";
 
 export async function register(
   data: RegisterData,
 ): Promise<FeatureResponse<RegisterResponseData>> {
+  // Validation schema
   const registerFormSchema = z.object({
     name: z
       .string()
@@ -28,6 +30,7 @@ export async function register(
       .regex(/[^A-Za-z0-9]/, "Need special char"),
   });
 
+  // Validating
   const validatedFields = registerFormSchema.safeParse(data);
 
   if (!validatedFields.success) {
@@ -39,8 +42,7 @@ export async function register(
     };
   }
 
-  //User creating
-  console.log(process.env.ARGON_SALT!);
+  // User creating
   // Password hashing
   const hashedPassword = await argon2.hash(data.password, {
     type: argon2.argon2id,
@@ -48,7 +50,7 @@ export async function register(
   });
 
   try {
-    // Add record to DB
+    // Add user to DB
     const user = await db.orm.public.User.select("email", "name").create({
       email: data.email,
       name: data.name,
@@ -60,12 +62,23 @@ export async function register(
       isOk: true,
       status: StatusCodes.CREATED,
     };
-  } catch (err) {
-    console.log(err);
+  } catch (err: unknown) {
+    if (isSqlQueryError(err)) {
+      switch (err.sqlState) {
+        case "23505":
+          return {
+            isOk: false,
+            status: StatusCodes.CONFLICT,
+            errorMessage: "An account with this email already exists",
+            data: null,
+          };
+      }
+    }
+
     return {
       isOk: false,
       status: StatusCodes.INTERNAL_SERVER_ERROR,
-      errorMessage: "Failed to create user",
+      errorMessage: "Something went wrong",
       data: null,
     };
   }

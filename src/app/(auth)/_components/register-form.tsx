@@ -13,6 +13,8 @@ import { Input } from "@/src/components/ui/input";
 import { Button } from "@/src/components/ui/button";
 import { register } from "@/src/features/auth/auth";
 import { RegisterData } from "@/src/types";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export const registerFormSchema = z
   .object({
@@ -41,6 +43,8 @@ export const registerFormSchema = z
   });
 
 export default function RegisterForm() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof registerFormSchema>>({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
@@ -59,7 +63,13 @@ export default function RegisterForm() {
       password: data.password,
     };
     const res = await register(body);
-    console.log(res.isOk, res.data, res.errorMessage);
+
+    if (res.isOk) {
+      toast.success("Account created");
+      router.push("/dashboard");
+    } else {
+      toast.warning(res.errorMessage);
+    }
   }
 
   return (

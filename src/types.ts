@@ -16,3 +16,8 @@ export type RegisterResponseData = {
   email: string;
   imgUrl?: string;
 };
+
+export type SqlQueryError = {
+  kind: "sql_query";
+  sqlState: string;
+};
