@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import * as argon2 from "argon2";
+import { Temporal } from "@js-temporal/polyfill";
 import { StatusCodes } from "http-status-codes";
 import {
   FeatureResponse,
@@ -12,6 +13,8 @@ import {
 } from "@/src/types";
 import { db } from "@/src/prisma/db";
 import { isSqlQueryError } from "@/src/lib/utils";
+import { encryptToken } from "./jwt";
+import { cookies } from "next/headers";
 
 export async function register(
   data: RegisterData,
@@ -109,6 +112,34 @@ export async function login(
     );
 
     if (isPasswordCorrect) {
+      const sessionToken = await encryptToken(user.id);
+
+      const session = await db.orm.public.Session.create({
+        tokenHash: sessionToken,
+        expiresAt: Temporal.Instant.fromEpochMilliseconds(
+          Date.now() + 2 * 24 * 60 * 60 * 1000,
+        ),
+        user: (t) => t.connect({ id: user.id }),
+      });
+
+      if (!session) {
+        return {
+          isOk: false,
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          errorMessage: "Something went wrong",
+          data: null,
+        };
+      }
+
+      const cookieStore = await cookies();
+      cookieStore.set("session", sessionToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        path: "/",
+        maxAge: 2 * 24 * 60 * 60 * 1000,
+      });
+
       return {
         isOk: true,
         status: StatusCodes.OK,
