@@ -8,8 +8,12 @@ import {
   FieldLabel,
 } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
+import { login } from "@/src/features/auth/auth";
+import { LoginData } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 const loginFormSchema = z.object({
@@ -18,6 +22,8 @@ const loginFormSchema = z.object({
 });
 
 export default function LoginForm() {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -26,8 +32,20 @@ export default function LoginForm() {
     },
   });
 
-  function onSubmit(data: z.infer<typeof loginFormSchema>) {
+  async function onSubmit(data: z.infer<typeof loginFormSchema>) {
     console.log(data);
+    const body: LoginData = {
+      email: data.email,
+      password: data.password,
+    };
+    const res = await login(body);
+
+    if (res.isOk) {
+      toast.success("Successfully logged in");
+      router.push("/dashboard");
+    } else {
+      toast.warning(res.errorMessage);
+    }
   }
 
   return (

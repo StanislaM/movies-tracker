@@ -43,7 +43,7 @@ export default async function RegisterPage() {
                   href="/register"
                   className="hover:text-primary ml-1 transition"
                 >
-                  Sign un
+                  Sign up
                 </Link>
               </div>
             </ViewTransition>

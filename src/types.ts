@@ -4,6 +4,11 @@ export type RegisterData = {
   password: string;
 };
 
+export type LoginData = {
+  email: string;
+  password: string;
+};
+
 export type FeatureResponse<T> = {
   isOk: boolean;
   status: number | string;
@@ -14,8 +19,10 @@ export type FeatureResponse<T> = {
 export type RegisterResponseData = {
   name: string;
   email: string;
-  imgUrl?: string;
+  imgUrl: string | null;
 };
+
+export type LoginResponseData = {} & RegisterResponseData;
 
 export type SqlQueryError = {
   kind: "sql_query";

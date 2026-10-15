@@ -5,6 +5,8 @@ import * as argon2 from "argon2";
 import { StatusCodes } from "http-status-codes";
 import {
   FeatureResponse,
+  LoginData,
+  LoginResponseData,
   RegisterData,
   RegisterResponseData,
 } from "@/src/types";
@@ -58,7 +60,7 @@ export async function register(
     });
 
     return {
-      data: user,
+      data: { ...user, imgUrl: null },
       isOk: true,
       status: StatusCodes.CREATED,
     };
@@ -75,6 +77,53 @@ export async function register(
       }
     }
 
+    console.error(err);
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      errorMessage: "Something went wrong",
+      data: null,
+    };
+  }
+}
+
+export async function login(
+  data: LoginData,
+): Promise<FeatureResponse<LoginResponseData>> {
+  //User searching
+  try {
+    const user = await db.orm.public.User.where({ email: data.email }).first();
+
+    if (!user) {
+      return {
+        isOk: false,
+        status: StatusCodes.UNAUTHORIZED,
+        errorMessage: "Wrong email or password",
+        data: null,
+      };
+    }
+
+    const isPasswordCorrect = await argon2.verify(
+      user.passwordHash,
+      data.password,
+    );
+
+    if (isPasswordCorrect) {
+      return {
+        isOk: true,
+        status: StatusCodes.OK,
+        data: { email: user.email, name: user.name, imgUrl: user.imgUrl },
+      };
+    }
+
+    return {
+      isOk: false,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Wrong email or password",
+      data: null,
+    };
+  } catch (err) {
+    console.error(err);
     return {
       isOk: false,
       status: StatusCodes.INTERNAL_SERVER_ERROR,
