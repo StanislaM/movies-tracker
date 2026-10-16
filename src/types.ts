@@ -16,6 +16,13 @@ export type FeatureResponse<T> = {
   data: T | null;
 };
 
+export type SessionData = {
+  userId: string;
+  name: string;
+  email: string;
+  imgUrl: string | null;
+} | null;
+
 export type RegisterResponseData = {
   name: string;
   email: string;

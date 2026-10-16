@@ -1,6 +1,6 @@
 "use server";
 
-import { SignJWT } from "jose";
+import { SignJWT, jwtVerify } from "jose";
 
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -20,4 +20,24 @@ export async function encryptToken(userId: string) {
     .setAudience(AUDIENCE)
     .setExpirationTime("2d")
     .sign(new TextEncoder().encode(jwtSecret));
+}
+
+export async function decryptToken(token: string) {
+  try {
+    const { payload } = await jwtVerify(
+      token,
+      new TextEncoder().encode(jwtSecret),
+      { algorithms: ["HS256"] },
+    );
+
+    if (!payload.sub) {
+      return null;
+    }
+
+    return {
+      userId: payload.sub,
+    };
+  } catch {
+    return null;
+  }
 }
