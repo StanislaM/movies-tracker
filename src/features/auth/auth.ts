@@ -167,13 +167,19 @@ export async function login(
   }
 }
 
-export async function logout(): Promise<boolean> {
+export async function logout(): Promise<FeatureResponse<null>> {
   // Get session token
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session")?.value;
 
   if (!sessionToken) {
-    return false;
+    // Token missing
+    return {
+      isOk: false,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+      data: null,
+    };
   }
 
   // Remove session from db
@@ -184,9 +190,19 @@ export async function logout(): Promise<boolean> {
 
     cookieStore.delete("session");
 
-    return true;
+    return {
+      isOk: true,
+      status: StatusCodes.OK,
+      data: null,
+    };
   } catch (err) {
     console.error(err);
-    return false;
+    return {
+      // Deletion error
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      errorMessage: "Something went wrong",
+      data: null,
+    };
   }
 }
