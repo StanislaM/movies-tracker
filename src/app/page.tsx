@@ -1,6 +1,8 @@
 import { ChevronRight } from "lucide-react";
 import Logo from "../components/logo";
 import { Button } from "../components/ui/button";
+import { getSession } from "../features/auth/session";
+import Link from "next/link";
 
 const WelcomeCard = ({
   number,
@@ -38,17 +40,33 @@ const welcomeCards = [
 ];
 
 export default async function WelcomePage() {
+  const session = await getSession();
+
   return (
     <div className="flex min-h-screen flex-col bg-[url(/bg-welcome.webp)] bg-position-[20%] sm:bg-left">
       <div className="container mx-auto flex grow flex-col px-6 sm:px-0">
         <header className="isolate flex items-center justify-between py-10">
           <Logo size="xl" />
-          <Button
-            size="lg"
-            className="shadow-accent px-4 font-semibold shadow-2xl"
-          >
-            Sign Up
-          </Button>
+          {session ? (
+            <Link href="/dashboard" aria-label="to-dashboard">
+              <Button
+                variant="outline"
+                size="lg"
+                className="shadow-accent border-2 px-4 font-semibold shadow-2xl"
+              >
+                My Library
+              </Button>
+            </Link>
+          ) : (
+            <Link href="/register" aria-label="to-sign-up-page">
+              <Button
+                size="lg"
+                className="shadow-accent px-4 font-semibold shadow-2xl"
+              >
+                Sign Up
+              </Button>
+            </Link>
+          )}
         </header>
 
         <section className="flex grow flex-col items-start justify-center pb-15">
@@ -63,12 +81,14 @@ export default async function WelcomePage() {
             build a library that feels entirely yours.
           </p>
           <div className="mb-16 flex w-full flex-col items-center gap-x-4 gap-y-2 sm:flex-row">
-            <Button className="group relative gap-x-3 px-5 py-6 text-lg">
-              Start tracking
-              <ChevronRight className="group-hover:text-secondary absolute top-0 right-6 size-9 h-full opacity-0 transition duration-300 group-hover:opacity-100" />
-              <ChevronRight className="group-hover:text-secondary size-6 transition delay-75 duration-300 group-hover:scale-150" />
-              <ChevronRight className="group-hover:text-secondary absolute top-0 right-1 size-9 h-full opacity-0 transition delay-75 duration-300 group-hover:opacity-100" />
-            </Button>
+            <Link href={session ? "/dashboard" : "/login"}>
+              <Button className="group relative gap-x-3 px-5 py-6 text-lg">
+                Start tracking
+                <ChevronRight className="group-hover:text-secondary absolute top-0 right-6 size-9 h-full opacity-0 transition duration-300 group-hover:opacity-100" />
+                <ChevronRight className="group-hover:text-secondary size-6 transition delay-75 duration-300 group-hover:scale-150" />
+                <ChevronRight className="group-hover:text-secondary absolute top-0 right-1 size-9 h-full opacity-0 transition delay-75 duration-300 group-hover:opacity-100" />
+              </Button>
+            </Link>
             <span className="text-muted-foreground text-xs">
               Free, private, and made for movie nights.
             </span>

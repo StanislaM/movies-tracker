@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Inter } from "next/font/google";
 import { cn } from "@/src/lib/utils";
+import { Toaster } from "../components/ui/sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -12,8 +13,10 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={cn("font-sans dark", inter.variable)}>
-      <body className="flex min-h-full flex-col">{children}</body>
+    <html lang="en" className={cn("dark font-sans", inter.variable)}>
+      <body className="flex min-h-full flex-col">
+        {children} <Toaster />
+      </body>
     </html>
   );
 }

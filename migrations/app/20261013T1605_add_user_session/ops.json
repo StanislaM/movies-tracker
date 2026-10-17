@@ -1,56 +1,39 @@
 [
   {
-    "id": "schema.public",
-    "label": "Create schema \"public\"",
-    "operationClass": "additive",
-    "target": {
-      "id": "postgres"
-    },
-    "precheck": [],
-    "execute": [
-      {
-        "description": "Create schema \"public\"",
-        "sql": "CREATE SCHEMA IF NOT EXISTS \"public\"",
-        "params": []
-      }
-    ],
-    "postcheck": []
-  },
-  {
-    "id": "table.Post",
-    "label": "Create table \"Post\"",
-    "summary": "Creates table \"Post\"",
+    "id": "table.Session",
+    "label": "Create table \"Session\"",
+    "summary": "Creates table \"Session\"",
     "operationClass": "additive",
     "target": {
       "id": "postgres",
       "details": {
         "schema": "public",
         "objectType": "table",
-        "name": "Post"
+        "name": "Session"
       }
     },
     "precheck": [
       {
-        "description": "ensure table \"Post\" does not exist",
+        "description": "ensure table \"Session\" does not exist",
         "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
         "params": [
-          "\"public\".\"Post\""
+          "\"public\".\"Session\""
         ]
       }
     ],
     "execute": [
       {
-        "description": "create table \"Post\"",
-        "sql": "CREATE TABLE \"public\".\"Post\" (\n  \"authorId\" int4 NOT NULL,\n  \"content\" text,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"title\" text NOT NULL,\n  \"updatedAt\" timestamptz NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
+        "description": "create table \"Session\"",
+        "sql": "CREATE TABLE \"public\".\"Session\" (\n  \"expiresAt\" timestamptz NOT NULL,\n  \"tokenHash\" text NOT NULL,\n  \"userId\" uuid NOT NULL,\n  PRIMARY KEY (\"tokenHash\")\n)",
         "params": []
       }
     ],
     "postcheck": [
       {
-        "description": "verify table \"Post\" exists",
+        "description": "verify table \"Session\" exists",
         "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
         "params": [
-          "\"public\".\"Post\""
+          "\"public\".\"Session\""
         ]
       }
     ]
@@ -80,7 +63,7 @@
     "execute": [
       {
         "description": "create table \"User\"",
-        "sql": "CREATE TABLE \"public\".\"User\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" SERIAL NOT NULL,\n  \"name\" text,\n  \"updatedAt\" timestamptz NOT NULL,\n  \"username\" text,\n  PRIMARY KEY (\"id\")\n)",
+        "sql": "CREATE TABLE \"public\".\"User\" (\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"email\" text NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"imgUrl\" text,\n  \"name\" text NOT NULL,\n  \"passwordHash\" text NOT NULL,\n  PRIMARY KEY (\"id\")\n)",
         "params": []
       }
     ],
@@ -90,6 +73,48 @@
         "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
         "params": [
           "\"public\".\"User\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "unique.Session.Session_tokenHash_key",
+    "label": "Add unique constraint on \"Session\" (tokenHash)",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "unique",
+        "name": "Session_tokenHash_key",
+        "table": "Session"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure constraint \"Session_tokenHash_key\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Session_tokenHash_key",
+          "public",
+          "\"public\".\"Session\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add unique constraint \"Session_tokenHash_key\"",
+        "sql": "ALTER TABLE \"public\".\"Session\" ADD CONSTRAINT \"Session_tokenHash_key\" UNIQUE (\"tokenHash\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify constraint \"Session_tokenHash_key\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "Session_tokenHash_key",
+          "public",
+          "\"public\".\"Session\""
         ]
       }
     ]
@@ -137,82 +162,82 @@
     ]
   },
   {
-    "id": "index.Post.Post_authorId_idx_e47547ed",
-    "label": "Create index \"Post_authorId_idx_e47547ed\" on \"Post\"",
+    "id": "index.Session.Session_userId_idx_a489d58a",
+    "label": "Create index \"Session_userId_idx_a489d58a\" on \"Session\"",
     "operationClass": "additive",
     "target": {
       "id": "postgres",
       "details": {
         "schema": "public",
         "objectType": "index",
-        "name": "Post_authorId_idx_e47547ed",
-        "table": "Post"
+        "name": "Session_userId_idx_a489d58a",
+        "table": "Session"
       }
     },
     "precheck": [
       {
-        "description": "ensure index \"Post_authorId_idx_e47547ed\" does not exist",
+        "description": "ensure index \"Session_userId_idx_a489d58a\" does not exist",
         "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
         "params": [
-          "\"public\".\"Post_authorId_idx_e47547ed\""
+          "\"public\".\"Session_userId_idx_a489d58a\""
         ]
       }
     ],
     "execute": [
       {
-        "description": "create index \"Post_authorId_idx_e47547ed\"",
-        "sql": "CREATE INDEX \"Post_authorId_idx_e47547ed\" ON \"public\".\"Post\" (\"authorId\")",
+        "description": "create index \"Session_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"Session_userId_idx_a489d58a\" ON \"public\".\"Session\" (\"userId\")",
         "params": []
       }
     ],
     "postcheck": [
       {
-        "description": "verify index \"Post_authorId_idx_e47547ed\" exists",
+        "description": "verify index \"Session_userId_idx_a489d58a\" exists",
         "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
         "params": [
-          "\"public\".\"Post_authorId_idx_e47547ed\""
+          "\"public\".\"Session_userId_idx_a489d58a\""
         ]
       }
     ]
   },
   {
-    "id": "foreignKey.Post.Post_authorId_fkey",
-    "label": "Add foreign key \"Post_authorId_fkey\" on \"Post\"",
+    "id": "foreignKey.Session.Session_userId_fkey",
+    "label": "Add foreign key \"Session_userId_fkey\" on \"Session\"",
     "operationClass": "additive",
     "target": {
       "id": "postgres",
       "details": {
         "schema": "public",
         "objectType": "foreignKey",
-        "name": "Post_authorId_fkey",
-        "table": "Post"
+        "name": "Session_userId_fkey",
+        "table": "Session"
       }
     },
     "precheck": [
       {
-        "description": "ensure FK \"Post_authorId_fkey\" does not exist",
+        "description": "ensure FK \"Session_userId_fkey\" does not exist",
         "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
         "params": [
-          "Post_authorId_fkey",
+          "Session_userId_fkey",
           "public",
-          "\"public\".\"Post\""
+          "\"public\".\"Session\""
         ]
       }
     ],
     "execute": [
       {
-        "description": "add FK \"Post_authorId_fkey\"",
-        "sql": "ALTER TABLE \"public\".\"Post\"\nADD CONSTRAINT \"Post_authorId_fkey\"\nFOREIGN KEY (\"authorId\")\nREFERENCES \"public\".\"User\" (\"id\")"
+        "description": "add FK \"Session_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"Session\"\nADD CONSTRAINT \"Session_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"User\" (\"id\")"
       }
     ],
     "postcheck": [
       {
-        "description": "verify FK \"Post_authorId_fkey\" exists",
+        "description": "verify FK \"Session_userId_fkey\" exists",
         "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
         "params": [
-          "Post_authorId_fkey",
+          "Session_userId_fkey",
           "public",
-          "\"public\".\"Post\""
+          "\"public\".\"Session\""
         ]
       }
     ]
