@@ -38,6 +38,7 @@ export async function register(
   // Validating
   const validatedFields = registerFormSchema.safeParse(data);
 
+  // If fields failed vaidation
   if (!validatedFields.success) {
     return {
       isOk: false,
@@ -62,6 +63,7 @@ export async function register(
       passwordHash: hashedPassword,
     });
 
+    // User successfully created
     return {
       data: { ...user, imgUrl: null },
       isOk: true,
@@ -71,6 +73,7 @@ export async function register(
     if (isSqlQueryError(err)) {
       switch (err.sqlState) {
         case "23505":
+          // User already exists
           return {
             isOk: false,
             status: StatusCodes.CONFLICT,
@@ -81,6 +84,7 @@ export async function register(
     }
 
     console.error(err);
+    // Server error
     return {
       isOk: false,
       status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -98,6 +102,7 @@ export async function login(
     const user = await db.orm.public.User.where({ email: data.email }).first();
 
     if (!user) {
+      // Cant find user
       return {
         isOk: false,
         status: StatusCodes.UNAUTHORIZED,
@@ -111,50 +116,54 @@ export async function login(
       data.password,
     );
 
-    if (isPasswordCorrect) {
-      const sessionToken = await encryptToken(user.id);
-
-      const session = await db.orm.public.Session.create({
-        tokenHash: sessionToken,
-        expiresAt: Temporal.Instant.fromEpochMilliseconds(
-          Date.now() + 2 * 24 * 60 * 60 * 1000,
-        ),
-        user: (t) => t.connect({ id: user.id }),
-      });
-
-      if (!session) {
-        return {
-          isOk: false,
-          status: StatusCodes.INTERNAL_SERVER_ERROR,
-          errorMessage: "Something went wrong",
-          data: null,
-        };
-      }
-
-      const cookieStore = await cookies();
-      cookieStore.set("session", sessionToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "lax",
-        path: "/",
-        maxAge: 2 * 24 * 60 * 60 * 1000,
-      });
-
+    if (!isPasswordCorrect) {
+      // Wrong password
       return {
-        isOk: true,
-        status: StatusCodes.OK,
-        data: { email: user.email, name: user.name, imgUrl: user.imgUrl },
+        isOk: false,
+        status: StatusCodes.UNAUTHORIZED,
+        errorMessage: "Wrong email or password",
+        data: null,
       };
     }
 
+    const sessionToken = await encryptToken(user.id);
+
+    const session = await db.orm.public.Session.create({
+      tokenHash: sessionToken,
+      expiresAt: Temporal.Instant.fromEpochMilliseconds(
+        Date.now() + 2 * 24 * 60 * 60 * 1000,
+      ),
+      user: (t) => t.connect({ id: user.id }),
+    });
+
+    if (!session) {
+      // Session creation failed
+      return {
+        isOk: false,
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        errorMessage: "Something went wrong",
+        data: null,
+      };
+    }
+
+    const cookieStore = await cookies();
+    cookieStore.set("session", sessionToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 2 * 24 * 60 * 60 * 1000,
+    });
+
+    // Successfully logged in
     return {
-      isOk: false,
-      status: StatusCodes.UNAUTHORIZED,
-      errorMessage: "Wrong email or password",
-      data: null,
+      isOk: true,
+      status: StatusCodes.OK,
+      data: { email: user.email, name: user.name, imgUrl: user.imgUrl },
     };
   } catch (err) {
     console.error(err);
+    // Server or db error
     return {
       isOk: false,
       status: StatusCodes.INTERNAL_SERVER_ERROR,
