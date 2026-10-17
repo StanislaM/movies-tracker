@@ -184,13 +184,9 @@ export async function logout(): Promise<boolean> {
 
   // Remove session from db
   try {
-    const token = await db.orm.public.Session.where({
+    await db.orm.public.Session.where({
       tokenHash: sessionToken,
     }).delete();
-
-    if (!token) {
-      return false;
-    }
 
     cookieStore.delete("session");
 

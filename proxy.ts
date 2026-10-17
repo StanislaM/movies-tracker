@@ -9,7 +9,7 @@ export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
 
-  // 3. Decrypt the session from the cookie
+  // 3. Chech if session cookie exist
   const sessionToken = (await cookies()).get("session")?.value;
 
   // 4. Redirect to /login if the user is not authenticated
