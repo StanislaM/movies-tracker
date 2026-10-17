@@ -163,3 +163,30 @@ export async function login(
     };
   }
 }
+
+export async function logout(): Promise<boolean> {
+  // Get session token
+  const cookieStore = await cookies();
+  const sessionToken = cookieStore.get("session")?.value;
+
+  if (!sessionToken) {
+    return false;
+  }
+
+  // Remove session from db
+  try {
+    const token = await db.orm.public.Session.where({
+      tokenHash: sessionToken,
+    }).delete();
+
+    if (!token) {
+      return false;
+    }
+
+    cookieStore.delete("session");
+
+    return true;
+  } catch {
+    return false;
+  }
+}

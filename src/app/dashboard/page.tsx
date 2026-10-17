@@ -1,5 +1,6 @@
 import { getSession } from "@/src/features/auth/session";
 import { redirect } from "next/navigation";
+import LogoutButton from "./_components/logout-button";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -8,5 +9,10 @@ export default async function DashboardPage() {
     redirect("/login");
   }
 
-  return <div>{session.name}</div>;
+  return (
+    <div>
+      {session.name}
+      <LogoutButton />
+    </div>
+  );
 }
