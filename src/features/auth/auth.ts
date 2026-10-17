@@ -2,7 +2,6 @@
 
 import { z } from "zod";
 import * as argon2 from "argon2";
-import { Temporal } from "@js-temporal/polyfill";
 import { StatusCodes } from "http-status-codes";
 import {
   FeatureResponse,
@@ -13,8 +12,8 @@ import {
 } from "@/src/types";
 import { db } from "@/src/prisma/db";
 import { isSqlQueryError } from "@/src/lib/utils";
-import { encryptToken } from "./jwt";
 import { cookies } from "next/headers";
+import { createSession } from "./session";
 
 export async function register(
   data: RegisterData,
@@ -57,11 +56,23 @@ export async function register(
 
   try {
     // Add user to DB
-    const user = await db.orm.public.User.select("email", "name").create({
+    const user = await db.orm.public.User.select("id", "email", "name").create({
       email: data.email,
       name: data.name,
       passwordHash: hashedPassword,
     });
+
+    // Session creating
+    const isSessionCreated = await createSession(user.id);
+
+    if (!isSessionCreated) {
+      return {
+        isOk: false,
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        errorMessage: "Something went wrong",
+        data: null,
+      };
+    }
 
     // User successfully created
     return {
@@ -126,18 +137,10 @@ export async function login(
       };
     }
 
-    const sessionToken = await encryptToken(user.id);
+    // Session creating
+    const isSessionCreated = await createSession(user.id);
 
-    const session = await db.orm.public.Session.create({
-      tokenHash: sessionToken,
-      expiresAt: Temporal.Instant.fromEpochMilliseconds(
-        Date.now() + 2 * 24 * 60 * 60 * 1000,
-      ),
-      user: (t) => t.connect({ id: user.id }),
-    });
-
-    if (!session) {
-      // Session creation failed
+    if (!isSessionCreated) {
       return {
         isOk: false,
         status: StatusCodes.INTERNAL_SERVER_ERROR,
@@ -145,15 +148,6 @@ export async function login(
         data: null,
       };
     }
-
-    const cookieStore = await cookies();
-    cookieStore.set("session", sessionToken, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-      path: "/",
-      maxAge: 2 * 24 * 60 * 60 * 1000,
-    });
 
     // Successfully logged in
     return {
