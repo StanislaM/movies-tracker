@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
+import { decryptToken } from "./features/auth/jwt";
+import { logout } from "./features/auth/auth";
 
 // 1. Specify protected and public routes
 const protectedRoutes = ["/dashboard"];
@@ -9,8 +11,16 @@ export default async function proxy(req: NextRequest) {
   const path = req.nextUrl.pathname;
   const isProtectedRoute = protectedRoutes.includes(path);
 
-  // 3. Chech if session cookie exist
+  // 3. Chech if session cookie exist and valid
   const sessionToken = (await cookies()).get("session")?.value;
+
+  if (sessionToken) {
+    const isValid = await decryptToken(sessionToken);
+    if (!isValid) {
+      await logout();
+      return NextResponse.redirect(new URL("/login", req.nextUrl));
+    }
+  }
 
   // 4. Redirect to /login if the user is not authenticated
   if (isProtectedRoute && !sessionToken) {

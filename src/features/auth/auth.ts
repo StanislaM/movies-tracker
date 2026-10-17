@@ -185,7 +185,8 @@ export async function logout(): Promise<boolean> {
     cookieStore.delete("session");
 
     return true;
-  } catch {
+  } catch (err) {
+    console.error(err);
     return false;
   }
 }
