@@ -1,3 +1,5 @@
+"use client";
+
 import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "cn";
 import Image from "next/image";
@@ -20,7 +22,7 @@ type LogoProps = {
   className?: string;
 };
 
-export default async function Logo({
+export default function Logo({
   className,
   size,
 }: LogoProps & VariantProps<typeof logoVariants>) {

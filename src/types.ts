@@ -35,3 +35,9 @@ export type SqlQueryError = {
   kind: "sql_query";
   sqlState: string;
 };
+
+export interface IUser {
+  name: string;
+  email: string;
+  imgUrl: string | null;
+}
