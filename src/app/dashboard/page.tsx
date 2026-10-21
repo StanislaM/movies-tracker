@@ -10,7 +10,7 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div>
+    <div className="pt-10">
       {session.name}
       <LogoutButton />
     </div>

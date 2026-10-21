@@ -4,6 +4,7 @@ import { cva, VariantProps } from "class-variance-authority";
 import { cn } from "cn";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const logoVariants = cva("", {
   variants: {
@@ -27,9 +28,11 @@ export default function Logo({
   className,
   size,
 }: LogoProps & VariantProps<typeof logoVariants>) {
+  const pathname = usePathname();
+
   return (
     <Link
-      href="/"
+      href={pathname.includes("dashboard") ? "/dashboard" : "/"}
       className={`group/logo flex items-center gap-x-2 ${className}`}
     >
       <Image

@@ -2,6 +2,7 @@ import { SidebarProvider, SidebarTrigger } from "@/src/components/ui/sidebar";
 import DashboardSidebar from "./_components/dashboard-sidebar";
 import { getSession } from "@/src/features/auth/session";
 import { redirect } from "next/navigation";
+import DashboardTopbar from "./_components/dashboard-topbar";
 
 export default async function DashboardLayout({
   children,
@@ -23,8 +24,9 @@ export default async function DashboardLayout({
           imgUrl: session.imgUrl,
         }}
       />
-      <main>
-        <SidebarTrigger />
+      <main className="relative grow">
+        <SidebarTrigger className="absolute left-0" />
+        <DashboardTopbar />
         {children}
       </main>
     </SidebarProvider>

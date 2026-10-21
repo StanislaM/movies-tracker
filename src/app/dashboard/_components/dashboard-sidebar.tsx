@@ -45,7 +45,7 @@ export default function DashboardSidebar({ user }: { user: IUser }) {
       <SidebarHeader className="p-8">
         <Logo size="lg" />
       </SidebarHeader>
-      <SidebarContent className="pt-6">
+      <SidebarContent className="pt-3">
         <SidebarGroup>
           <SidebarMenu className="gap-y-1 px-3">
             {menuItems.map((item, i) => (
