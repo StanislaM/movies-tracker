@@ -1,6 +1,6 @@
 import { getSession } from "@/src/features/auth/session";
 import { redirect } from "next/navigation";
-import LogoutButton from "./_components/logout-button";
+import Greetings from "./_components/greetings";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -10,9 +10,14 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="pt-10">
-      {session.name}
-      <LogoutButton />
-    </div>
+    <>
+      {/* Greetings */}
+      <section className="px-12 pt-12">
+        <Greetings name={session.name} />
+      </section>
+
+      {/* Continue watching */}
+      <section></section>
+    </>
   );
 }

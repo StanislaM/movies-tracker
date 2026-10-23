@@ -31,7 +31,7 @@ export default function DashboardTopbar() {
   }, [inputRef]);
 
   return (
-    <nav className="flex w-full items-center justify-between border-b px-14 py-2">
+    <nav className="flex w-full items-center justify-between border-b px-14 py-3">
       {/* Search movie input */}
       <InputGroup className="h-12 max-w-sm">
         <InputGroupInput
