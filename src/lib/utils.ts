@@ -28,3 +28,10 @@ export const convertToPartOfDay = (hours: number) => {
 
   return "day";
 };
+
+export const convertMinutesToHours = (minutes: number) => {
+  return {
+    hours: Math.floor(minutes / 60),
+    minutes: minutes % 60,
+  };
+};

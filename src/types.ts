@@ -41,3 +41,7 @@ export interface IUser {
   email: string;
   imgUrl: string | null;
 }
+
+export type MediaItemType = "movie" | "series" | "anime" | "short movie";
+
+export type AgeRating = "G" | "PG" | "PG-13" | "R" | "NC-17";
