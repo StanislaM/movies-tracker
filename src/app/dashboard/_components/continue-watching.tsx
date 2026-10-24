@@ -4,34 +4,32 @@ import { AgeRating, MediaItemType } from "@/src/types";
 import { Check, Play } from "lucide-react";
 import Link from "next/link";
 
-type ContinueWatchingProps = {
-  id: string;
-  releaseYear: number;
-  type: MediaItemType;
-  duration: number;
-  ageRating?: AgeRating;
-  name: string;
-  description?: string;
-  imgUrl: string | null;
-  watchUrl?: string;
-};
+export default async function ContinueWatching() {
+  // HARDCODED DATA==============
+  const continueWatchingItem = {
+    id: "123456",
+    releaseYear: 2026,
+    type: "movie" as MediaItemType,
+    duration: 67,
+    ageRating: "PG" as AgeRating,
+    name: "A Still Place",
+    description:
+      "A photographer returns to the remote lake of her childhood, where silence holds more than memory.",
+    imgUrl:
+      "https://images.pexels.com/photos/16268987/pexels-photo-16268987.jpeg",
+    watchUrl: "https://yummyanime.tv/index-6",
+  };
+  // HARDCODED DATA==============
 
-export default async function ContinueWatching({
-  id,
-  releaseYear,
-  type,
-  duration,
-  ageRating,
-  name,
-  description,
-  imgUrl,
-  watchUrl,
-}: ContinueWatchingProps) {
-  const convertedDuration = convertMinutesToHours(duration);
+  const convertedDuration = convertMinutesToHours(
+    continueWatchingItem.duration,
+  );
+
+  // IF NO ITEM RENDER PROPOSAL TO GO TO SAVED PAGE TO CHOOSE ONE
 
   return (
     <article
-      style={{ backgroundImage: `url('${imgUrl}')` }}
+      style={{ backgroundImage: `url('${continueWatchingItem.imgUrl}')` }}
       className={`outline-muted relative flex flex-col overflow-hidden rounded-3xl bg-cover bg-right p-10 outline`}
     >
       {/* Cover */}
@@ -43,9 +41,9 @@ export default async function ContinueWatching({
       </div>
 
       <div className="text-muted-foreground relative mb-3 flex items-center gap-x-2 text-xs font-medium">
-        <span>{releaseYear}</span>
+        <span>{continueWatchingItem.releaseYear}</span>
         <span className="bg-muted-foreground h-0.5 w-0.5 rounded-full" />
-        <span className="capitalize">{type}</span>
+        <span className="capitalize">{continueWatchingItem.type}</span>
         <span className="bg-muted-foreground h-0.5 w-0.5 rounded-full" />
         <span>
           {convertedDuration.hours && `${convertedDuration.hours}h`}{" "}
@@ -54,19 +52,21 @@ export default async function ContinueWatching({
         <span className="bg-muted-foreground h-0.5 w-0.5 rounded-full" />
 
         <span className="border-muted-foreground/50 rounded-sm border px-1 text-[10px]">
-          {ageRating}
+          {continueWatchingItem.ageRating}
         </span>
       </div>
 
-      <h2 className="relative mb-7 font-serif text-7xl">{name}</h2>
+      <h2 className="relative mb-7 font-serif text-7xl">
+        {continueWatchingItem.name}
+      </h2>
 
       <p className="text-muted-foreground relative mb-7 max-w-110 text-sm leading-6">
-        {description}
+        {continueWatchingItem.description}
       </p>
 
       <div className="relative flex gap-x-3">
-        {watchUrl && (
-          <Link href={watchUrl} target="_blank">
+        {continueWatchingItem.watchUrl && (
+          <Link href={continueWatchingItem.watchUrl} target="_blank">
             <Button
               size="lg"
               className="px-4 py-5 text-sm font-semibold"
