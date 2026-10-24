@@ -19,7 +19,7 @@ type UserItem = {
 export default function UserItem({ email, imgUrl, name }: UserItem) {
   const router = useRouter();
 
-  const [imgUlr, setImgUrl] = useState(imgUrl);
+  const [img, setImg] = useState(imgUrl);
 
   return (
     <SidebarGroup className="mt-auto">
@@ -29,14 +29,14 @@ export default function UserItem({ email, imgUrl, name }: UserItem) {
             className="px-2 py-6"
             onClick={() => router.push("/dashboard/me")}
           >
-            {imgUlr ? (
+            {img ? (
               <Image
                 alt="profile-image"
                 className="h-8 w-8"
-                src={imgUlr}
+                src={img}
                 width={32}
                 height={32}
-                onError={() => setImgUrl(null)}
+                onError={() => setImg(null)}
               />
             ) : (
               <div className="bg-muted-foreground/20 flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xl">
