@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import Greetings from "./_components/greetings";
 import ContinueWatching from "./_components/continue-watching";
 import { AgeRating, MediaItemType } from "@/src/types";
+import SavedForLater from "./_components/saved-for-later";
 
 export default async function DashboardPage() {
   const session = await getSession();
@@ -37,6 +38,11 @@ export default async function DashboardPage() {
       {/* Continue watching */}
       <section className="px-12 pt-9">
         <ContinueWatching {...continueWatchingItem} />
+      </section>
+
+      {/* Saved for later */}
+      <section className="px-12 pt-15">
+        <SavedForLater />
       </section>
     </>
   );

@@ -45,3 +45,23 @@ export interface IUser {
 export type MediaItemType = "movie" | "series" | "anime" | "short movie";
 
 export type AgeRating = "G" | "PG" | "PG-13" | "R" | "NC-17";
+
+export type Genre =
+  | "action"
+  | "adventure"
+  | "comedy"
+  | "drama"
+  | "horror"
+  | "sci-fi"
+  | "fantasy"
+  | "thriller"
+  | "crime"
+  | "romance"
+  | "mystery"
+  | "western"
+  | "historical"
+  | "war"
+  | "animation"
+  | "documentary"
+  | "musical"
+  | "other";
