@@ -64,7 +64,7 @@ export default async function SavedForLater() {
       {/* Wrapper */}
       <div className="flex gap-x-5">
         {savedItems.map((item, i) => (
-          <MediaItemCard key={i} {...item} className="w-[calc(20%-20px)]" />
+          <MediaItemCard key={i} {...item} className="w-[calc(20%-16px)]" />
         ))}
       </div>
     </>
