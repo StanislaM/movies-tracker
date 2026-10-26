@@ -35,3 +35,33 @@ export type SqlQueryError = {
   kind: "sql_query";
   sqlState: string;
 };
+
+export interface IUser {
+  name: string;
+  email: string;
+  imgUrl: string | null;
+}
+
+export type MediaItemType = "movie" | "series" | "anime" | "short movie";
+
+export type AgeRating = "G" | "PG" | "PG-13" | "R" | "NC-17";
+
+export type Genre =
+  | "action"
+  | "adventure"
+  | "comedy"
+  | "drama"
+  | "horror"
+  | "sci-fi"
+  | "fantasy"
+  | "thriller"
+  | "crime"
+  | "romance"
+  | "mystery"
+  | "western"
+  | "historical"
+  | "war"
+  | "animation"
+  | "documentary"
+  | "musical"
+  | "other";

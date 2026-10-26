@@ -198,3 +198,19 @@
     opacity: 0;
   }
 }
+
+.animate-marquee {
+  animation: slide-from-right-to-left 5s linear infinite;
+}
+
+@keyframes slide-from-right-to-left {
+  from {
+    transform: translateX(0);
+    left: 100%;
+  }
+
+  to {
+    left: 0%;
+    transform: translateX(-100%);
+  }
+}

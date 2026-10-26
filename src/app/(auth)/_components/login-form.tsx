@@ -105,6 +105,7 @@ export default function LoginForm() {
         type="submit"
         className="text-background w-full py-6 font-bold"
         size="lg"
+        disabled={form.formState.isSubmitting}
       >
         Login into my account
       </Button>

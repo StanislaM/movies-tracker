@@ -3,6 +3,7 @@ import "./globals.css";
 import { Inter } from "next/font/google";
 import { cn } from "@/src/lib/utils";
 import { Toaster } from "../components/ui/sonner";
+import { TooltipProvider } from "../components/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -15,7 +16,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={cn("dark font-sans", inter.variable)}>
       <body className="flex min-h-full flex-col">
-        {children} <Toaster />
+        <TooltipProvider>
+          {children} <Toaster />
+        </TooltipProvider>
       </body>
     </html>
   );
