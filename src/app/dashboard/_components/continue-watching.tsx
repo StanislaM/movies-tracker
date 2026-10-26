@@ -33,9 +33,9 @@ export default async function ContinueWatching() {
       className={`outline-muted relative flex flex-col overflow-hidden rounded-3xl bg-cover bg-right p-10 outline`}
     >
       {/* Cover */}
-      <div className="from-background to-background/0 absolute top-0 left-0 h-full w-full bg-linear-to-r from-20%" />
+      <div className="md:from-background from-background/80 to-background/80 md:to-background/0 absolute top-0 left-0 h-full w-full bg-linear-to-r from-20%" />
 
-      <div className="text-muted-foreground relative mb-12 flex items-center text-xs font-semibold tracking-widest">
+      <div className="text-muted-foreground relative mb-8 flex items-center text-xs font-semibold tracking-widest md:mb-12">
         <span className="bg-primary mr-2 mb-0.5 block h-2 w-2 rounded-full" />
         Continue watching
       </div>
@@ -56,15 +56,15 @@ export default async function ContinueWatching() {
         </span>
       </div>
 
-      <h2 className="relative mb-7 font-serif text-7xl">
+      <h2 className="relative mb-4 font-serif text-4xl sm:mb-7 sm:text-5xl md:text-7xl">
         {continueWatchingItem.name}
       </h2>
 
-      <p className="text-muted-foreground relative mb-7 max-w-110 text-sm leading-6">
+      <p className="text-muted-foreground relative mb-4 max-w-110 text-sm leading-6 sm:mb-7">
         {continueWatchingItem.description}
       </p>
 
-      <div className="relative flex gap-x-3">
+      <div className="relative flex flex-wrap gap-x-3 gap-y-3">
         {continueWatchingItem.watchUrl && (
           <Link href={continueWatchingItem.watchUrl} target="_blank">
             <Button

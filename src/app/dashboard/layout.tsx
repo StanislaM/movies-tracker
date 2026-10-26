@@ -24,8 +24,8 @@ export default async function DashboardLayout({
           imgUrl: session.imgUrl,
         }}
       />
-      <main className="relative grow">
-        <SidebarTrigger className="absolute left-0" />
+      <main className="relative min-w-0 grow">
+        <SidebarTrigger className="fixed top-1 left-1 z-10 md:absolute md:top-0 md:left-0" />
         <DashboardTopbar />
         {children}
       </main>

@@ -9,7 +9,7 @@ type StatCardPops = {
 
 const StatCard = async ({ icon, stat, title }: StatCardPops) => {
   return (
-    <Card className="w-full px-1 py-5">
+    <Card className="grow px-1 py-5">
       <CardContent>
         <div className="flex items-center gap-x-5">
           <span className="bg-accent flex items-center justify-center rounded-full p-3">
@@ -35,7 +35,7 @@ export default async function PersonalStats() {
   const iconColor = "var(--primary)";
 
   return (
-    <div className="flex gap-x-5">
+    <div className="flex flex-wrap gap-5">
       <StatCard
         title="Total views"
         stat={`${stats.watched}`}

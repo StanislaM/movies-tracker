@@ -14,9 +14,9 @@ export default async function DashboardPage() {
   }
 
   return (
-    <div className="px-12">
+    <div className="px-6 lg:px-12">
       {/* Greetings */}
-      <section className="pt-12">
+      <section className="pt-8 md:pt-12">
         <Greetings name={session.name} />
       </section>
 
@@ -26,7 +26,7 @@ export default async function DashboardPage() {
       </section>
 
       {/* Saved for later */}
-      <section className="py-15">
+      <section className="py-9 md:py-15">
         <SavedForLater />
       </section>
 

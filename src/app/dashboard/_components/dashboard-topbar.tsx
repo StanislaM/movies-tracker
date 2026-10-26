@@ -31,26 +31,26 @@ export default function DashboardTopbar() {
   }, [inputRef]);
 
   return (
-    <nav className="flex w-full items-center justify-between border-b px-14 py-3">
+    <nav className="flex w-full items-center justify-between gap-x-4 border-b px-3 py-3 sm:px-7 md:gap-x-0 lg:px-14">
       {/* Search movie input */}
-      <InputGroup className="h-12 max-w-sm">
+      <InputGroup className="h-10 sm:h-12 sm:max-w-xs lg:max-w-sm">
         <InputGroupInput
           placeholder="Search your movies"
-          className="w-sm py-20"
+          className="w-full text-sm md:w-sm"
           ref={inputRef}
         />
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
         </InputGroupAddon>
         <InputGroupAddon align="inline-end">
-          <Kbd>⌘K</Kbd>
+          <Kbd className="invisible md:visible">⌘K</Kbd>
         </InputGroupAddon>
       </InputGroup>
 
       {/* Add movie button */}
-      <Button size="lg" className="font-semibold">
+      <Button size="lg" className="shrink-0 font-semibold">
         <Plus />
-        Add movie
+        <span className="hidden sm:inline">Add movie</span>
       </Button>
     </nav>
   );

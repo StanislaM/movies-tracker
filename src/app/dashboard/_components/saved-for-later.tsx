@@ -62,10 +62,16 @@ export default async function SavedForLater() {
       </div>
 
       {/* Wrapper */}
-      <div className="flex gap-x-5">
-        {savedItems.map((item, i) => (
-          <MediaItemCard key={i} {...item} className="w-[calc(20%-16px)]" />
-        ))}
+      <div className="scrollbar-thumb-primary scrollbar-track-muted-foreground w-full min-w-0 overflow-x-auto pb-3 xl:pb-0">
+        <div className="flex w-max gap-x-5 xl:w-full">
+          {savedItems.map((item, i) => (
+            <MediaItemCard
+              key={i}
+              {...item}
+              className="w-60 shrink-0 xl:w-[calc(20%-16px)]"
+            />
+          ))}
+        </div>
       </div>
     </>
   );

@@ -21,7 +21,7 @@ export default function Greetings({ name }: GreetingsProps) {
           })}
         </span>
       )}
-      <h2 className="font-serif text-5xl">
+      <h2 className="font-serif text-4xl md:text-5xl">
         Good {convertToPartOfDay(currentDate.getHours())}, {name.split(" ")[0]}
       </h2>
     </div>
