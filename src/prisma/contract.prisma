@@ -1,13 +1,14 @@
 // use prisma-8
 model User {
-  id           Uuid      @id @default(uuid())
-  email        String    @unique
+  id           Uuid        @id @default(uuid())
+  email        String      @unique
   name         String
   passwordHash String
   imgUrl       String?
-  createdAt    DateTime  @default(now())
+  createdAt    DateTime    @default(now())
 
   sessions     Session[]
+  mediaItems   MediaItem[]
 }
 
 model Session {
@@ -16,4 +17,32 @@ model Session {
   expiresAt DateTime
 
   user      User     @relation(fields: [userId], references: [id])
+}
+
+enum Status {
+  @@type("pg/text@1")
+  Planned = "planned"
+  Watching = "watching"
+  Completed = "completed"
+  Delayed = "delayed"
+  Dropped = "dropped"
+}
+
+model MediaItem {
+  id          Uuid      @id @default(uuid())
+  title       String
+  description String?
+  releaseYear SmallInt
+  type        String
+  ageRating   String?
+  duration    SmallInt
+  status      Status
+  saved       Boolean
+  watchUrl    String?
+  imgUrl      String?
+  userScore   SmallInt?
+  createdAt   DateTime  @default(now())
+  userId      Uuid
+
+  user        User      @relation(fields: [userId], references: [id])
 }
