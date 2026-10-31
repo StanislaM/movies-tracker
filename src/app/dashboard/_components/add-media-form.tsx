@@ -25,9 +25,9 @@ import {
   watchingStatuses,
 } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageUp, Plus } from "lucide-react";
+import { ImageUp, Plus, X } from "lucide-react";
 import Image from "next/image";
-import { Dispatch, SetStateAction } from "react";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
@@ -53,7 +53,6 @@ const addMediaFormSchema = z.object({
     .string()
     .max(512, "Link must be at most 512 characters")
     .optional(),
-  imgUrl: z.string().max(512, "Link must be at most 512 characters").optional(),
 });
 
 export default function AddMediaForm({
@@ -61,6 +60,9 @@ export default function AddMediaForm({
 }: {
   setIsOpenAction: Dispatch<SetStateAction<boolean>>;
 }) {
+  const [img, setImg] = useState<File | null>(null);
+  const imgUploadRef = useRef<HTMLInputElement>(null);
+
   const form = useForm<z.infer<typeof addMediaFormSchema>>({
     resolver: zodResolver(addMediaFormSchema),
     defaultValues: {
@@ -73,7 +75,6 @@ export default function AddMediaForm({
       duration: 60,
       status: "planned",
       watchUrl: "",
-      imgUrl: "",
     },
   });
 
@@ -377,25 +378,69 @@ export default function AddMediaForm({
           </div>
         </FieldGroup>
 
+        {/* Preview */}
         <div className="flex flex-col">
           <span className="text-muted-foreground mb-2 text-xs font-bold tracking-widest uppercase">
             Preview
           </span>
-          {form.watch("imgUrl") ? (
-            <Image
-              src={form.watch("imgUrl") || ""}
-              alt="preview-image"
-              width={60}
-              height={45}
-              className="h-60 w-45"
-            />
+          {/* Img preview */}
+          {img ? (
+            <div className="relative h-60 w-45">
+              <Image
+                src={URL.createObjectURL(img) || ""}
+                alt="preview-image"
+                width={60}
+                height={45}
+                className="h-60 w-45 rounded-2xl object-cover transition hover:opacity-75"
+                onClick={() => imgUploadRef.current?.click()}
+              />
+              <Button
+                className="absolute top-2 right-2"
+                size="icon-sm"
+                variant="destructive"
+                onClick={() => {
+                  if (imgUploadRef.current?.files) {
+                    imgUploadRef.current.files = null;
+                  }
+
+                  setImg(null);
+                }}
+              >
+                <X />
+              </Button>
+            </div>
           ) : (
-            <div className="from-muted to-muted/30 flex h-60 w-45 items-center justify-center rounded-2xl border bg-linear-60 transition hover:opacity-75">
+            <div
+              className="from-muted to-muted/30 flex h-60 w-45 items-center justify-center rounded-2xl border bg-linear-60 transition hover:opacity-75"
+              onClick={() => imgUploadRef.current?.click()}
+            >
               <ImageUp />
             </div>
           )}
+          {/* File upload input */}
+          <Input
+            type="file"
+            className="hidden"
+            ref={imgUploadRef}
+            onChange={(e) => {
+              if (e.target.files) {
+                if (
+                  e.target.files[0].type.includes("jpg") ||
+                  e.target.files[0].type.includes("jpeg") ||
+                  e.target.files[0].type.includes("png") ||
+                  e.target.files[0].type.includes("webp")
+                ) {
+                  setImg(e.target.files[0]);
+                }
+              }
+            }}
+          />
+
           <h6 className="mt-2.5 mb-1 font-semibold">
-            {form.watch("title") || "Untitled"}
+            {
+              // eslint-disable-next-line react-hooks/incompatible-library
+              form.watch("title") || "Untitled"
+            }
           </h6>
           <div className="text-muted-foreground flex items-center gap-x-1 text-[10px] opacity-75">
             <span>{form.watch("releaseYear")}</span>
