@@ -41,6 +41,7 @@ model MediaItem {
   saved       Boolean
   watchUrl    String?
   imgUrl      String?
+  imgKey      String?
   userScore   SmallInt?
   createdAt   DateTime  @default(now())
   userId      Uuid
