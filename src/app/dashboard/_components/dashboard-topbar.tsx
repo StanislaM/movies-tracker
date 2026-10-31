@@ -1,14 +1,14 @@
 "use client";
 
-import { Button } from "@/src/components/ui/button";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/src/components/ui/input-group";
 import { Kbd } from "@/src/components/ui/kbd";
-import { Plus, SearchIcon } from "lucide-react";
+import { SearchIcon } from "lucide-react";
 import { useEffect, useRef } from "react";
+import AddMediaModal from "./add-media-modal";
 
 export default function DashboardTopbar() {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -48,10 +48,7 @@ export default function DashboardTopbar() {
       </InputGroup>
 
       {/* Add movie button */}
-      <Button size="lg" className="shrink-0 font-semibold">
-        <Plus />
-        <span className="hidden sm:inline">Add movie</span>
-      </Button>
+      <AddMediaModal />
     </nav>
   );
 }

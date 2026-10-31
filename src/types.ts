@@ -43,8 +43,10 @@ export interface IUser {
 }
 
 export type MediaItemType = "movie" | "series" | "anime" | "short movie";
+export const mediaItemTypes = ["movie", "series", "anime", "short movie"];
 
-export type AgeRating = "G" | "PG" | "PG-13" | "R" | "NC-17";
+export type AgeRating = "G" | "PG" | "PG-13" | "R" | "NC-17" | "None";
+export const ageRatings = ["G", "PG", "PG-13", "R", "NC-17", "None"];
 
 export type Genre =
   | "action"
@@ -65,3 +67,33 @@ export type Genre =
   | "documentary"
   | "musical"
   | "other";
+export const genres = [
+  "action",
+  "adventure",
+  "comedy",
+  "drama",
+  "horror",
+  "sci-fi",
+  "fantasy",
+  "thriller",
+  "crime",
+  "romance",
+  "mystery",
+  "western",
+  "historical",
+  "war",
+  "animation",
+  "documentary",
+  "musical",
+  "other",
+];
+
+export type WatchingStatus =
+  "planned" | "watching" | "completed" | "delayed" | "dropped";
+export const watchingStatuses = [
+  "planned",
+  "watching",
+  "completed",
+  "delayed",
+  "dropped",
+];
