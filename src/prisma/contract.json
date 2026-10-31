@@ -78,6 +78,13 @@
                   "kind": "scalar"
                 }
               },
+              "genre": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
               "id": {
                 "nullable": false,
                 "type": {
@@ -186,6 +193,9 @@
                 },
                 "duration": {
                   "column": "duration"
+                },
+                "genre": {
+                  "column": "genre"
                 },
                 "id": {
                   "column": "id"
@@ -424,6 +434,11 @@
                   "nativeType": "int2",
                   "nullable": false
                 },
+                "genre": {
+                  "codecId": "pg/text@1",
+                  "nativeType": "text",
+                  "nullable": false
+                },
                 "id": {
                   "codecId": "pg/uuid@1",
                   "nativeType": "uuid",
@@ -645,7 +660,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "875fcb54f843411d0ad1edc5be6fc9d17db9bf8bfa14496ffaeee632a9cd688f"
+    "storageHash": "b518daaff49aab44c296cb80874ffeb018a9b2dec46d983a24f6253deea477a9"
   },
   "execution": {
     "executionHash": "7c2744b476e7c89fcdc0a0170d3989737d505fe024fe127f5377f65b2b132a02",

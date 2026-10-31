@@ -34,6 +34,7 @@ model MediaItem {
   description String?
   releaseYear SmallInt
   type        String
+  genre       String
   ageRating   String?
   duration    SmallInt
   status      Status

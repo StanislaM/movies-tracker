@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'875fcb54f843411d0ad1edc5be6fc9d17db9bf8bfa14496ffaeee632a9cd688f'>;
+  StorageHashBase<'b518daaff49aab44c296cb80874ffeb018a9b2dec46d983a24f6253deea477a9'>;
 export type ExecutionHash =
   ExecutionHashBase<'7c2744b476e7c89fcdc0a0170d3989737d505fe024fe127f5377f65b2b132a02'>;
 export type ProfileHash =
@@ -255,6 +255,7 @@ export type FieldOutputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly description: CodecTypes['pg/text@1']['output'] | null;
       readonly duration: CodecTypes['pg/int2@1']['output'];
+      readonly genre: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly imgUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['output'];
@@ -288,6 +289,7 @@ export type FieldInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly description: CodecTypes['pg/text@1']['input'] | null;
       readonly duration: CodecTypes['pg/int2@1']['input'];
+      readonly genre: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly imgUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['input'];
@@ -321,6 +323,7 @@ export type StorageColumnTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly description: CodecTypes['pg/text@1']['output'] | null;
       readonly duration: CodecTypes['pg/int2@1']['output'];
+      readonly genre: CodecTypes['pg/text@1']['output'];
       readonly id: CodecTypes['pg/uuid@1']['output'];
       readonly imgUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['output'];
@@ -354,6 +357,7 @@ export type StorageColumnInputTypes = {
       readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly description: CodecTypes['pg/text@1']['input'] | null;
       readonly duration: CodecTypes['pg/int2@1']['input'];
+      readonly genre: CodecTypes['pg/text@1']['input'];
       readonly id: CodecTypes['pg/uuid@1']['input'];
       readonly imgUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['input'];
@@ -387,6 +391,7 @@ export namespace Models {
     createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     description: CodecTypes['pg/text@1']['output'] | null;
     duration: CodecTypes['pg/int2@1']['output'];
+    genre: CodecTypes['pg/text@1']['output'];
     id: CodecTypes['pg/uuid@1']['output'];
     imgUrl: CodecTypes['pg/text@1']['output'] | null;
     releaseYear: CodecTypes['pg/int2@1']['output'];
@@ -467,6 +472,11 @@ type ContractBase = Omit<
                 readonly duration: {
                   readonly nativeType: 'int2';
                   readonly codecId: 'pg/int2@1';
+                  readonly nullable: false;
+                };
+                readonly genre: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
                   readonly nullable: false;
                 };
                 readonly id: {
@@ -673,6 +683,10 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int2@1' };
               };
+              readonly genre: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
               readonly id: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
@@ -733,6 +747,7 @@ type ContractBase = Omit<
                 readonly createdAt: { readonly column: 'createdAt' };
                 readonly description: { readonly column: 'description' };
                 readonly duration: { readonly column: 'duration' };
+                readonly genre: { readonly column: 'genre' };
                 readonly id: { readonly column: 'id' };
                 readonly imgUrl: { readonly column: 'imgUrl' };
                 readonly releaseYear: { readonly column: 'releaseYear' };

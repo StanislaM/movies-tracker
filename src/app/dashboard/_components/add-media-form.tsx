@@ -27,7 +27,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageUp, Plus } from "lucide-react";
 import Image from "next/image";
-import { Dispatch, SetStateAction, useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 
