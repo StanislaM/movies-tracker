@@ -18,7 +18,7 @@ import { createSession } from "./session";
 export async function register(
   data: RegisterData,
 ): Promise<FeatureResponse<RegisterResponseData>> {
-  // Validation schema
+  // Schema validation
   const registerFormSchema = z.object({
     name: z
       .string()

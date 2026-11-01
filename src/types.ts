@@ -9,6 +9,19 @@ export type LoginData = {
   password: string;
 };
 
+export type CreateMediaItemData = {
+  title: string;
+  description?: string;
+  releaseYear: number;
+  type: MediaItemType;
+  genre: Genre;
+  ageRating?: string;
+  duration: number;
+  status: WatchingStatus;
+  watchUrl?: string;
+  img: File | null;
+};
+
 export type FeatureResponse<T> = {
   isOk: boolean;
   status: number | string;

@@ -18,10 +18,15 @@ import {
 } from "@/src/components/ui/select";
 import { Separator } from "@/src/components/ui/separator";
 import { Textarea } from "@/src/components/ui/textarea";
+import { createMediaItem } from "@/src/features/media/media-item";
 import {
+  AgeRating,
   ageRatings,
+  Genre,
   genres,
+  MediaItemType,
   mediaItemTypes,
+  WatchingStatus,
   watchingStatuses,
 } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -80,6 +85,20 @@ export default function AddMediaForm({
 
   async function onSubmit(data: z.infer<typeof addMediaFormSchema>) {
     console.log(data);
+    const res = await createMediaItem({
+      title: data.title,
+      description: data.description,
+      releaseYear: data.releaseYear,
+      type: data.type as MediaItemType,
+      genre: data.genre as Genre,
+      ageRating: data.ageRating as AgeRating,
+      duration: data.duration,
+      status: data.status as WatchingStatus,
+      watchUrl: data.watchUrl,
+      img: img,
+    });
+
+    console.log(res.isOk);
   }
 
   return (
