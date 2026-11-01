@@ -460,7 +460,6 @@ export default function AddMediaForm({
                   URL
                 </FieldLabel>
                 <Input
-                  type="number"
                   className="focus-visible:ring-primary focus-visible:border-primary py-4 placeholder:opacity-75"
                   {...field}
                   id="add-media-form-watch"
