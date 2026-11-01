@@ -1,5 +1,6 @@
 "use server";
 
+import { utapi } from "@/src/lib/uploadthing";
 import {
   CreateMediaItemData,
   FeatureResponse,
@@ -53,12 +54,33 @@ export async function createMediaItem(
     };
   }
 
+  let imgData = null;
+
   // Img uploading
-  console.log(data.img);
+
+  // Img validation
+  if (
+    data.img instanceof File &&
+    data.img.size !== 0 &&
+    data.img.type.startsWith("image/")
+  ) {
+    // Uploading
+    const [uploadResult] = await utapi.uploadFiles([data.img]);
+    console.log(uploadResult);
+    // If success
+    if (!uploadResult.error || uploadResult.data) {
+      imgData = {
+        imgUrl: uploadResult.data.ufsUrl,
+        imgKey: uploadResult.data.key,
+      };
+    }
+  }
+
+  console.log(imgData);
 
   return {
     isOk: true,
-    status: 200,
     data: null,
+    status: 200,
   };
 }
