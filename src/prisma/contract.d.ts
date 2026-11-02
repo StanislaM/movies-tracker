@@ -34,7 +34,7 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'b22609a50b0ba329cef785e727d4f65e93db96fc56818e448b00b846fb5e0616'>;
+  StorageHashBase<'910f464e1b8353e7f6d95d726435cd42f6f7fcb7333fed32e879a4e2472ce591'>;
 export type ExecutionHash =
   ExecutionHashBase<'7c2744b476e7c89fcdc0a0170d3989737d505fe024fe127f5377f65b2b132a02'>;
 export type ProfileHash =
@@ -261,6 +261,7 @@ export type FieldOutputTypes = {
       readonly imgUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['output'];
       readonly saved: CodecTypes['pg/bool@1']['output'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
       readonly title: CodecTypes['pg/text@1']['output'];
       readonly type: CodecTypes['pg/text@1']['output'];
@@ -296,6 +297,7 @@ export type FieldInputTypes = {
       readonly imgUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['input'];
       readonly saved: CodecTypes['pg/bool@1']['input'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
       readonly title: CodecTypes['pg/text@1']['input'];
       readonly type: CodecTypes['pg/text@1']['input'];
@@ -331,6 +333,7 @@ export type StorageColumnTypes = {
       readonly imgUrl: CodecTypes['pg/text@1']['output'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['output'];
       readonly saved: CodecTypes['pg/bool@1']['output'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
       readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
       readonly title: CodecTypes['pg/text@1']['output'];
       readonly type: CodecTypes['pg/text@1']['output'];
@@ -366,6 +369,7 @@ export type StorageColumnInputTypes = {
       readonly imgUrl: CodecTypes['pg/text@1']['input'] | null;
       readonly releaseYear: CodecTypes['pg/int2@1']['input'];
       readonly saved: CodecTypes['pg/bool@1']['input'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
       readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
       readonly title: CodecTypes['pg/text@1']['input'];
       readonly type: CodecTypes['pg/text@1']['input'];
@@ -401,6 +405,7 @@ export namespace Models {
     imgUrl: CodecTypes['pg/text@1']['output'] | null;
     releaseYear: CodecTypes['pg/int2@1']['output'];
     saved: CodecTypes['pg/bool@1']['output'];
+    savedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
     status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
     title: CodecTypes['pg/text@1']['output'];
     type: CodecTypes['pg/text@1']['output'];
@@ -508,6 +513,11 @@ type ContractBase = Omit<
                   readonly nativeType: 'bool';
                   readonly codecId: 'pg/bool@1';
                   readonly nullable: false;
+                };
+                readonly savedAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
                 };
                 readonly status: {
                   readonly nativeType: 'text';
@@ -717,6 +727,13 @@ type ContractBase = Omit<
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
               };
+              readonly savedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
               readonly status: {
                 readonly nullable: false;
                 readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
@@ -767,6 +784,7 @@ type ContractBase = Omit<
                 readonly imgUrl: { readonly column: 'imgUrl' };
                 readonly releaseYear: { readonly column: 'releaseYear' };
                 readonly saved: { readonly column: 'saved' };
+                readonly savedAt: { readonly column: 'savedAt' };
                 readonly status: { readonly column: 'status' };
                 readonly title: { readonly column: 'title' };
                 readonly type: { readonly column: 'type' };

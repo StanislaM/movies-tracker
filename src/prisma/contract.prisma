@@ -39,6 +39,7 @@ model MediaItem {
   duration    SmallInt
   status      Status
   saved       Boolean
+  savedAt     DateTime?
   watchUrl    String?
   imgUrl      String?
   imgKey      String?

@@ -120,6 +120,13 @@
                   "kind": "scalar"
                 }
               },
+              "savedAt": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "kind": "scalar"
+                }
+              },
               "status": {
                 "nullable": false,
                 "type": {
@@ -218,6 +225,9 @@
                 },
                 "saved": {
                   "column": "saved"
+                },
+                "savedAt": {
+                  "column": "savedAt"
                 },
                 "status": {
                   "column": "status"
@@ -474,6 +484,11 @@
                   "nativeType": "bool",
                   "nullable": false
                 },
+                "savedAt": {
+                  "codecId": "pg/timestamptz-temporal@1",
+                  "nativeType": "timestamptz",
+                  "nullable": true
+                },
                 "status": {
                   "codecId": "pg/text@1",
                   "nativeType": "text",
@@ -675,7 +690,7 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "b22609a50b0ba329cef785e727d4f65e93db96fc56818e448b00b846fb5e0616"
+    "storageHash": "910f464e1b8353e7f6d95d726435cd42f6f7fcb7333fed32e879a4e2472ce591"
   },
   "execution": {
     "executionHash": "7c2744b476e7c89fcdc0a0170d3989737d505fe024fe127f5377f65b2b132a02",
