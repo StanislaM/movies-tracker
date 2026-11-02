@@ -30,10 +30,13 @@ import {
   watchingStatuses,
 } from "@/src/types";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { StatusCodes } from "http-status-codes";
 import { ImageUp, Plus, X } from "lucide-react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import z from "zod";
 
 const addMediaFormSchema = z.object({
@@ -65,6 +68,7 @@ export default function AddMediaForm({
 }: {
   setIsOpenAction: Dispatch<SetStateAction<boolean>>;
 }) {
+  const router = useRouter();
   const [img, setImg] = useState<File | null>(null);
   const imgUploadRef = useRef<HTMLInputElement>(null);
 
@@ -98,7 +102,20 @@ export default function AddMediaForm({
       img: img,
     });
 
-    console.log(res.isOk);
+    if (!res.isOk) {
+      if (res.status === StatusCodes.UNAUTHORIZED) {
+        toast.warning("Session expired");
+        router.push("/login");
+      } else {
+        toast.warning(res.errorMessage);
+      }
+    }
+
+    if (res.isOk) {
+      toast.success("Created successfully");
+      form.reset();
+      setIsOpenAction(false);
+    }
   }
 
   return (

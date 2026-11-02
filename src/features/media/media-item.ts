@@ -1,6 +1,7 @@
 "use server";
 
 import { utapi } from "@/src/lib/uploadthing";
+import { db } from "@/src/prisma/db";
 import {
   CreateMediaItemData,
   FeatureResponse,
@@ -8,11 +9,24 @@ import {
   mediaItemTypes,
   watchingStatuses,
 } from "@/src/types";
+import { StatusCodes } from "http-status-codes";
 import z from "zod";
+import { getSession } from "../auth/session";
 
 export async function createMediaItem(
   data: CreateMediaItemData,
 ): Promise<FeatureResponse<null>> {
+  // Authorization
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
   // Schema validation
   const createMediaSchem = z.object({
     title: z
@@ -66,17 +80,50 @@ export async function createMediaItem(
   ) {
     // Uploading
     const [uploadResult] = await utapi.uploadFiles([data.img]);
-    console.log(uploadResult);
+
     // If success
     if (!uploadResult.error || uploadResult.data) {
       imgData = {
         imgUrl: uploadResult.data.ufsUrl,
         imgKey: uploadResult.data.key,
       };
+    } else {
+      // If upload error
+      return {
+        isOk: false,
+        data: null,
+        status: uploadResult.error.code,
+      };
     }
   }
 
-  console.log(imgData);
+  // Item creating
+  try {
+    await db.orm.public.MediaItem.create({
+      title: data.title,
+      description: data.description || null,
+      type: data.type,
+      genre: data.genre,
+      releaseYear: data.releaseYear,
+      duration: data.duration,
+      ageRating: data.ageRating,
+      status: data.status,
+      watchUrl: data.watchUrl || null,
+      saved: false,
+      imgKey: imgData?.imgKey || null,
+      imgUrl: imgData?.imgUrl || null,
+      user: (t) => t.connect({ id: session.userId }),
+    });
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      errorMessage: "Something went wrong",
+    };
+  }
 
   return {
     isOk: true,
