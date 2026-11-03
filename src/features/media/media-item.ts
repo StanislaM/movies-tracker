@@ -6,17 +6,21 @@ import {
   CreateMediaItemData,
   FeatureResponse,
   genres,
+  LoadMoreMediaCursor,
+  LoadMoreMediaResponseData,
   mediaItemTypes,
   watchingStatuses,
 } from "@/src/types";
 import { StatusCodes } from "http-status-codes";
 import z from "zod";
 import { getSession } from "../auth/session";
+import { Temporal } from "@js-temporal/polyfill";
+import { convertMediaItems } from "@/src/lib/utils";
 
 export async function createMediaItem(
   data: CreateMediaItemData,
 ): Promise<FeatureResponse<null>> {
-  // Authorization
+  // Session validation
   const session = await getSession();
   if (!session) {
     return {
@@ -130,4 +134,62 @@ export async function createMediaItem(
     data: null,
     status: 200,
   };
+}
+
+export async function loadMoreMedia(
+  cursor: LoadMoreMediaCursor,
+): Promise<FeatureResponse<LoadMoreMediaResponseData>> {
+  const PAGE_LIMIT = 1;
+
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  try {
+    // Get media
+
+    let mediaItems = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+    })
+      .orderBy([(p) => p.createdAt.desc()])
+      .cursor({
+        id: cursor.id,
+        createdAt: Temporal.Instant.from(cursor.createdAt.toISOString()),
+      })
+      .limit(PAGE_LIMIT + 1)
+      .all();
+
+    const hasMore = mediaItems.length > PAGE_LIMIT;
+    mediaItems = mediaItems.slice(0, PAGE_LIMIT);
+
+    const last = mediaItems[mediaItems.length - 1]!;
+
+    const newCursor = {
+      id: last.id,
+      createdAt: new Date(last.createdAt.epochMilliseconds),
+    };
+
+    const convertedItems = convertMediaItems(mediaItems);
+    return {
+      isOk: true,
+      status: StatusCodes.OK,
+      data: { mediaItems: convertedItems, cursor: newCursor, hasMore },
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
 }

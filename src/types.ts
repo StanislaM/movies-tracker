@@ -44,6 +44,16 @@ export type RegisterResponseData = {
 
 export type LoginResponseData = {} & RegisterResponseData;
 
+export type LoadMoreMediaCursor = {
+  id: string;
+  createdAt: Date;
+};
+export type LoadMoreMediaResponseData = {
+  cursor: LoadMoreMediaCursor;
+  mediaItems: IMedia[];
+  hasMore: boolean;
+};
+
 export type SqlQueryError = {
   kind: "sql_query";
   sqlState: string;
@@ -53,6 +63,25 @@ export interface IUser {
   name: string;
   email: string;
   imgUrl: string | null;
+}
+
+export interface IMedia {
+  id: string;
+  title: string;
+  description: string | null;
+  releaseYear: number;
+  type: MediaItemType;
+  genre: Genre;
+  ageRating: AgeRating | null;
+  duration: number;
+  status: WatchingStatus;
+  saved: boolean;
+  savedAt: Date | null;
+  watchUrl: string | null;
+  imgUrl: string | null;
+  imgKey: string | null;
+  userScore: number | null;
+  createdAt: Date;
 }
 
 export type MediaItemType = "movie" | "series" | "anime" | "short movie";

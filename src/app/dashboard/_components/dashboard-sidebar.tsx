@@ -51,7 +51,7 @@ export default function DashboardSidebar({ user }: { user: IUser }) {
             {menuItems.map((item, i) => (
               <SidebarMenuItem key={i}>
                 <SidebarMenuButton
-                  className={`${currentUrl.includes(item.link) ? "bg-muted" : "opacity-70"} px-5 py-6`}
+                  className={`${currentUrl === item.link ? "bg-muted" : "opacity-70"} px-5 py-6`}
                   onClick={() => router.push(item.link)}
                 >
                   {item.icon} {item.title}

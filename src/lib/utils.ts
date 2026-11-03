@@ -1,4 +1,12 @@
-import { SqlQueryError } from "../types";
+import { DefaultModelRow } from "@prisma/orm-postgres/orm-client";
+import {
+  AgeRating,
+  Genre,
+  IMedia,
+  MediaItemType,
+  SqlQueryError,
+} from "../types";
+import { Contract } from "../prisma/contract";
 
 export { cn } from "cn";
 
@@ -34,4 +42,17 @@ export const convertMinutesToHours = (minutes: number) => {
     hours: Math.floor(minutes / 60),
     minutes: minutes % 60,
   };
+};
+
+export const convertMediaItems = (
+  mediaItems: DefaultModelRow<Contract, "MediaItem", "public">[],
+) => {
+  return mediaItems.map((item) => ({
+    ...item,
+    type: item.type as MediaItemType,
+    savedAt: item.savedAt ? new Date(item.savedAt.epochMilliseconds) : null,
+    genre: item.genre as Genre,
+    ageRating: item.ageRating as AgeRating,
+    createdAt: new Date(item.createdAt.epochMilliseconds),
+  })) as IMedia[];
 };

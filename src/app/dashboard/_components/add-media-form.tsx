@@ -33,7 +33,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { StatusCodes } from "http-status-codes";
 import { ImageUp, Plus, X } from "lucide-react";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Dispatch, SetStateAction, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -71,6 +71,7 @@ export default function AddMediaForm({
   const router = useRouter();
   const [img, setImg] = useState<File | null>(null);
   const imgUploadRef = useRef<HTMLInputElement>(null);
+  const pathname = usePathname();
 
   const form = useForm<z.infer<typeof addMediaFormSchema>>({
     resolver: zodResolver(addMediaFormSchema),
@@ -114,6 +115,9 @@ export default function AddMediaForm({
     if (res.isOk) {
       toast.success("Created successfully");
       form.reset();
+      if (pathname === "/dashboard/my-list") {
+        router.refresh();
+      }
       setIsOpenAction(false);
     }
   }

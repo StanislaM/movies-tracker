@@ -9,9 +9,9 @@ import { Button } from "./ui/button";
 
 type MediaItemProps = {
   id: string;
-  watchUrl?: string;
+  watchUrl: string | null;
   imgUrl: string | null;
-  name: string;
+  title: string;
   releaseYear: number;
   genre: Genre;
   className?: string;
@@ -19,7 +19,7 @@ type MediaItemProps = {
 
 export default function MediaItemCard({
   id,
-  name,
+  title,
   genre,
   releaseYear,
   imgUrl,
@@ -40,9 +40,9 @@ export default function MediaItemCard({
             className="aspect-3/4 w-full object-cover transition duration-500 group-hover:scale-110"
           />
         ) : (
-          <div className="from-muted to bg-muted-foreground/10 relative aspect-3/4 overflow-hidden bg-linear-45 from-40%">
+          <div className="from-muted to bg-muted-foreground/10 relative aspect-3/4 h-full w-full overflow-hidden bg-linear-45 from-40%">
             <span className="animate-marquee absolute top-1/2 -translate-y-1/2 text-8xl font-extrabold text-nowrap uppercase">
-              {name}
+              {title}
             </span>
           </div>
         )}
@@ -71,10 +71,10 @@ export default function MediaItemCard({
       <div className="mb-0.5 flex items-center justify-between">
         {watchUrl ? (
           <Link target="_blank" href={watchUrl}>
-            {name}
+            {title}
           </Link>
         ) : (
-          <span>{name}</span>
+          <span>{title}</span>
         )}
 
         {/* Placeholder for actions */}

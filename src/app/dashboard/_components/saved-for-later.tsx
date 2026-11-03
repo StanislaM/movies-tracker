@@ -5,15 +5,15 @@ export default async function SavedForLater() {
   // HARDCODED DATA===================
   const savedItems: {
     id: string;
-    name: string;
+    title: string;
     releaseYear: number;
     genre: Genre;
     imgUrl: string | null;
-    watchUrl?: string;
+    watchUrl: string | null;
   }[] = [
     {
       id: "123456",
-      name: "The ",
+      title: "The ",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
@@ -21,7 +21,7 @@ export default async function SavedForLater() {
     },
     {
       id: "123457",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl:
@@ -30,24 +30,27 @@ export default async function SavedForLater() {
     },
     {
       id: "123458",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
+      watchUrl: null,
     },
     {
       id: "123459",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
+      watchUrl: null,
     },
     {
       id: "123450",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
+      watchUrl: null,
     },
   ];
   // HARDCODED DATA===================
