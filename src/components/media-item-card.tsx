@@ -28,6 +28,16 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import { Separator } from "./ui/separator";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "./ui/dialog";
+import { deleteMedia } from "../features/media/media-item";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 type MediaItemProps = {
   id: string;
@@ -50,11 +60,52 @@ export default function MediaItemCard({
   status,
   className,
 }: MediaItemProps) {
+  const router = useRouter();
   const [img, setImg] = useState(imgUrl);
   const [watchinStatus, setWatchinStatus] = useState(status);
+  const [isOpen, setIsOpen] = useState(false);
+
+  const deleteMediaHandler = async () => {
+    const res = await deleteMedia(id);
+
+    if (!res.isOk) {
+      toast.warning(res.errorMessage);
+    }
+
+    toast.success("Successfully deleted");
+    setIsOpen(false);
+    router.refresh();
+  };
 
   return (
     <article className={` ${className}`}>
+      {/* Complete deletion dialog */}
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="w-fit">
+          <DialogHeader>
+            <DialogTitle>Are you sure?</DialogTitle>
+            <DialogDescription>This operation is permanent</DialogDescription>
+            <div className="flex gap-x-1">
+              <Button
+                size="lg"
+                onClick={() => setIsOpen(false)}
+                className="grow"
+                variant="secondary"
+              >
+                Cancel
+              </Button>
+              <Button
+                size="lg"
+                variant="destructive"
+                className="grow"
+                onClick={deleteMediaHandler}
+              >
+                Delete
+              </Button>
+            </div>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
       <div className="group relative mb-2 aspect-3/4 overflow-hidden rounded-2xl border">
         {img ? (
           <Image
@@ -141,7 +192,10 @@ export default function MediaItemCard({
                 </DropdownMenuPortal>
               </DropdownMenuSub>
               <Separator className="my-1" />
-              <DropdownMenuItem variant="destructive">
+              <DropdownMenuItem
+                variant="destructive"
+                onClick={() => setIsOpen(true)}
+              >
                 <Trash />
                 Delete
               </DropdownMenuItem>

@@ -197,3 +197,44 @@ export async function loadMoreMedia(
   }
 }
 // #endregion
+//#region Delete Media
+export async function deleteMedia(id: string): Promise<FeatureResponse<null>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  try {
+    const deletedItem = await db.orm.public.MediaItem.where({ id }).delete();
+
+    if (!deletedItem) {
+      return {
+        isOk: false,
+        data: null,
+        status: StatusCodes.NOT_FOUND,
+        errorMessage: "Media item not found",
+      };
+    }
+
+    return {
+      isOk: true,
+      data: null,
+      status: StatusCodes.OK,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
