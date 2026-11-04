@@ -35,6 +35,7 @@ export default function DashboardTopbar() {
       {/* Search movie input */}
       <InputGroup className="h-10 sm:h-12 sm:max-w-xs lg:max-w-sm">
         <InputGroupInput
+          id="seacrh-media-input"
           placeholder="Search your movies"
           className="w-full text-sm md:w-sm"
           ref={inputRef}

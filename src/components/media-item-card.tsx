@@ -37,7 +37,6 @@ import {
 } from "./ui/dialog";
 import { deleteMedia } from "../features/media/media-item";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 type MediaItemProps = {
   id: string;
@@ -48,6 +47,7 @@ type MediaItemProps = {
   genre: Genre;
   status: WatchingStatus;
   className?: string;
+  deleteSelfAction?: (id: string) => void;
 };
 
 export default function MediaItemCard({
@@ -59,8 +59,8 @@ export default function MediaItemCard({
   watchUrl,
   status,
   className,
+  deleteSelfAction,
 }: MediaItemProps) {
-  const router = useRouter();
   const [img, setImg] = useState(imgUrl);
   const [watchinStatus, setWatchinStatus] = useState(status);
   const [isOpen, setIsOpen] = useState(false);
@@ -74,7 +74,9 @@ export default function MediaItemCard({
 
     toast.success("Successfully deleted");
     setIsOpen(false);
-    router.refresh();
+    if (deleteSelfAction) {
+      deleteSelfAction(id);
+    }
   };
 
   return (

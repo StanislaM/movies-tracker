@@ -36,6 +36,10 @@ export default function MediaList(props: MediaListProps) {
     setIsLoading(false);
   };
 
+  const deleteItem = (id: string) => {
+    setItems(items.filter((item) => item.id !== id));
+  };
+
   if (!items || items.length === 0) {
     return <div>No items</div>;
   }
@@ -44,7 +48,12 @@ export default function MediaList(props: MediaListProps) {
     <>
       <div className="flex flex-wrap gap-5">
         {items.map((item) => (
-          <MediaItemCard className="w-60" key={item.id} {...item} />
+          <MediaItemCard
+            className="w-60"
+            key={item.id}
+            {...item}
+            deleteSelfAction={deleteItem}
+          />
         ))}
         {!isLoading ? (
           <div
