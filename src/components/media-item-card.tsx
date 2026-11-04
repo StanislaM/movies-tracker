@@ -1,11 +1,33 @@
 "use client";
 
 import Link from "next/link";
-import { Genre } from "../types";
+import { Genre, WatchingStatus, watchingStatuses } from "../types";
 import Image from "next/image";
 import { useState } from "react";
-import { Bookmark, Play } from "lucide-react";
+import {
+  Bookmark,
+  Ellipsis,
+  Eye,
+  Info,
+  Play,
+  SquarePen,
+  Trash,
+} from "lucide-react";
 import { Button } from "./ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuPortal,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "./ui/dropdown-menu";
+import { Separator } from "./ui/separator";
 
 type MediaItemProps = {
   id: string;
@@ -14,6 +36,7 @@ type MediaItemProps = {
   title: string;
   releaseYear: number;
   genre: Genre;
+  status: WatchingStatus;
   className?: string;
 };
 
@@ -24,9 +47,11 @@ export default function MediaItemCard({
   releaseYear,
   imgUrl,
   watchUrl,
+  status,
   className,
 }: MediaItemProps) {
   const [img, setImg] = useState(imgUrl);
+  const [watchinStatus, setWatchinStatus] = useState(status);
 
   return (
     <article className={` ${className}`}>
@@ -77,9 +102,52 @@ export default function MediaItemCard({
           <span>{title}</span>
         )}
 
-        {/* Placeholder for actions */}
-        <span>...</span>
-        {/* Placeholder for actions */}
+        {/* Actions */}
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <Ellipsis />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuGroup>
+              <DropdownMenuItem>
+                <Info />
+                Details
+              </DropdownMenuItem>
+              <DropdownMenuItem>
+                <SquarePen />
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger>
+                  <Eye /> Status
+                </DropdownMenuSubTrigger>
+                <DropdownMenuPortal>
+                  <DropdownMenuSubContent>
+                    <DropdownMenuRadioGroup
+                      value={watchinStatus}
+                      onValueChange={setWatchinStatus}
+                    >
+                      {watchingStatuses.map((item) => (
+                        <DropdownMenuRadioItem
+                          className="capitalize"
+                          key={item}
+                          value={item}
+                        >
+                          {item}
+                        </DropdownMenuRadioItem>
+                      ))}
+                    </DropdownMenuRadioGroup>
+                  </DropdownMenuSubContent>
+                </DropdownMenuPortal>
+              </DropdownMenuSub>
+              <Separator className="my-1" />
+              <DropdownMenuItem variant="destructive">
+                <Trash />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
       <div className="flex items-center gap-x-1">
         <span className="text-muted-foreground text-xs">{releaseYear}</span>

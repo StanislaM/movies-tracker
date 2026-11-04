@@ -1,5 +1,5 @@
 import MediaItemCard from "@/src/components/media-item-card";
-import { Genre } from "@/src/types";
+import { Genre, WatchingStatus } from "@/src/types";
 
 export default async function SavedForLater() {
   // HARDCODED DATA===================
@@ -10,6 +10,7 @@ export default async function SavedForLater() {
     genre: Genre;
     imgUrl: string | null;
     watchUrl: string | null;
+    status: WatchingStatus;
   }[] = [
     {
       id: "123456",
@@ -18,6 +19,7 @@ export default async function SavedForLater() {
       genre: "drama",
       imgUrl: null,
       watchUrl: "https://yummyanime.tv/index-6",
+      status: "planned",
     },
     {
       id: "123457",
@@ -27,6 +29,7 @@ export default async function SavedForLater() {
       imgUrl:
         "https://images.pexels.com/photos/39886343/pexels-photo-39886343.jpeg",
       watchUrl: "https://yummyanime.tv/index-6",
+      status: "planned",
     },
     {
       id: "123458",
@@ -35,6 +38,7 @@ export default async function SavedForLater() {
       genre: "drama",
       imgUrl: null,
       watchUrl: null,
+      status: "planned",
     },
     {
       id: "123459",
@@ -43,6 +47,7 @@ export default async function SavedForLater() {
       genre: "drama",
       imgUrl: null,
       watchUrl: null,
+      status: "planned",
     },
     {
       id: "123450",
@@ -51,6 +56,7 @@ export default async function SavedForLater() {
       genre: "drama",
       imgUrl: null,
       watchUrl: null,
+      status: "planned",
     },
   ];
   // HARDCODED DATA===================
