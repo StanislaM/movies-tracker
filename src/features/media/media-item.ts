@@ -211,7 +211,10 @@ export async function deleteMedia(id: string): Promise<FeatureResponse<null>> {
   }
 
   try {
-    const deletedItem = await db.orm.public.MediaItem.where({ id }).delete();
+    const deletedItem = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+      id,
+    }).delete();
 
     if (!deletedItem) {
       return {
