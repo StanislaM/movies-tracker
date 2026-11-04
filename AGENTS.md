@@ -53,3 +53,15 @@
 ## Known doc drift
 
 `README.md` says starter users are seeded from `src/prisma/seed.ts`, but that file does not exist; there is currently no seed step.
+
+## Documentation
+
+- Use Context7 when answering questions about library APIs.
+- Prefer official, up-to-date documentation.
+- Always consider the installed library version.
+- For Next.js, use documentation relevant to Next.js 16.
+- For Prisma, use documentation relevant to Prisma 8.
+- Never assume that documentation for the latest
+  version applies to the installed version.
+- Distinguish documentation recommendations from
+  the implementation currently present in this project.
