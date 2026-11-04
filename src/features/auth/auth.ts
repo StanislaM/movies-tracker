@@ -15,6 +15,7 @@ import { isSqlQueryError } from "@/src/lib/utils";
 import { cookies } from "next/headers";
 import { createSession } from "./session";
 
+//#region Register
 export async function register(
   data: RegisterData,
 ): Promise<FeatureResponse<RegisterResponseData>> {
@@ -104,7 +105,8 @@ export async function register(
     };
   }
 }
-
+// #endregion
+//#region Login
 export async function login(
   data: LoginData,
 ): Promise<FeatureResponse<LoginResponseData>> {
@@ -166,7 +168,8 @@ export async function login(
     };
   }
 }
-
+// #endregion
+//#region Logout
 export async function logout(): Promise<FeatureResponse<null>> {
   // Get session token
   const cookieStore = await cookies();
@@ -206,3 +209,4 @@ export async function logout(): Promise<FeatureResponse<null>> {
     };
   }
 }
+// #endregion

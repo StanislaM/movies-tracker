@@ -40,7 +40,7 @@ const MediaListWrapperContent = async () => {
       .all();
   } catch (err) {
     console.error(err);
-    return <MediaList mediaItems={null} cursor={null} hasMore={false} />;
+    return <div>Something went wrong</div>;
   }
 
   const hasMore = mediaItems.length > PAGE_LIMIT;
@@ -54,10 +54,6 @@ const MediaListWrapperContent = async () => {
   };
 
   const convertedItems = convertMediaItems(mediaItems);
-
-  if (mediaItems.length === 0) {
-    return <MediaList mediaItems={null} cursor={cursor} hasMore={false} />;
-  }
 
   return (
     <>

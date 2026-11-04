@@ -7,7 +7,7 @@ import { Loader } from "lucide-react";
 import { useState } from "react";
 
 type MediaListProps = {
-  mediaItems: IMedia[] | null;
+  mediaItems: IMedia[];
   cursor: LoadMoreMediaCursor | null;
   hasMore: boolean;
 };
@@ -19,7 +19,7 @@ export default function MediaList(props: MediaListProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const loadMore = async () => {
-    if (!items || !hasMore || !cursor) {
+    if (!hasMore || !cursor) {
       return;
     }
 
@@ -27,7 +27,6 @@ export default function MediaList(props: MediaListProps) {
 
     const res = await loadMoreMedia(cursor);
 
-    console.log(res.data?.mediaItems);
     if (res.isOk && res.data) {
       setCursor(res.data.cursor);
       setHasMore(res.data.hasMore);

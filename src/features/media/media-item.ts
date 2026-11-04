@@ -17,6 +17,7 @@ import { getSession } from "../auth/session";
 import { Temporal } from "@js-temporal/polyfill";
 import { convertMediaItems } from "@/src/lib/utils";
 
+//#region Create Media Item
 export async function createMediaItem(
   data: CreateMediaItemData,
 ): Promise<FeatureResponse<null>> {
@@ -135,7 +136,9 @@ export async function createMediaItem(
     status: 200,
   };
 }
+// #endregion
 
+//#region Load More Media
 export async function loadMoreMedia(
   cursor: LoadMoreMediaCursor,
 ): Promise<FeatureResponse<LoadMoreMediaResponseData>> {
@@ -172,8 +175,8 @@ export async function loadMoreMedia(
     const last = mediaItems[mediaItems.length - 1]!;
 
     const newCursor = {
-      id: last.id,
-      createdAt: new Date(last.createdAt.epochMilliseconds),
+      id: last?.id,
+      createdAt: new Date(last?.createdAt.epochMilliseconds),
     };
 
     const convertedItems = convertMediaItems(mediaItems);
@@ -193,3 +196,4 @@ export async function loadMoreMedia(
     };
   }
 }
+// #endregion
