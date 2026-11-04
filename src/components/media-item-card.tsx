@@ -70,6 +70,7 @@ export default function MediaItemCard({
 
     if (!res.isOk) {
       toast.warning(res.errorMessage);
+      return;
     }
 
     toast.success("Successfully deleted");
