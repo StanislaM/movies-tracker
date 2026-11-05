@@ -1,10 +1,14 @@
 "use client";
 
 import MediaItemCard from "@/src/components/media-item-card";
+import MideItemInfoModal from "@/src/components/media-item-info-modal";
 import { loadMoreMedia } from "@/src/features/media/media-item";
 import { IMedia, LoadMoreMediaCursor } from "@/src/types";
+import { StatusCodes } from "http-status-codes";
 import { Loader } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type MediaListProps = {
   mediaItems: IMedia[];
@@ -13,10 +17,13 @@ type MediaListProps = {
 };
 
 export default function MediaList(props: MediaListProps) {
+  const router = useRouter();
   const [items, setItems] = useState(props.mediaItems);
   const [cursor, setCursor] = useState(props.cursor);
   const [hasMore, setHasMore] = useState(props.hasMore);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [selectedItem, setSelectedItem] = useState<IMedia | null>(null);
 
   const loadMore = async () => {
     if (!hasMore || !cursor) {
@@ -31,6 +38,15 @@ export default function MediaList(props: MediaListProps) {
       setCursor(res.data.cursor);
       setHasMore(res.data.hasMore);
       setItems([...items, ...(res.data.mediaItems || [])]);
+    }
+
+    if (!res.isOk) {
+      if (res.status === StatusCodes.UNAUTHORIZED) {
+        toast.warning("Session has been expired");
+        router.push("/login");
+      }
+
+      toast.warning(res.errorMessage);
     }
 
     setIsLoading(false);
@@ -53,6 +69,7 @@ export default function MediaList(props: MediaListProps) {
             key={item.id}
             {...item}
             deleteSelfAction={deleteItem}
+            setSelfSelectedAction={() => setSelectedItem(item)}
           />
         ))}
         {!isLoading ? (
@@ -68,6 +85,13 @@ export default function MediaList(props: MediaListProps) {
           </div>
         )}
       </div>
+
+      {selectedItem && (
+        <MideItemInfoModal
+          item={selectedItem}
+          onCloseAction={() => setSelectedItem(null)}
+        />
+      )}
     </>
   );
 }

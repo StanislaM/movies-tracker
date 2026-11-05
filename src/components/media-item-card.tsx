@@ -48,6 +48,7 @@ type MediaItemProps = {
   status: WatchingStatus;
   className?: string;
   deleteSelfAction?: (id: string) => void;
+  setSelfSelectedAction?: () => void;
 };
 
 export default function MediaItemCard({
@@ -60,6 +61,7 @@ export default function MediaItemCard({
   status,
   className,
   deleteSelfAction,
+  setSelfSelectedAction,
 }: MediaItemProps) {
   const [img, setImg] = useState(imgUrl);
   const [watchinStatus, setWatchinStatus] = useState(status);
@@ -163,7 +165,13 @@ export default function MediaItemCard({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => {
+                  if (setSelfSelectedAction) {
+                    setSelfSelectedAction();
+                  }
+                }}
+              >
                 <Info />
                 Details
               </DropdownMenuItem>
