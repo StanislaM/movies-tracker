@@ -225,6 +225,10 @@ export async function deleteMedia(id: string): Promise<FeatureResponse<null>> {
       };
     }
 
+    if (deletedItem.imgKey) {
+      await utapi.deleteFiles(deletedItem.imgKey);
+    }
+
     return {
       isOk: true,
       data: null,
@@ -241,3 +245,4 @@ export async function deleteMedia(id: string): Promise<FeatureResponse<null>> {
     };
   }
 }
+// #endregion
