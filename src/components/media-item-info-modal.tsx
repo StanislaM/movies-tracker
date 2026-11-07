@@ -28,14 +28,14 @@ export default function MideItemInfoModal({
 
   return (
     <Dialog onOpenChange={(state) => !state && onCloseAction()} defaultOpen>
-      <DialogContent className="w-fit max-w-140!">
+      <DialogContent className="xs:w-100 xs:max-w-140! max-h-[calc(100dvh-20px)] w-full max-w-77.5! overflow-y-scroll md:w-120 lg:w-fit">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-x-1 text-xl">
             <Info height={18} /> Info
           </DialogTitle>
         </DialogHeader>
 
-        <div className="flex gap-x-4">
+        <div className="xs:flex-row flex flex-col gap-x-4">
           <div className="relative">
             <div className="bg-primary/75 absolute top-2 left-2 flex h-12 w-12 items-center justify-center rounded-full text-2xl font-semibold">
               <span className="relative z-2">{item.userScore || "N/A"}</span>
@@ -52,10 +52,10 @@ export default function MideItemInfoModal({
                 onError={() => setImg(null)}
                 width={300}
                 height={400}
-                className="aspect-3/4 w-60 rounded-t-2xl object-cover transition duration-500"
+                className="xs:w-50 aspect-3/4 w-full rounded-t-2xl object-cover transition duration-500 lg:w-60"
               />
             ) : (
-              <div className="from-muted to bg-muted-foreground/10 relative aspect-3/4 w-60 overflow-hidden rounded-t-2xl bg-linear-45 from-40%">
+              <div className="from-muted to bg-muted-foreground/10 xs:w-50 relative aspect-3/4 w-full overflow-hidden rounded-t-2xl bg-linear-45 from-40% lg:w-60">
                 <span className="animate-marquee absolute top-1/2 -translate-y-1/2 text-8xl font-extrabold text-nowrap uppercase">
                   {item.title}
                 </span>

@@ -62,10 +62,10 @@ export default function MediaList(props: MediaListProps) {
 
   return (
     <>
-      <div className="flex flex-wrap gap-5">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5">
         {items.map((item) => (
           <MediaItemCard
-            className="w-60"
+            className="w-full"
             key={item.id}
             {...item}
             deleteSelfAction={deleteItem}
@@ -74,13 +74,13 @@ export default function MediaList(props: MediaListProps) {
         ))}
         {!isLoading ? (
           <div
-            className="bg-muted/15 hover:bg-muted/35 flex aspect-3/4 w-60 cursor-pointer items-center justify-center rounded-2xl uppercase transition"
+            className="bg-muted/15 hover:bg-muted/35 flex aspect-3/4 w-full cursor-pointer items-center justify-center rounded-2xl uppercase transition"
             onClick={loadMore}
           >
             Load more
           </div>
         ) : (
-          <div className="flex aspect-3/4 w-60 cursor-pointer items-center justify-center">
+          <div className="flex aspect-3/4 w-full cursor-pointer items-center justify-center">
             <Loader className="h-20 w-20 animate-spin" />
           </div>
         )}

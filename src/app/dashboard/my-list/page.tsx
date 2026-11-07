@@ -11,7 +11,7 @@ export default async function MyListPage() {
           </span>
 
           <h2 className="mb-4 font-serif text-4xl md:text-5xl">My list</h2>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-col items-start justify-between sm:flex-row sm:items-center">
             <p className="text-muted-foreground text-sm">
               Every story you have saved, ready whenever the mood is right.
             </p>
@@ -23,7 +23,7 @@ export default async function MyListPage() {
       </section>
 
       {/* Media items list */}
-      <section className="pt-7">
+      <section className="py-7">
         <MediaListWrapper />
       </section>
     </div>
