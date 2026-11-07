@@ -6,6 +6,7 @@ import {
   CreateMediaItemData,
   FeatureResponse,
   genres,
+  IMedia,
   LoadMoreMediaCursor,
   LoadMoreMediaResponseData,
   mediaItemTypes,
@@ -211,6 +212,7 @@ export async function deleteMedia(id: string): Promise<FeatureResponse<null>> {
   }
 
   try {
+    // Delete item
     const deletedItem = await db.orm.public.MediaItem.where({
       userId: session.userId,
       id,
@@ -225,6 +227,7 @@ export async function deleteMedia(id: string): Promise<FeatureResponse<null>> {
       };
     }
 
+    // Delete image
     if (deletedItem.imgKey) {
       await utapi.deleteFiles(deletedItem.imgKey);
     }
@@ -232,6 +235,54 @@ export async function deleteMedia(id: string): Promise<FeatureResponse<null>> {
     return {
       isOk: true,
       data: null,
+      status: StatusCodes.OK,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
+// #endregion
+//#region Get Media
+export async function getMedia(id: string): Promise<FeatureResponse<IMedia>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  try {
+    // Get media
+    const mediaItem = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+      id,
+    }).first();
+
+    if (!mediaItem) {
+      return {
+        isOk: false,
+        data: null,
+        status: StatusCodes.NOT_FOUND,
+        errorMessage: "Cannot find media",
+      };
+    }
+
+    const convertedItems = convertMediaItems([mediaItem]);
+
+    return {
+      isOk: true,
+      data: convertedItems[0],
       status: StatusCodes.OK,
     };
   } catch (err) {

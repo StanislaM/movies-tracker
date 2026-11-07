@@ -150,13 +150,12 @@ export default function MediaItemCard({
         </Button>
       </div>
       <div className="mb-0.5 flex items-center justify-between">
-        {watchUrl ? (
-          <Link target="_blank" href={watchUrl}>
-            {title}
-          </Link>
-        ) : (
-          <span>{title}</span>
-        )}
+        <Link
+          className="hover:text-primary transition hover:underline"
+          href={`/dashboard/my-list/${id}`}
+        >
+          {title}
+        </Link>
 
         {/* Actions */}
         <DropdownMenu>
