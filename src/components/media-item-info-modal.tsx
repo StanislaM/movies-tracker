@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 
-type MideItemInfoModalProps = {
+type MediaItemInfoModalProps = {
   item: IMedia;
   onCloseAction: () => void;
 };
@@ -23,12 +23,12 @@ type MideItemInfoModalProps = {
 export default function MideItemInfoModal({
   item,
   onCloseAction,
-}: MideItemInfoModalProps) {
+}: MediaItemInfoModalProps) {
   const [img, setImg] = useState(item.imgUrl);
 
   return (
     <Dialog onOpenChange={(state) => !state && onCloseAction()} defaultOpen>
-      <DialogContent className="xs:w-100 xs:max-w-140! max-h-[calc(100dvh-20px)] w-full max-w-77.5! overflow-y-scroll md:w-120 lg:w-fit">
+      <DialogContent className="xs:w-100 xs:max-w-140! max-h-[calc(100dvh-20px)] w-full max-w-77.5! overflow-y-auto md:w-120 lg:w-fit">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-x-1 text-xl">
             <Info height={18} /> Info
@@ -38,7 +38,7 @@ export default function MideItemInfoModal({
         <div className="xs:flex-row flex flex-col gap-x-4">
           <div className="relative">
             <div className="bg-primary/75 absolute top-2 left-2 flex h-12 w-12 items-center justify-center rounded-full text-2xl font-semibold">
-              <span className="relative z-2">{item.userScore || "N/A"}</span>
+              <span className="relative z-2">{item.userScore ?? "N/A"}</span>
               <Star
                 className="absolute z-1 h-10 w-10 opacity-70"
                 fill="var(--muted-foreground)"
@@ -55,7 +55,7 @@ export default function MideItemInfoModal({
                 className="xs:w-50 aspect-3/4 w-full rounded-t-2xl object-cover transition duration-500 lg:w-60"
               />
             ) : (
-              <div className="from-muted to bg-muted-foreground/10 xs:w-50 relative aspect-3/4 w-full overflow-hidden rounded-t-2xl bg-linear-45 from-40% lg:w-60">
+              <div className="from-muted to-muted-foreground/10 xs:w-50 relative aspect-3/4 w-full overflow-hidden rounded-t-2xl bg-linear-45 from-40% lg:w-60">
                 <span className="animate-marquee absolute top-1/2 -translate-y-1/2 text-8xl font-extrabold text-nowrap uppercase">
                   {item.title}
                 </span>
@@ -136,7 +136,7 @@ export default function MideItemInfoModal({
               <span className="text-primary mr-1 text-xs font-semibold tracking-wider">
                 Age rating:
               </span>
-              <span>{item.ageRating}</span>
+              <span>{item.ageRating || "None"}</span>
             </p>
 
             {/* Duration */}
@@ -172,13 +172,16 @@ export default function MideItemInfoModal({
                 {item.createdAt.toDateString()}
               </span>
             </p>
-            <Button>
-              <Link
-                href={`/dasboard/my-items/${item.id}`}
-                className="flex items-center gap-x-1"
-              >
-                <Edit /> Edit info
-              </Link>
+            <Button
+              nativeButton={false}
+              render={
+                <Link
+                  href={`/dashboard/my-list/${item.id}`}
+                  className="flex items-center gap-x-1"
+                />
+              }
+            >
+              <Edit /> Edit info
             </Button>
           </div>
         </div>

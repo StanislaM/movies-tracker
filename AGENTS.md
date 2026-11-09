@@ -10,6 +10,7 @@
 
 ## Commands
 
+- The agent must NEVER modify project files. Only analyze code and provide suggestions.
 - Use pnpm (pinned `pnpm@11.21.0`), not npm or yarn.
 - `pnpm dev` — Next dev server with HMR. Requires `DATABASE_URL` (direct Postgres mode).
 - `pnpm dev:composer` — runs a full `build` first, then Composer with local Prisma Postgres and applies the contract. Use it to test real deployment wiring; it is slow for UI iteration.
