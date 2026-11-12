@@ -130,7 +130,7 @@ export default function UpdateInput({
           />
           {fieldName === "watchUrl" && draft && (
             <Link
-              className="hover:underline"
+              className="w-fit! self-start hover:underline"
               target="_blank"
               href={draft.toString()}
             >
