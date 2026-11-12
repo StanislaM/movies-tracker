@@ -10,6 +10,7 @@ import {
   LoadMoreMediaCursor,
   LoadMoreMediaResponseData,
   mediaItemTypes,
+  updateMediaItemData,
   watchingStatuses,
 } from "@/src/types";
 import { StatusCodes } from "http-status-codes";
@@ -17,6 +18,7 @@ import z from "zod";
 import { getSession } from "../auth/session";
 import { Temporal } from "@js-temporal/polyfill";
 import { convertMediaItems } from "@/src/lib/utils";
+import { mediaUpdateSchema } from "./validation";
 
 //#region Create Media Item
 export async function createMediaItem(
@@ -138,7 +140,76 @@ export async function createMediaItem(
   };
 }
 // #endregion
+//#region Update Media
+export async function updateMedia(
+  id: string,
+  data: updateMediaItemData,
+): Promise<FeatureResponse<boolean>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
 
+  // Field validation
+  const validationResult = mediaUpdateSchema.safeParse(data);
+
+  if (!validationResult.success) {
+    return {
+      isOk: false,
+      status: StatusCodes.BAD_REQUEST,
+      data: false,
+      errorMessage: "Wrong data",
+    };
+  }
+
+  try {
+    // Update img
+    if (data.img) {
+      return {
+        isOk: true,
+        data: true,
+        status: StatusCodes.OK,
+      };
+    }
+
+    // Update media
+    const res = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+      id,
+    }).update({ ...data });
+
+    if (!res) {
+      return {
+        isOk: false,
+        status: StatusCodes.BAD_REQUEST,
+        data: false,
+        errorMessage: "Cannot change media",
+      };
+    }
+
+    return {
+      isOk: true,
+      status: StatusCodes.OK,
+      data: true,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
+// #endregion
 //#region Load More Media
 export async function loadMoreMedia(
   cursor: LoadMoreMediaCursor,

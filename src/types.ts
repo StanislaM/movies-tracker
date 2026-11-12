@@ -22,6 +22,8 @@ export type CreateMediaItemData = {
   img: File | null;
 };
 
+export type updateMediaItemData = Partial<CreateMediaItemData>;
+
 export type FeatureResponse<T> = {
   isOk: boolean;
   status: number | string;
