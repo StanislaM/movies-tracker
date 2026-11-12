@@ -4,7 +4,7 @@ import Image from "next/image";
 import { IMedia } from "../types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { useState } from "react";
-import { Edit, Ellipsis, Info, Star } from "lucide-react";
+import { Edit, Ellipsis, Info, Play, Star } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
 import {
@@ -147,22 +147,6 @@ export default function MideItemInfoModal({
               <span>{item.duration}m</span>
             </p>
 
-            {/* WATCH */}
-            {item.watchUrl && (
-              <p>
-                <span className="text-primary mr-1 text-xs font-semibold tracking-wider">
-                  Watch url:
-                </span>
-                <Link
-                  href={item.watchUrl}
-                  target="_blank"
-                  className="hover:underline"
-                >
-                  Click to watch
-                </Link>
-              </p>
-            )}
-
             {/* CREATED AT */}
             <p className="mb-3">
               <span className="text-primary mr-1 text-xs font-semibold tracking-wider">
@@ -183,6 +167,21 @@ export default function MideItemInfoModal({
             >
               <Edit /> Edit info
             </Button>
+            {/* WATCH */}
+            {item.watchUrl && (
+              <Button
+                nativeButton={false}
+                render={
+                  <Link
+                    href={item.watchUrl}
+                    className="flex items-center gap-x-1"
+                    target="_blank"
+                  />
+                }
+              >
+                <Play /> Watch
+              </Button>
+            )}
           </div>
         </div>
         {/* DESCRIPTION */}
