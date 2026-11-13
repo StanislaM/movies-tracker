@@ -210,6 +210,71 @@ export async function updateMedia(
   }
 }
 // #endregion
+//#region Delete Media Image
+export async function deleteMediaImage(
+  id: string,
+  key: string,
+): Promise<FeatureResponse<boolean>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  try {
+    const mediaItem = await db.orm.public.MediaItem.where({
+      id,
+      imgKey: key,
+      userId: session.userId,
+    }).first();
+
+    if (!mediaItem) {
+      return {
+        isOk: false,
+        status: StatusCodes.NOT_FOUND,
+        data: false,
+        errorMessage: "Not found",
+      };
+    }
+
+    const deletionResult = await utapi.deleteFiles(key);
+
+    if (!deletionResult.success) {
+      return {
+        isOk: false,
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        data: false,
+        errorMessage: "Failed to delete image",
+      };
+    }
+
+    await db.orm.public.MediaItem.where({ id, userId: session.userId }).update({
+      imgKey: null,
+      imgUrl: null,
+    });
+
+    return {
+      isOk: true,
+      data: true,
+      status: StatusCodes.OK,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
+// #endregion
 //#region Load More Media
 export async function loadMoreMedia(
   cursor: LoadMoreMediaCursor,

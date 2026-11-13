@@ -216,7 +216,9 @@ export default function MediaItemCard({
       <div className="flex items-center gap-x-1">
         <span className="text-muted-foreground text-xs">{releaseYear}</span>
         <span className="bg-muted-foreground h-0.5 w-0.5 rounded-full" />
-        <span className="text-muted-foreground text-xs">{genre}</span>
+        <span className="text-muted-foreground text-xs capitalize">
+          {genre}
+        </span>
       </div>
     </article>
   );

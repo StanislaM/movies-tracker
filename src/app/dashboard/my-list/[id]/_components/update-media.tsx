@@ -17,6 +17,7 @@ import {
 import { Play } from "lucide-react";
 import UpdateInput from "./update-input";
 import UpdateSelect from "./update-select";
+import UpdateImage from "./update-image";
 
 type UpdateMediaProps = {
   mediaItem: IMedia;
@@ -24,9 +25,9 @@ type UpdateMediaProps = {
 
 export default function UpdateMedia({ mediaItem }: UpdateMediaProps) {
   return (
-    <div className="flex">
+    <div className="flex gap-x-8">
       {/* Information section */}
-      <div className="max-w-3xl grow">
+      <section className="block max-w-3xl grow">
         <Card className="px-4 py-8">
           <CardHeader className="flex items-center gap-x-3">
             <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-full">
@@ -127,9 +128,21 @@ export default function UpdateMedia({ mediaItem }: UpdateMediaProps) {
             />
           </CardContent>
         </Card>
-      </div>
+      </section>
 
       {/* Img section */}
+      <section className="block max-w-sm grow">
+        <Card className="px-4 py-8">
+          <CardContent>
+            {/* Image */}
+            <UpdateImage
+              imgUrl={mediaItem.imgUrl}
+              imgKey={mediaItem.imgKey}
+              id={mediaItem.id}
+            />
+          </CardContent>
+        </Card>
+      </section>
     </div>
   );
 }
