@@ -169,15 +169,6 @@ export async function updateMedia(
   }
 
   try {
-    // Update img
-    if (data.img) {
-      return {
-        isOk: true,
-        data: true,
-        status: StatusCodes.OK,
-      };
-    }
-
     // Update media
     const res = await db.orm.public.MediaItem.where({
       userId: session.userId,
@@ -257,6 +248,116 @@ export async function deleteMediaImage(
       imgKey: null,
       imgUrl: null,
     });
+
+    return {
+      isOk: true,
+      data: true,
+      status: StatusCodes.OK,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
+// #endregion
+//#region Update Media Image
+export async function updateMediaImage(
+  id: string,
+  newImage: File,
+): Promise<FeatureResponse<boolean>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  // Image validation
+  if (
+    !(newImage instanceof File) ||
+    newImage.size === 0 ||
+    !newImage.type.startsWith("image/")
+  ) {
+    // Wrong image format
+    return {
+      isOk: false,
+      data: false,
+      status: StatusCodes.BAD_REQUEST,
+      errorMessage: "Wrong image format",
+    };
+  }
+
+  try {
+    // Get media item
+    const mediaItem = await db.orm.public.MediaItem.where({
+      id,
+      userId: session.userId,
+    }).first();
+    // If cannot find
+    if (!mediaItem) {
+      return {
+        isOk: false,
+        data: false,
+        status: StatusCodes.NOT_FOUND,
+        errorMessage: "Cannot find media",
+      };
+    }
+
+    // Old image deletion
+    if (mediaItem.imgKey) {
+      const deletionResult = await utapi.deleteFiles(mediaItem.imgKey);
+      if (!deletionResult.success) {
+        return {
+          isOk: false,
+          status: StatusCodes.INTERNAL_SERVER_ERROR,
+          data: false,
+          errorMessage: "Failed to delete image",
+        };
+      }
+      await db.orm.public.MediaItem.where({
+        id,
+        userId: session.userId,
+      }).update({ imgKey: null, imgUrl: null });
+    }
+
+    // New image uploading
+    const uploadingResult = await utapi.uploadFiles(newImage);
+    // If failed to upload
+    if (uploadingResult.error) {
+      return {
+        isOk: false,
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        data: false,
+        errorMessage: "Failed to upload image",
+      };
+    }
+    // Update new image url
+    const updatedMedia = await db.orm.public.MediaItem.where({
+      id,
+      userId: session.userId,
+    }).update({
+      imgKey: uploadingResult.data.key,
+      imgUrl: uploadingResult.data.ufsUrl,
+    });
+
+    if (!updatedMedia) {
+      return {
+        isOk: false,
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        data: false,
+        errorMessage: "Failed to update media",
+      };
+    }
 
     return {
       isOk: true,
