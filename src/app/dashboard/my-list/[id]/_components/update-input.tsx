@@ -70,6 +70,19 @@ export default function UpdateInput({
     setResetStatusTimer(setTimeout(() => setStatus("idle"), 2500));
   };
 
+  const validateUrl = () => {
+    try {
+      const url = new URL(draft.toString());
+
+      if (!["http:", "https:"].includes(url.protocol)) {
+        return null;
+      }
+      return url.href;
+    } catch {
+      return null;
+    }
+  };
+
   return (
     <Field>
       <FieldLabel
@@ -128,7 +141,7 @@ export default function UpdateInput({
             type={type}
             placeholder="Empty"
           />
-          {fieldName === "watchUrl" && draft && (
+          {fieldName === "watchUrl" && draft && validateUrl() && (
             <Link
               className="w-fit! self-start hover:underline"
               target="_blank"
