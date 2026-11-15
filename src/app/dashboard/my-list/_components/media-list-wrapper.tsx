@@ -48,10 +48,12 @@ const MediaListWrapperContent = async () => {
   mediaItems = mediaItems.slice(0, PAGE_LIMIT);
   const last = mediaItems[mediaItems.length - 1]!;
 
-  const cursor = {
-    id: last.id,
-    createdAt: new Date(last.createdAt.epochMilliseconds),
-  };
+  const cursor = last
+    ? {
+        id: last.id,
+        createdAt: new Date(last.createdAt.epochMilliseconds),
+      }
+    : null;
 
   const convertedItems = convertMediaItems(mediaItems);
 

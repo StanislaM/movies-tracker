@@ -46,6 +46,7 @@ type MediaItemProps = {
   releaseYear: number;
   genre: Genre;
   status: WatchingStatus;
+  saved: boolean;
   className?: string;
   deleteSelfAction?: (id: string) => void;
   setSelfSelectedAction?: () => void;
@@ -59,6 +60,7 @@ export default function MediaItemCard({
   imgUrl,
   watchUrl,
   status,
+  saved,
   className,
   deleteSelfAction,
   setSelfSelectedAction,
@@ -112,6 +114,7 @@ export default function MediaItemCard({
         </DialogContent>
       </Dialog>
       <div className="group relative mb-2 aspect-3/4 overflow-hidden rounded-2xl border">
+        {/* Image */}
         {img ? (
           <Image
             alt="poster"
@@ -142,11 +145,15 @@ export default function MediaItemCard({
             </div>
           </Link>
         )}
+        {/* Save for later */}
         <Button
           size="icon-lg"
-          className="bg-background/30 hover:bg-background/50 absolute top-4 right-4 h-12 w-12 rounded-full hover:scale-110"
+          className={`bg-background/30 hover:bg-background/50 absolute top-4 right-4 h-12 w-12 rounded-full hover:scale-110 ${!saved && "opacity-55"} hover:opacity-100`}
         >
-          <Bookmark fill="var(--primary)" stroke="none" />
+          <Bookmark
+            fill={`${saved ? "var(--primary)" : "none"}`}
+            stroke={`${!saved ? "var(--primary)" : "none"}`}
+          />
         </Button>
       </div>
       <div className="mb-0.5 flex items-center justify-between">

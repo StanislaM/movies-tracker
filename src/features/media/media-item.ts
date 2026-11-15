@@ -376,6 +376,75 @@ export async function updateMediaImage(
   }
 }
 // #endregion
+//#region Save for Later
+export async function saveForLater(
+  id: string,
+  saved: boolean,
+): Promise<FeatureResponse<boolean>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  try {
+    // Get media item
+    const mediaItem = await db.orm.public.MediaItem.where({
+      id,
+      userId: session.userId,
+    }).first();
+    // If cannot find
+    if (!mediaItem) {
+      return {
+        isOk: false,
+        data: false,
+        status: StatusCodes.NOT_FOUND,
+        errorMessage: "Cannot find media",
+      };
+    }
+
+    // Updating
+    const updatedMedia = await db.orm.public.MediaItem.where({
+      id,
+      userId: session.userId,
+    }).update({
+      saved,
+      savedAt: saved
+        ? Temporal.Instant.fromEpochMilliseconds(Date.now())
+        : null,
+    });
+
+    if (!updatedMedia) {
+      return {
+        isOk: false,
+        status: StatusCodes.INTERNAL_SERVER_ERROR,
+        data: false,
+        errorMessage: "Failed to update media",
+      };
+    }
+
+    return {
+      isOk: true,
+      data: updatedMedia.saved,
+      status: StatusCodes.OK,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
+// #endregion
 //#region Load More Media
 export async function loadMoreMedia(
   cursor: LoadMoreMediaCursor,
