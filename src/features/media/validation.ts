@@ -35,3 +35,27 @@ export const mediaUpdateSchema = z.object({
     .optional()
     .nullable(),
 });
+
+export const createMediaSchema = z.object({
+  title: z
+    .string()
+    .min(1, "Title cannot be empty")
+    .max(128, "Title must be at most 128 characters"),
+  description: z
+    .string("Description must be at most 512 characters")
+    .max(512)
+    .optional(),
+  releaseYear: z.number().min(0, "Non valid year").max(9999, "Non valid year"),
+  type: z.enum(mediaItemTypes),
+  genre: z.enum(genres),
+  ageRating: z
+    .string()
+    .max(32, "Age rating must be at most 32 characters")
+    .optional(),
+  duration: z.number().min(0).max(Number.MAX_SAFE_INTEGER, "To long"),
+  status: z.enum(watchingStatuses),
+  watchUrl: z
+    .string()
+    .max(512, "Link must be at most 512 characters")
+    .optional(),
+});

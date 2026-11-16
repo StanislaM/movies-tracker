@@ -19,6 +19,7 @@ import {
 import { Separator } from "@/src/components/ui/separator";
 import { Textarea } from "@/src/components/ui/textarea";
 import { createMediaItem } from "@/src/features/media/media-item";
+import { createMediaSchema } from "@/src/features/media/validation";
 import {
   AgeRating,
   ageRatings,
@@ -39,30 +40,6 @@ import { Controller, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import z from "zod";
 
-const addMediaFormSchema = z.object({
-  title: z
-    .string()
-    .min(1, "Title cannot be empty")
-    .max(128, "Title must be at most 128 characters"),
-  description: z
-    .string("Description must be at most 512 characters")
-    .max(512)
-    .optional(),
-  releaseYear: z.number().min(0, "Non valid year").max(9999, "Non valid year"),
-  type: z.enum(mediaItemTypes),
-  genre: z.enum(genres),
-  ageRating: z
-    .string()
-    .max(32, "Age rating must be at most 32 characters")
-    .optional(),
-  duration: z.number().min(0).max(Number.MAX_SAFE_INTEGER, "To long"),
-  status: z.enum(watchingStatuses),
-  watchUrl: z
-    .string()
-    .max(512, "Link must be at most 512 characters")
-    .optional(),
-});
-
 export default function AddMediaForm({
   setIsOpenAction,
 }: {
@@ -73,8 +50,8 @@ export default function AddMediaForm({
   const imgUploadRef = useRef<HTMLInputElement>(null);
   const pathname = usePathname();
 
-  const form = useForm<z.infer<typeof addMediaFormSchema>>({
-    resolver: zodResolver(addMediaFormSchema),
+  const form = useForm<z.infer<typeof createMediaSchema>>({
+    resolver: zodResolver(createMediaSchema),
     defaultValues: {
       title: "",
       description: "",
@@ -88,7 +65,7 @@ export default function AddMediaForm({
     },
   });
 
-  async function onSubmit(data: z.infer<typeof addMediaFormSchema>) {
+  async function onSubmit(data: z.infer<typeof createMediaSchema>) {
     console.log(data);
     const res = await createMediaItem({
       title: data.title,
