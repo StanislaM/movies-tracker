@@ -128,15 +128,16 @@ export default function AddMediaForm({
       onSubmit={form.handleSubmit(onSubmit)}
       noValidate
     >
-      <div className="flex gap-x-6">
+      <div className="flex flex-col gap-x-6 md:flex-row">
         <FieldGroup>
+          {/* Title */}
           <Controller
             name="title"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
-                  className="font-normal opacity-85"
+                  className="text-xs font-normal opacity-85 md:text-[14px]"
                   htmlFor="add-media-form-title"
                 >
                   Title
@@ -156,13 +157,14 @@ export default function AddMediaForm({
             )}
           />
 
+          {/* Description */}
           <Controller
             name="description"
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel
-                  className="font-normal opacity-85"
+                  className="text-xs font-normal opacity-85 md:text-[14px]"
                   htmlFor="add-media-form-descr"
                 >
                   Description(optional)
@@ -183,6 +185,7 @@ export default function AddMediaForm({
             )}
           />
 
+          {/* Type */}
           <div className="flex gap-x-4">
             <Controller
               name="type"
@@ -190,7 +193,7 @@ export default function AddMediaForm({
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel
-                    className="font-normal opacity-85"
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
                     htmlFor="add-media-form-type"
                   >
                     Type
@@ -227,13 +230,14 @@ export default function AddMediaForm({
               )}
             />
 
+            {/* Genre */}
             <Controller
               name="genre"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel
-                    className="font-normal opacity-85"
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
                     htmlFor="add-media-form-genre"
                   >
                     Genre
@@ -272,13 +276,14 @@ export default function AddMediaForm({
           </div>
 
           <div className="flex gap-x-4">
+            {/* Release year */}
             <Controller
               name="releaseYear"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel
-                    className="font-normal opacity-85"
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
                     htmlFor="add-media-form-release"
                   >
                     Release year
@@ -299,13 +304,14 @@ export default function AddMediaForm({
               )}
             />
 
+            {/* Duration */}
             <Controller
               name="duration"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel
-                    className="font-normal opacity-85"
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
                     htmlFor="add-media-form-duration"
                   >
                     Duration(in minutes)
@@ -327,13 +333,14 @@ export default function AddMediaForm({
           </div>
 
           <div className="flex gap-x-4">
+            {/* Age rating */}
             <Controller
               name="ageRating"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel
-                    className="font-normal opacity-85"
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
                     htmlFor="add-media-form-age"
                   >
                     Age rating
@@ -370,13 +377,14 @@ export default function AddMediaForm({
               )}
             />
 
+            {/* Status */}
             <Controller
               name="status"
               control={form.control}
               render={({ field, fieldState }) => (
                 <Field data-invalid={fieldState.invalid}>
                   <FieldLabel
-                    className="font-normal opacity-85"
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
                     htmlFor="add-media-form-status"
                   >
                     Status
@@ -419,8 +427,8 @@ export default function AddMediaForm({
         </FieldGroup>
 
         {/* Preview */}
-        <div className="flex flex-col">
-          <span className="text-muted-foreground mb-2 text-xs font-bold tracking-widest uppercase">
+        <div className="mt-4 flex flex-col items-center md:mt-0 md:items-start">
+          <span className="text-muted-foreground mt-4 mb-2 text-xs font-bold tracking-widest uppercase md:mt-0">
             Preview
           </span>
           {/* Img preview */}
@@ -488,13 +496,17 @@ export default function AddMediaForm({
             <span>{form.watch("genre")}</span>
           </div>
 
+          {/* Watch URL */}
           <Controller
             name="watchUrl"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid} className="mt-auto">
+              <Field
+                data-invalid={fieldState.invalid}
+                className="-order-1 mt-auto md:order-1"
+              >
                 <FieldLabel
-                  className="font-normal opacity-85"
+                  className="text-xs font-normal opacity-85 md:text-[14px]"
                   htmlFor="add-media-form-watch"
                 >
                   URL
