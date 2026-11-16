@@ -181,10 +181,14 @@ export default function MediaItemCard({
                 <Info />
                 Details
               </DropdownMenuItem>
-              <DropdownMenuItem>
-                <SquarePen />
-                Edit
-              </DropdownMenuItem>
+              <DropdownMenuItem
+                render={
+                  <Link href={`/dashboard/my-list/${id}`}>
+                    <SquarePen />
+                    Edit
+                  </Link>
+                }
+              ></DropdownMenuItem>
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger>
                   <Eye /> Status
