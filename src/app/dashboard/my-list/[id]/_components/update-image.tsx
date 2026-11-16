@@ -96,14 +96,14 @@ export default function UpdateImage({ imgUrl, imgKey, id }: UpdateImageProps) {
           <ImageUp className="absolute top-1/2 left-1/2 h-15 w-15 -translate-x-1/2 -translate-y-1/2 opacity-0 transition group-hover/update-img:opacity-100" />
           {/* Cancel new image */}
           <div
-            className="bg-destructive absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full opacity-0 transition group-hover/update-img:opacity-100 hover:scale-125"
+            className="bg-destructive absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full opacity-0 transition group-hover/update-img:opacity-100 hover:scale-125 [@media(hover:none)]:opacity-100"
             onClick={() => setNewImage(null)}
           >
             <X />
           </div>
           {/* Confirm new image */}
           <div
-            className="bg-primary absolute right-5 bottom-5 flex h-10 w-10 items-center justify-center rounded-full opacity-0 transition group-hover/update-img:opacity-100 hover:scale-125"
+            className="bg-primary absolute right-5 bottom-5 flex h-10 w-10 items-center justify-center rounded-full opacity-0 transition group-hover/update-img:opacity-100 hover:scale-125 [@media(hover:none)]:opacity-100"
             onClick={updateImageHandler}
           >
             <Check />
@@ -124,7 +124,7 @@ export default function UpdateImage({ imgUrl, imgKey, id }: UpdateImageProps) {
           />
           <ImageUp className="absolute top-1/2 left-1/2 h-15 w-15 -translate-x-1/2 -translate-y-1/2 opacity-0 transition group-hover/update-img:opacity-100" />
           <div
-            className="bg-destructive absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full opacity-0 transition group-hover/update-img:opacity-100 hover:scale-125"
+            className="bg-destructive absolute top-5 right-5 flex h-10 w-10 items-center justify-center rounded-full opacity-0 transition group-hover/update-img:opacity-100 hover:scale-125 [@media(hover:none)]:opacity-100"
             onClick={(e) => {
               e.stopPropagation();
               setIsOpen(true);

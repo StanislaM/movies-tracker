@@ -74,16 +74,16 @@ export default function UpdateMedia({ mediaItem }: UpdateMediaProps) {
   };
 
   return (
-    <div className="flex gap-x-8">
+    <div className="flex flex-wrap gap-8">
       {/* Information section */}
       <section className="block max-w-3xl grow">
-        <Card className="px-4 py-8">
+        <Card className="px-0 py-4 sm:px-4 sm:py-8">
           <CardHeader className="flex items-center gap-x-3">
-            <div className="bg-muted flex h-12 w-12 items-center justify-center rounded-full">
+            <div className="bg-muted flex h-12 w-12 shrink-0 items-center justify-center rounded-full">
               <Play stroke="var(--primary)" height={18} />
             </div>
             <div className="flex flex-col">
-              <CardTitle className="mb-2 font-serif text-3xl">
+              <CardTitle className="mb-2 font-serif text-xl sm:text-3xl">
                 Update information
               </CardTitle>
               <CardDescription className="text-muted-foreground text-xs">
@@ -142,7 +142,7 @@ export default function UpdateMedia({ mediaItem }: UpdateMediaProps) {
               {/* Duration */}
               <UpdateInput
                 fieldName="duration"
-                title="Duration(in minutes)"
+                title="Duration(minutes)"
                 value={mediaItem.duration}
                 type="number"
                 id={mediaItem.id}
@@ -181,7 +181,7 @@ export default function UpdateMedia({ mediaItem }: UpdateMediaProps) {
 
       {/* Img section */}
       <section className="block max-w-sm grow">
-        <Card className="px-4 py-8">
+        <Card className="px-0 py-4 sm:px-4 sm:py-8">
           <CardContent>
             {/* Image */}
             <UpdateImage
@@ -191,7 +191,7 @@ export default function UpdateMedia({ mediaItem }: UpdateMediaProps) {
             />
 
             {/* Save for later, deletion */}
-            <div className="mt-5 flex gap-x-5">
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3">
               <Button
                 size="lg"
                 variant={isSaved ? "outline" : "default"}

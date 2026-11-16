@@ -77,7 +77,7 @@ export default function UpdateSelect({
     <Field>
       <FieldLabel
         htmlFor={`update-input-${fieldName}`}
-        className="text-muted-foreground capitalize"
+        className="text-muted-foreground text-xs capitalize sm:text-[14px]"
       >
         {title}
         {status === "pending" && (
