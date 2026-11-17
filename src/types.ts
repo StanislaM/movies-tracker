@@ -22,7 +22,9 @@ export type CreateMediaItemData = {
   img: File | null;
 };
 
-export type updateMediaItemData = Omit<Partial<CreateMediaItemData>, "img">;
+export type updateMediaItemData = Omit<Partial<CreateMediaItemData>, "img"> & {
+  userScore?: number | null;
+};
 
 export type FeatureResponse<T> = {
   isOk: boolean;

@@ -37,12 +37,12 @@ export default function MideItemInfoModal({
 
         <div className="xs:flex-row flex flex-col gap-x-4">
           <div className="relative">
-            <div className="bg-primary/75 absolute top-2 left-2 flex h-12 w-12 items-center justify-center rounded-full text-2xl font-semibold">
+            <div className="bg-accent-foreground/45 absolute top-2 left-2 flex h-12 w-12 items-center justify-center rounded-full text-2xl font-semibold">
               <span className="relative z-2">{item.userScore ?? "N/A"}</span>
               <Star
                 className="absolute z-1 h-10 w-10 opacity-70"
-                fill="var(--muted-foreground)"
-                stroke="var(--muted-foreground)"
+                fill="var(--primary)"
+                stroke="var(--primary)"
               />
             </div>
             {img ? (

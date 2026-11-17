@@ -22,7 +22,7 @@ export default function AddMediaModal() {
         <Plus height={16} />
         <span className="hidden sm:inline">Add movie</span>
       </DialogTrigger>
-      <DialogContent className="max-h-[calc(100dvh-20px)] overflow-y-scroll md:w-xl md:max-w-xl!">
+      <DialogContent className="max-h-[calc(100dvh-20px)] overflow-y-auto md:w-xl md:max-w-xl!">
         <DialogHeader>
           <span className="text-primary text-xs font-semibold tracking-widest uppercase">
             Your library

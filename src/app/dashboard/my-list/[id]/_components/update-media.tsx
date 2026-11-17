@@ -30,6 +30,7 @@ import { useState } from "react";
 import { deleteMedia, saveForLater } from "@/src/features/media/media-item";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import UpdateScore from "./update-score";
 
 type UpdateMediaProps = {
   mediaItem: IMedia;
@@ -175,6 +176,14 @@ export default function UpdateMedia({ mediaItem }: UpdateMediaProps) {
               value={mediaItem.watchUrl}
               id={mediaItem.id}
             />
+
+            {/* Score */}
+            <div className="max-w-xs">
+              <span className="text-muted-foreground mb-1 flex font-bold tracking-widest uppercase">
+                Score
+              </span>
+              <UpdateScore id={mediaItem.id} userScore={mediaItem.userScore} />
+            </div>
           </CardContent>
         </Card>
       </section>

@@ -14,7 +14,7 @@ import { StatusCodes } from "http-status-codes";
 import { getSession } from "../auth/session";
 import { Temporal } from "@js-temporal/polyfill";
 import { convertMediaItems } from "@/src/lib/utils";
-import { createMediaSchema, mediaUpdateSchema } from "./validation";
+import { createMediaSchema, updateMediaSchema } from "./validation";
 
 //#region Create Media Item
 export async function createMediaItem(
@@ -125,7 +125,7 @@ export async function updateMedia(
   }
 
   // Field validation
-  const validationResult = mediaUpdateSchema.safeParse(data);
+  const validationResult = updateMediaSchema.safeParse(data);
 
   if (!validationResult.success) {
     return {

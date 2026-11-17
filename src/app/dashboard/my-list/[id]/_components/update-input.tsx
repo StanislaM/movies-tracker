@@ -4,7 +4,7 @@ import { Field, FieldLabel } from "@/src/components/ui/field";
 import { Input } from "@/src/components/ui/input";
 import { Textarea } from "@/src/components/ui/textarea";
 import { updateMedia } from "@/src/features/media/media-item";
-import { mediaUpdateSchema } from "@/src/features/media/validation";
+import { updateMediaSchema } from "@/src/features/media/validation";
 import { IMedia } from "@/src/types";
 import { Check, Loader, X } from "lucide-react";
 import Link from "next/link";
@@ -39,7 +39,7 @@ export default function UpdateInput({
       return;
     }
 
-    const validationResult = mediaUpdateSchema.safeParse({
+    const validationResult = updateMediaSchema.safeParse({
       [fieldName]: draft,
     });
     if (!validationResult.success) {

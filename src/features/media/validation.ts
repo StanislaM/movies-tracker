@@ -1,7 +1,7 @@
 import { genres, mediaItemTypes, watchingStatuses } from "@/src/types";
 import z from "zod";
 
-export const mediaUpdateSchema = z.object({
+export const updateMediaSchema = z.object({
   title: z
     .string()
     .min(1, "Title cannot be empty")
@@ -32,6 +32,12 @@ export const mediaUpdateSchema = z.object({
   watchUrl: z
     .string()
     .max(512, "Link must be at most 512 characters")
+    .optional()
+    .nullable(),
+  userScore: z
+    .number()
+    .min(0, "Score cannot be below 0")
+    .max(10, "Score cannot be abow 10")
     .optional()
     .nullable(),
 });

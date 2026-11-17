@@ -10,7 +10,7 @@ import {
   SelectValue,
 } from "@/src/components/ui/select";
 import { updateMedia } from "@/src/features/media/media-item";
-import { mediaUpdateSchema } from "@/src/features/media/validation";
+import { updateMediaSchema } from "@/src/features/media/validation";
 import { IMedia } from "@/src/types";
 import { Check, Loader, X } from "lucide-react";
 import { useState } from "react";
@@ -43,7 +43,7 @@ export default function UpdateSelect({
       return;
     }
 
-    const validationResult = mediaUpdateSchema.safeParse({
+    const validationResult = updateMediaSchema.safeParse({
       [fieldName]: newValue,
     });
     if (!validationResult.success) {
