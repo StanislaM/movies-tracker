@@ -1,0 +1,122 @@
+[
+  {
+    "id": "table.MediaItem",
+    "label": "Create table \"MediaItem\"",
+    "summary": "Creates table \"MediaItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "table",
+        "name": "MediaItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure table \"MediaItem\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MediaItem\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create table \"MediaItem\"",
+        "sql": "CREATE TABLE \"public\".\"MediaItem\" (\n  \"ageRating\" text NOT NULL,\n  \"createdAt\" timestamptz DEFAULT (now()) NOT NULL,\n  \"description\" text,\n  \"duration\" int2 NOT NULL,\n  \"id\" uuid NOT NULL,\n  \"imgUrl\" text,\n  \"releaseYear\" int2 NOT NULL,\n  \"saved\" bool NOT NULL,\n  \"status\" text NOT NULL,\n  \"title\" text NOT NULL,\n  \"type\" text NOT NULL,\n  \"userId\" uuid NOT NULL,\n  \"userScore\" int2 NOT NULL,\n  \"watchUrl\" text,\n  PRIMARY KEY (\"id\"),\n  CONSTRAINT \"MediaItem_status_check_399d5be8\" CHECK (\"status\" IN ('planned', 'watching', 'completed', 'delayed', 'dropped'))\n)",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify table \"MediaItem\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MediaItem\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "index.MediaItem.MediaItem_userId_idx_a489d58a",
+    "label": "Create index \"MediaItem_userId_idx_a489d58a\" on \"MediaItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "index",
+        "name": "MediaItem_userId_idx_a489d58a",
+        "table": "MediaItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure index \"MediaItem_userId_idx_a489d58a\" does not exist",
+        "sql": "SELECT (to_regclass($1)) IS NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MediaItem_userId_idx_a489d58a\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "create index \"MediaItem_userId_idx_a489d58a\"",
+        "sql": "CREATE INDEX \"MediaItem_userId_idx_a489d58a\" ON \"public\".\"MediaItem\" (\"userId\")",
+        "params": []
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify index \"MediaItem_userId_idx_a489d58a\" exists",
+        "sql": "SELECT (to_regclass($1)) IS NOT NULL AS \"result\"",
+        "params": [
+          "\"public\".\"MediaItem_userId_idx_a489d58a\""
+        ]
+      }
+    ]
+  },
+  {
+    "id": "foreignKey.MediaItem.MediaItem_userId_fkey",
+    "label": "Add foreign key \"MediaItem_userId_fkey\" on \"MediaItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "foreignKey",
+        "name": "MediaItem_userId_fkey",
+        "table": "MediaItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure FK \"MediaItem_userId_fkey\" does not exist",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MediaItem_userId_fkey",
+          "public",
+          "\"public\".\"MediaItem\""
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add FK \"MediaItem_userId_fkey\"",
+        "sql": "ALTER TABLE \"public\".\"MediaItem\"\nADD CONSTRAINT \"MediaItem_userId_fkey\"\nFOREIGN KEY (\"userId\")\nREFERENCES \"public\".\"User\" (\"id\")"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify FK \"MediaItem_userId_fkey\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"pg_constraint\" AS \"c\" INNER JOIN \"pg_namespace\" AS \"n\" ON \"n\".\"oid\" = \"c\".\"connamespace\" WHERE (\"c\".\"conname\" = $1 AND \"n\".\"nspname\" = $2 AND \"c\".\"conrelid\" = to_regclass($3))) AS \"result\"",
+        "params": [
+          "MediaItem_userId_fkey",
+          "public",
+          "\"public\".\"MediaItem\""
+        ]
+      }
+    ]
+  }
+]

@@ -1,53 +1,62 @@
 import MediaItemCard from "@/src/components/media-item-card";
-import { Genre } from "@/src/types";
+import { Genre, WatchingStatus } from "@/src/types";
 
 export default async function SavedForLater() {
   // HARDCODED DATA===================
   const savedItems: {
     id: string;
-    name: string;
+    title: string;
     releaseYear: number;
     genre: Genre;
     imgUrl: string | null;
-    watchUrl?: string;
+    watchUrl: string | null;
+    status: WatchingStatus;
   }[] = [
     {
       id: "123456",
-      name: "The ",
+      title: "The ",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
       watchUrl: "https://yummyanime.tv/index-6",
+      status: "planned",
     },
     {
       id: "123457",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl:
         "https://images.pexels.com/photos/39886343/pexels-photo-39886343.jpeg",
       watchUrl: "https://yummyanime.tv/index-6",
+      status: "planned",
     },
     {
       id: "123458",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
+      watchUrl: null,
+      status: "planned",
     },
     {
       id: "123459",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
+      watchUrl: null,
+      status: "planned",
     },
     {
       id: "123450",
-      name: "The Quiet Hour",
+      title: "The Quiet Hour",
       releaseYear: 2024,
       genre: "drama",
       imgUrl: null,
+      watchUrl: null,
+      status: "planned",
     },
   ];
   // HARDCODED DATA===================

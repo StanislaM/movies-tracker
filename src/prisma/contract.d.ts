@@ -34,9 +34,9 @@ import type {
 } from '@prisma/orm-postgres/contract/types';
 
 export type StorageHash =
-  StorageHashBase<'d07f27f7f0bf2c183562f6283b46888107411660a8d99e751721bd0ee335936e'>;
+  StorageHashBase<'910f464e1b8353e7f6d95d726435cd42f6f7fcb7333fed32e879a4e2472ce591'>;
 export type ExecutionHash =
-  ExecutionHashBase<'e853f56b00b23938ad3fbd689d9bb07c3411d8066e574174900a60fe73bda0a9'>;
+  ExecutionHashBase<'7c2744b476e7c89fcdc0a0170d3989737d505fe024fe127f5377f65b2b132a02'>;
 export type ProfileHash =
   ProfileHashBase<'3916f444a8a17ad749191acf9e08dad97d1a327b88c2f1d45d12f240296aa8b2'>;
 
@@ -250,6 +250,25 @@ type DefaultLiteralValue<CodecId extends string, Encoded> = CodecId extends keyo
 
 export type FieldOutputTypes = {
   readonly public: {
+    readonly MediaItem: {
+      readonly ageRating: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly description: CodecTypes['pg/text@1']['output'] | null;
+      readonly duration: CodecTypes['pg/int2@1']['output'];
+      readonly genre: CodecTypes['pg/text@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly imgKey: CodecTypes['pg/text@1']['output'] | null;
+      readonly imgUrl: CodecTypes['pg/text@1']['output'] | null;
+      readonly releaseYear: CodecTypes['pg/int2@1']['output'];
+      readonly saved: CodecTypes['pg/bool@1']['output'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly type: CodecTypes['pg/text@1']['output'];
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
+      readonly userScore: CodecTypes['pg/int2@1']['output'] | null;
+      readonly watchUrl: CodecTypes['pg/text@1']['output'] | null;
+    };
     readonly Session: {
       readonly expiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly tokenHash: CodecTypes['pg/text@1']['output'];
@@ -267,6 +286,25 @@ export type FieldOutputTypes = {
 };
 export type FieldInputTypes = {
   readonly public: {
+    readonly MediaItem: {
+      readonly ageRating: CodecTypes['pg/text@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly description: CodecTypes['pg/text@1']['input'] | null;
+      readonly duration: CodecTypes['pg/int2@1']['input'];
+      readonly genre: CodecTypes['pg/text@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly imgKey: CodecTypes['pg/text@1']['input'] | null;
+      readonly imgUrl: CodecTypes['pg/text@1']['input'] | null;
+      readonly releaseYear: CodecTypes['pg/int2@1']['input'];
+      readonly saved: CodecTypes['pg/bool@1']['input'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly type: CodecTypes['pg/text@1']['input'];
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
+      readonly userScore: CodecTypes['pg/int2@1']['input'] | null;
+      readonly watchUrl: CodecTypes['pg/text@1']['input'] | null;
+    };
     readonly Session: {
       readonly expiresAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly tokenHash: CodecTypes['pg/text@1']['input'];
@@ -284,6 +322,25 @@ export type FieldInputTypes = {
 };
 export type StorageColumnTypes = {
   readonly public: {
+    readonly MediaItem: {
+      readonly ageRating: CodecTypes['pg/text@1']['output'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+      readonly description: CodecTypes['pg/text@1']['output'] | null;
+      readonly duration: CodecTypes['pg/int2@1']['output'];
+      readonly genre: CodecTypes['pg/text@1']['output'];
+      readonly id: CodecTypes['pg/uuid@1']['output'];
+      readonly imgKey: CodecTypes['pg/text@1']['output'] | null;
+      readonly imgUrl: CodecTypes['pg/text@1']['output'] | null;
+      readonly releaseYear: CodecTypes['pg/int2@1']['output'];
+      readonly saved: CodecTypes['pg/bool@1']['output'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+      readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
+      readonly title: CodecTypes['pg/text@1']['output'];
+      readonly type: CodecTypes['pg/text@1']['output'];
+      readonly userId: CodecTypes['pg/uuid@1']['output'];
+      readonly userScore: CodecTypes['pg/int2@1']['output'] | null;
+      readonly watchUrl: CodecTypes['pg/text@1']['output'] | null;
+    };
     readonly Session: {
       readonly expiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
       readonly tokenHash: CodecTypes['pg/text@1']['output'];
@@ -301,6 +358,25 @@ export type StorageColumnTypes = {
 };
 export type StorageColumnInputTypes = {
   readonly public: {
+    readonly MediaItem: {
+      readonly ageRating: CodecTypes['pg/text@1']['input'] | null;
+      readonly createdAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
+      readonly description: CodecTypes['pg/text@1']['input'] | null;
+      readonly duration: CodecTypes['pg/int2@1']['input'];
+      readonly genre: CodecTypes['pg/text@1']['input'];
+      readonly id: CodecTypes['pg/uuid@1']['input'];
+      readonly imgKey: CodecTypes['pg/text@1']['input'] | null;
+      readonly imgUrl: CodecTypes['pg/text@1']['input'] | null;
+      readonly releaseYear: CodecTypes['pg/int2@1']['input'];
+      readonly saved: CodecTypes['pg/bool@1']['input'];
+      readonly savedAt: CodecTypes['pg/timestamptz-temporal@1']['input'] | null;
+      readonly status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
+      readonly title: CodecTypes['pg/text@1']['input'];
+      readonly type: CodecTypes['pg/text@1']['input'];
+      readonly userId: CodecTypes['pg/uuid@1']['input'];
+      readonly userScore: CodecTypes['pg/int2@1']['input'] | null;
+      readonly watchUrl: CodecTypes['pg/text@1']['input'] | null;
+    };
     readonly Session: {
       readonly expiresAt: CodecTypes['pg/timestamptz-temporal@1']['input'];
       readonly tokenHash: CodecTypes['pg/text@1']['input'];
@@ -318,6 +394,27 @@ export type StorageColumnInputTypes = {
 };
 
 export namespace Models {
+  export type public_MediaItem = {
+    ageRating: CodecTypes['pg/text@1']['output'] | null;
+    createdAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
+    description: CodecTypes['pg/text@1']['output'] | null;
+    duration: CodecTypes['pg/int2@1']['output'];
+    genre: CodecTypes['pg/text@1']['output'];
+    id: CodecTypes['pg/uuid@1']['output'];
+    imgKey: CodecTypes['pg/text@1']['output'] | null;
+    imgUrl: CodecTypes['pg/text@1']['output'] | null;
+    releaseYear: CodecTypes['pg/int2@1']['output'];
+    saved: CodecTypes['pg/bool@1']['output'];
+    savedAt: CodecTypes['pg/timestamptz-temporal@1']['output'] | null;
+    status: 'planned' | 'watching' | 'completed' | 'delayed' | 'dropped';
+    title: CodecTypes['pg/text@1']['output'];
+    type: CodecTypes['pg/text@1']['output'];
+    userId: CodecTypes['pg/uuid@1']['output'];
+    userScore: CodecTypes['pg/int2@1']['output'] | null;
+    watchUrl: CodecTypes['pg/text@1']['output'] | null;
+    user: public_User;
+    readonly [RelationKeys]?: 'user';
+  };
   export type public_Session = {
     expiresAt: CodecTypes['pg/timestamptz-temporal@1']['output'];
     tokenHash: CodecTypes['pg/text@1']['output'];
@@ -332,13 +429,15 @@ export namespace Models {
     imgUrl: CodecTypes['pg/text@1']['output'] | null;
     name: CodecTypes['pg/text@1']['output'];
     passwordHash: CodecTypes['pg/text@1']['output'];
+    mediaItems: public_MediaItem[];
     sessions: public_Session[];
-    readonly [RelationKeys]?: 'sessions';
+    readonly [RelationKeys]?: 'mediaItems' | 'sessions';
   };
 }
 
 export declare const models: {
   public: {
+    MediaItem: Models.public_MediaItem;
     Session: Models.public_Session;
     User: Models.public_User;
   };
@@ -362,6 +461,120 @@ type ContractBase = Omit<
         readonly kind: 'postgres-schema';
         readonly entries: {
           readonly table: {
+            readonly MediaItem: {
+              columns: {
+                readonly ageRating: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly createdAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: false;
+                  readonly default: { readonly kind: 'function'; readonly expression: 'now()' };
+                };
+                readonly description: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly duration: {
+                  readonly nativeType: 'int2';
+                  readonly codecId: 'pg/int2@1';
+                  readonly nullable: false;
+                };
+                readonly genre: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly id: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly imgKey: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly imgUrl: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+                readonly releaseYear: {
+                  readonly nativeType: 'int2';
+                  readonly codecId: 'pg/int2@1';
+                  readonly nullable: false;
+                };
+                readonly saved: {
+                  readonly nativeType: 'bool';
+                  readonly codecId: 'pg/bool@1';
+                  readonly nullable: false;
+                };
+                readonly savedAt: {
+                  readonly nativeType: 'timestamptz';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                  readonly nullable: true;
+                };
+                readonly status: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly title: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly type: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: false;
+                };
+                readonly userId: {
+                  readonly nativeType: 'uuid';
+                  readonly codecId: 'pg/uuid@1';
+                  readonly nullable: false;
+                };
+                readonly userScore: {
+                  readonly nativeType: 'int2';
+                  readonly codecId: 'pg/int2@1';
+                  readonly nullable: true;
+                };
+                readonly watchUrl: {
+                  readonly nativeType: 'text';
+                  readonly codecId: 'pg/text@1';
+                  readonly nullable: true;
+                };
+              };
+              primaryKey: { readonly columns: readonly ['id'] };
+              uniques: readonly [];
+              indexes: readonly [
+                {
+                  readonly name: 'MediaItem_userId_idx_a489d58a';
+                  readonly prefix: 'MediaItem_userId_idx';
+                  readonly columns: readonly ['userId'];
+                  readonly unique: false;
+                },
+              ];
+              foreignKeys: readonly [
+                {
+                  readonly source: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'MediaItem';
+                    readonly columns: readonly ['userId'];
+                  };
+                  readonly target: {
+                    readonly namespaceId: 'public' & NamespaceId;
+                    readonly tableName: 'User';
+                    readonly columns: readonly ['id'];
+                  };
+                },
+              ];
+            };
             readonly Session: {
               columns: {
                 readonly expiresAt: {
@@ -445,6 +658,12 @@ type ContractBase = Omit<
               foreignKeys: readonly [];
             };
           };
+          readonly valueSet: {
+            readonly Status: {
+              readonly kind: 'valueSet';
+              readonly values: readonly ['planned', 'watching', 'completed', 'delayed', 'dropped'];
+            };
+          };
         };
       };
     };
@@ -455,6 +674,7 @@ type ContractBase = Omit<
   readonly target: 'postgres';
   readonly targetFamily: 'sql';
   readonly roots: {
+    readonly MediaItem: { readonly namespace: 'public' & NamespaceId; readonly model: 'MediaItem' };
     readonly Session: { readonly namespace: 'public' & NamespaceId; readonly model: 'Session' };
     readonly User: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
   };
@@ -462,6 +682,118 @@ type ContractBase = Omit<
     readonly namespaces: {
       readonly public: {
         readonly models: {
+          readonly MediaItem: {
+            readonly fields: {
+              readonly ageRating: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly createdAt: {
+                readonly nullable: false;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly description: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly duration: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int2@1' };
+              };
+              readonly genre: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly id: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly imgKey: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly imgUrl: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly releaseYear: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int2@1' };
+              };
+              readonly saved: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/bool@1' };
+              };
+              readonly savedAt: {
+                readonly nullable: true;
+                readonly type: {
+                  readonly kind: 'scalar';
+                  readonly codecId: 'pg/timestamptz-temporal@1';
+                };
+              };
+              readonly status: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly title: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly type: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+              readonly userId: {
+                readonly nullable: false;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/uuid@1' };
+              };
+              readonly userScore: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/int2@1' };
+              };
+              readonly watchUrl: {
+                readonly nullable: true;
+                readonly type: { readonly kind: 'scalar'; readonly codecId: 'pg/text@1' };
+              };
+            };
+            readonly relations: {
+              readonly user: {
+                readonly to: { readonly namespace: 'public' & NamespaceId; readonly model: 'User' };
+                readonly cardinality: 'N:1';
+                readonly nullable: false;
+                readonly on: {
+                  readonly localFields: readonly ['userId'];
+                  readonly targetFields: readonly ['id'];
+                };
+              };
+            };
+            readonly storage: {
+              readonly table: 'MediaItem';
+              readonly namespaceId: 'public';
+              readonly fields: {
+                readonly ageRating: { readonly column: 'ageRating' };
+                readonly createdAt: { readonly column: 'createdAt' };
+                readonly description: { readonly column: 'description' };
+                readonly duration: { readonly column: 'duration' };
+                readonly genre: { readonly column: 'genre' };
+                readonly id: { readonly column: 'id' };
+                readonly imgKey: { readonly column: 'imgKey' };
+                readonly imgUrl: { readonly column: 'imgUrl' };
+                readonly releaseYear: { readonly column: 'releaseYear' };
+                readonly saved: { readonly column: 'saved' };
+                readonly savedAt: { readonly column: 'savedAt' };
+                readonly status: { readonly column: 'status' };
+                readonly title: { readonly column: 'title' };
+                readonly type: { readonly column: 'type' };
+                readonly userId: { readonly column: 'userId' };
+                readonly userScore: { readonly column: 'userScore' };
+                readonly watchUrl: { readonly column: 'watchUrl' };
+              };
+            };
+          };
           readonly Session: {
             readonly fields: {
               readonly expiresAt: {
@@ -532,6 +864,17 @@ type ContractBase = Omit<
               };
             };
             readonly relations: {
+              readonly mediaItems: {
+                readonly to: {
+                  readonly namespace: 'public' & NamespaceId;
+                  readonly model: 'MediaItem';
+                };
+                readonly cardinality: '1:N';
+                readonly on: {
+                  readonly localFields: readonly ['id'];
+                  readonly targetFields: readonly ['userId'];
+                };
+              };
               readonly sessions: {
                 readonly to: {
                   readonly namespace: 'public' & NamespaceId;
@@ -556,6 +899,18 @@ type ContractBase = Omit<
                 readonly passwordHash: { readonly column: 'passwordHash' };
               };
             };
+          };
+        };
+        readonly enum: {
+          readonly Status: {
+            readonly codecId: 'pg/text@1';
+            readonly members: readonly [
+              { readonly name: 'Planned'; readonly value: 'planned' },
+              { readonly name: 'Watching'; readonly value: 'watching' },
+              { readonly name: 'Completed'; readonly value: 'completed' },
+              { readonly name: 'Delayed'; readonly value: 'delayed' },
+              { readonly name: 'Dropped'; readonly value: 'dropped' },
+            ];
           };
         };
       };
@@ -586,6 +941,14 @@ type ContractBase = Omit<
     readonly executionHash: ExecutionHash;
     readonly mutations: {
       readonly defaults: readonly [
+        {
+          readonly onCreate: { readonly id: 'uuidv4'; readonly kind: 'generator' };
+          readonly ref: {
+            readonly column: 'id';
+            readonly namespace: 'public';
+            readonly table: 'MediaItem';
+          };
+        },
         {
           readonly onCreate: { readonly id: 'uuidv4'; readonly kind: 'generator' };
           readonly ref: {

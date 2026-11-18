@@ -1,0 +1,92 @@
+[
+  {
+    "id": "column.public.MediaItem.genre",
+    "label": "Add column \"genre\" to \"MediaItem\"",
+    "operationClass": "additive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "genre",
+        "table": "MediaItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"genre\" is missing",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "MediaItem",
+          "genre"
+        ]
+      }
+    ],
+    "execute": [
+      {
+        "description": "add column \"genre\"",
+        "sql": "ALTER TABLE \"public\".\"MediaItem\" ADD COLUMN \"genre\" text"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"genre\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "MediaItem",
+          "genre"
+        ]
+      }
+    ]
+  },
+  {
+    "id": "alterNullability.setNotNull.MediaItem.genre",
+    "label": "Set NOT NULL on \"MediaItem\".\"genre\"",
+    "operationClass": "destructive",
+    "target": {
+      "id": "postgres",
+      "details": {
+        "schema": "public",
+        "objectType": "column",
+        "name": "genre",
+        "table": "MediaItem"
+      }
+    },
+    "precheck": [
+      {
+        "description": "ensure column \"genre\" exists",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3)) AS \"result\"",
+        "params": [
+          "public",
+          "MediaItem",
+          "genre"
+        ]
+      },
+      {
+        "description": "ensure no NULL values in \"genre\"",
+        "sql": "SELECT NOT EXISTS (SELECT 1 AS \"one\" FROM \"public\".\"MediaItem\" WHERE \"genre\" IS NULL) AS \"result\"",
+        "params": []
+      }
+    ],
+    "execute": [
+      {
+        "description": "set NOT NULL on \"genre\"",
+        "sql": "ALTER TABLE \"public\".\"MediaItem\" ALTER COLUMN \"genre\" SET NOT NULL"
+      }
+    ],
+    "postcheck": [
+      {
+        "description": "verify column \"genre\" is NOT NULL",
+        "sql": "SELECT EXISTS (SELECT 1 AS \"one\" FROM \"information_schema\".\"columns\" WHERE (\"table_schema\" = $1 AND \"table_name\" = $2 AND \"column_name\" = $3 AND \"is_nullable\" = $4)) AS \"result\"",
+        "params": [
+          "public",
+          "MediaItem",
+          "genre",
+          "NO"
+        ]
+      }
+    ]
+  }
+]

@@ -1,0 +1,525 @@
+"use client";
+
+import { Button } from "@/src/components/ui/button";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/src/components/ui/field";
+import { Input } from "@/src/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/src/components/ui/select";
+import { Separator } from "@/src/components/ui/separator";
+import { Textarea } from "@/src/components/ui/textarea";
+import { createMediaItem } from "@/src/features/media/media-item";
+import { createMediaSchema } from "@/src/features/media/validation";
+import {
+  AgeRating,
+  ageRatings,
+  Genre,
+  genres,
+  MediaItemType,
+  mediaItemTypes,
+  WatchingStatus,
+  watchingStatuses,
+} from "@/src/types";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { StatusCodes } from "http-status-codes";
+import { ImageUp, Plus, X } from "lucide-react";
+import Image from "next/image";
+import { usePathname, useRouter } from "next/navigation";
+import { Dispatch, SetStateAction, useRef, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import { toast } from "sonner";
+import z from "zod";
+
+export default function AddMediaForm({
+  setIsOpenAction,
+}: {
+  setIsOpenAction: Dispatch<SetStateAction<boolean>>;
+}) {
+  const router = useRouter();
+  const [img, setImg] = useState<File | null>(null);
+  const imgUploadRef = useRef<HTMLInputElement>(null);
+  const pathname = usePathname();
+
+  const form = useForm<z.infer<typeof createMediaSchema>>({
+    resolver: zodResolver(createMediaSchema),
+    defaultValues: {
+      title: "",
+      description: "",
+      releaseYear: 2020,
+      type: "movie",
+      genre: "action",
+      ageRating: "none",
+      duration: 60,
+      status: "planned",
+      watchUrl: "",
+    },
+  });
+
+  async function onSubmit(data: z.infer<typeof createMediaSchema>) {
+    console.log(data);
+    const res = await createMediaItem({
+      title: data.title,
+      description: data.description,
+      releaseYear: data.releaseYear,
+      type: data.type as MediaItemType,
+      genre: data.genre as Genre,
+      ageRating: data.ageRating as AgeRating,
+      duration: data.duration,
+      status: data.status as WatchingStatus,
+      watchUrl: data.watchUrl,
+      img: img,
+    });
+
+    if (!res.isOk) {
+      if (res.status === StatusCodes.UNAUTHORIZED) {
+        toast.warning("Session expired");
+        router.push("/login");
+      } else {
+        toast.warning(res.errorMessage);
+      }
+    }
+
+    if (res.isOk) {
+      toast.success("Created successfully");
+      form.reset();
+      if (pathname === "/dashboard/my-list") {
+        router.refresh();
+      }
+      setIsOpenAction(false);
+    }
+  }
+
+  return (
+    <form
+      id="add-media-item-form"
+      onSubmit={form.handleSubmit(onSubmit)}
+      noValidate
+    >
+      <div className="flex flex-col gap-x-6 md:flex-row">
+        <FieldGroup>
+          {/* Title */}
+          <Controller
+            name="title"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel
+                  className="text-xs font-normal opacity-85 md:text-[14px]"
+                  htmlFor="add-media-form-title"
+                >
+                  Title
+                </FieldLabel>
+                <Input
+                  className="focus-visible:ring-primary focus-visible:border-primary py-4 placeholder:opacity-75"
+                  {...field}
+                  id="add-media-form-title"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="e.g. Perfect Days"
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          {/* Description */}
+          <Controller
+            name="description"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field data-invalid={fieldState.invalid}>
+                <FieldLabel
+                  className="text-xs font-normal opacity-85 md:text-[14px]"
+                  htmlFor="add-media-form-descr"
+                >
+                  Description(optional)
+                </FieldLabel>
+                <Textarea
+                  maxLength={512}
+                  className="focus-visible:ring-primary focus-visible:border-primary py-3 placeholder:opacity-75"
+                  {...field}
+                  id="add-media-form-descr"
+                  aria-invalid={fieldState.invalid}
+                  placeholder="This movie about ..."
+                  autoComplete="off"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+
+          {/* Type */}
+          <div className="flex gap-x-4">
+            <Controller
+              name="type"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
+                    htmlFor="add-media-form-type"
+                  >
+                    Type
+                  </FieldLabel>
+                  <Select
+                    {...field}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    id="add-media-form-type"
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  >
+                    <SelectTrigger>
+                      <SelectValue className="capitalize" placeholder="Movie" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {mediaItemTypes.map((item) => (
+                          <SelectItem
+                            key={item}
+                            value={item}
+                            className="capitalize"
+                          >
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            {/* Genre */}
+            <Controller
+              name="genre"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
+                    htmlFor="add-media-form-genre"
+                  >
+                    Genre
+                  </FieldLabel>
+                  <Select
+                    {...field}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    id="add-media-form-genre"
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  >
+                    <SelectTrigger>
+                      <SelectValue className="capitalize" placeholder="Movie" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {genres.map((item) => (
+                          <SelectItem
+                            key={item}
+                            value={item}
+                            className="capitalize"
+                          >
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+
+          <div className="flex gap-x-4">
+            {/* Release year */}
+            <Controller
+              name="releaseYear"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
+                    htmlFor="add-media-form-release"
+                  >
+                    Release year
+                  </FieldLabel>
+                  <Input
+                    type="number"
+                    className="focus-visible:ring-primary focus-visible:border-primary py-4 placeholder:opacity-75"
+                    {...field}
+                    onChange={(e) => field.onChange(+e.target.value)}
+                    id="add-media-form-release"
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            {/* Duration */}
+            <Controller
+              name="duration"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
+                    htmlFor="add-media-form-duration"
+                  >
+                    Duration(in minutes)
+                  </FieldLabel>
+                  <Input
+                    type="number"
+                    className="focus-visible:ring-primary focus-visible:border-primary py-4 placeholder:opacity-75"
+                    {...field}
+                    id="add-media-form-duration"
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  />
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+
+          <div className="flex gap-x-4">
+            {/* Age rating */}
+            <Controller
+              name="ageRating"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
+                    htmlFor="add-media-form-age"
+                  >
+                    Age rating
+                  </FieldLabel>
+                  <Select
+                    {...field}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    id="add-media-form-age"
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  >
+                    <SelectTrigger>
+                      <SelectValue className="capitalize" placeholder="None" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {ageRatings.map((item) => (
+                          <SelectItem
+                            key={item}
+                            value={item}
+                            className="capitalize"
+                          >
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+
+            {/* Status */}
+            <Controller
+              name="status"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field data-invalid={fieldState.invalid}>
+                  <FieldLabel
+                    className="text-xs font-normal opacity-85 md:text-[14px]"
+                    htmlFor="add-media-form-status"
+                  >
+                    Status
+                  </FieldLabel>
+                  <Select
+                    {...field}
+                    value={field.value}
+                    onValueChange={field.onChange}
+                    id="add-media-form-status"
+                    aria-invalid={fieldState.invalid}
+                    autoComplete="off"
+                  >
+                    <SelectTrigger>
+                      <SelectValue
+                        className="capitalize"
+                        placeholder="Planned"
+                      />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectGroup>
+                        {watchingStatuses.map((item) => (
+                          <SelectItem
+                            key={item}
+                            value={item}
+                            className="capitalize"
+                          >
+                            {item}
+                          </SelectItem>
+                        ))}
+                      </SelectGroup>
+                    </SelectContent>
+                  </Select>
+                  {fieldState.invalid && (
+                    <FieldError errors={[fieldState.error]} />
+                  )}
+                </Field>
+              )}
+            />
+          </div>
+        </FieldGroup>
+
+        {/* Preview */}
+        <div className="mt-4 flex flex-col items-center md:mt-0 md:items-start">
+          <span className="text-muted-foreground mt-4 mb-2 text-xs font-bold tracking-widest uppercase md:mt-0">
+            Preview
+          </span>
+          {/* Img preview */}
+          {img ? (
+            <div className="relative h-60 w-45">
+              <Image
+                src={URL.createObjectURL(img) || ""}
+                alt="preview-image"
+                width={60}
+                height={45}
+                className="h-60 w-45 rounded-2xl object-cover transition hover:opacity-75"
+                onClick={() => imgUploadRef.current?.click()}
+              />
+              <Button
+                className="absolute top-2 right-2"
+                size="icon-sm"
+                variant="destructive"
+                onClick={() => {
+                  if (imgUploadRef.current?.files) {
+                    imgUploadRef.current.files = null;
+                  }
+
+                  setImg(null);
+                }}
+              >
+                <X />
+              </Button>
+            </div>
+          ) : (
+            <div
+              className="from-muted to-muted/30 flex h-60 w-45 items-center justify-center rounded-2xl border bg-linear-60 transition hover:opacity-75"
+              onClick={() => imgUploadRef.current?.click()}
+            >
+              <ImageUp />
+            </div>
+          )}
+          {/* File upload input */}
+          <Input
+            type="file"
+            className="hidden"
+            ref={imgUploadRef}
+            onChange={(e) => {
+              if (e.target.files) {
+                if (
+                  e.target.files[0].type.includes("jpg") ||
+                  e.target.files[0].type.includes("jpeg") ||
+                  e.target.files[0].type.includes("png") ||
+                  e.target.files[0].type.includes("webp")
+                ) {
+                  setImg(e.target.files[0]);
+                }
+              }
+            }}
+          />
+
+          <h6 className="mt-2.5 mb-1 font-semibold">
+            {
+              // eslint-disable-next-line react-hooks/incompatible-library
+              form.watch("title") || "Untitled"
+            }
+          </h6>
+          <div className="text-muted-foreground flex items-center gap-x-1 text-[10px] opacity-75">
+            <span>{form.watch("releaseYear")}</span>
+            <span className="bg-muted-foreground h-0.5 w-0.5 rounded-full"></span>
+            <span>{form.watch("genre")}</span>
+          </div>
+
+          {/* Watch URL */}
+          <Controller
+            name="watchUrl"
+            control={form.control}
+            render={({ field, fieldState }) => (
+              <Field
+                data-invalid={fieldState.invalid}
+                className="-order-1 mt-auto md:order-1"
+              >
+                <FieldLabel
+                  className="text-xs font-normal opacity-85 md:text-[14px]"
+                  htmlFor="add-media-form-watch"
+                >
+                  URL
+                </FieldLabel>
+                <Input
+                  className="focus-visible:ring-primary focus-visible:border-primary py-4 placeholder:opacity-75"
+                  {...field}
+                  id="add-media-form-watch"
+                  aria-invalid={fieldState.invalid}
+                  autoComplete="off"
+                  placeholder="Paste url for watching"
+                />
+                {fieldState.invalid && (
+                  <FieldError errors={[fieldState.error]} />
+                )}
+              </Field>
+            )}
+          />
+        </div>
+      </div>
+
+      <Separator className="my-4" />
+
+      <div className="flex items-center justify-end gap-x-3">
+        <Button
+          type="button"
+          size="lg"
+          variant="ghost"
+          onClick={() => setIsOpenAction(false)}
+        >
+          Cancel
+        </Button>
+        <Button type="submit" size="lg">
+          <Plus /> Add to my list
+        </Button>
+      </div>
+    </form>
+  );
+}
