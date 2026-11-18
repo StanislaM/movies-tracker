@@ -39,12 +39,12 @@ export default async function PersonalStats() {
       <StatCard
         title="Total views"
         stat={`${stats.watched}`}
-        icon={<Clock color={iconColor} />}
+        icon={<Play color={iconColor} />}
       />
       <StatCard
         title="Time well spent"
         stat={`${stats.timeSpent}h`}
-        icon={<Play color={iconColor} />}
+        icon={<Clock color={iconColor} />}
       />
       <StatCard
         title="Collections"
