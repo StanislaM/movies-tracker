@@ -35,7 +35,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
-import { deleteMedia, saveForLater } from "../features/media/media-item";
+import {
+  deleteMedia,
+  saveForLater,
+  updateMedia,
+} from "../features/media/media-item";
 import { toast } from "sonner";
 
 type MediaItemProps = {
@@ -49,7 +53,7 @@ type MediaItemProps = {
   saved: boolean;
   className?: string;
   deleteSelfAction?: (id: string) => void;
-  setSelfSelectedAction?: () => void;
+  setSelfSelectedAction?: (status: WatchingStatus) => void;
 };
 
 export default function MediaItemCard({
@@ -66,10 +70,11 @@ export default function MediaItemCard({
   setSelfSelectedAction,
 }: MediaItemProps) {
   const [img, setImg] = useState(imgUrl);
-  const [watchinStatus, setWatchinStatus] = useState(status);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(saved);
   const [isSaving, setIsSaving] = useState(false);
+  const [watchingStatus, setWatchingStatus] = useState<WatchingStatus>(status);
+  const [isStatusUpdating, setIsStatusUpdating] = useState(false);
 
   const saveForLaterHandler = async () => {
     setIsSaving(true);
@@ -85,6 +90,21 @@ export default function MediaItemCard({
     toast.success(res.data ? "Saved" : "Removed from saved");
     setIsSaved(res.data!);
     setIsSaving(false);
+  };
+
+  const updateStatus = async (newStatus: WatchingStatus) => {
+    setIsStatusUpdating(true);
+
+    const res = await updateMedia(id, { status: newStatus });
+
+    if (!res.isOk) {
+      toast.warning(res.errorMessage);
+      setIsStatusUpdating(false);
+      return;
+    }
+
+    toast.success("Status changed");
+    setIsStatusUpdating(false);
   };
 
   const deleteMediaHandler = async () => {
@@ -194,7 +214,7 @@ export default function MediaItemCard({
               <DropdownMenuItem
                 onClick={() => {
                   if (setSelfSelectedAction) {
-                    setSelfSelectedAction();
+                    setSelfSelectedAction(watchingStatus);
                   }
                 }}
               >
@@ -216,14 +236,18 @@ export default function MediaItemCard({
                 <DropdownMenuPortal>
                   <DropdownMenuSubContent>
                     <DropdownMenuRadioGroup
-                      value={watchinStatus}
-                      onValueChange={setWatchinStatus}
+                      value={watchingStatus}
+                      onValueChange={async (value) => {
+                        setWatchingStatus(value);
+                        await updateStatus(value);
+                      }}
                     >
                       {watchingStatuses.map((item) => (
                         <DropdownMenuRadioItem
                           className="capitalize"
                           key={item}
                           value={item}
+                          disabled={isStatusUpdating}
                         >
                           {item}
                         </DropdownMenuRadioItem>

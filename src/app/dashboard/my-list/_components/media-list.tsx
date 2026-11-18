@@ -3,7 +3,7 @@
 import MediaItemCard from "@/src/components/media-item-card";
 import MideItemInfoModal from "@/src/components/media-item-info-modal";
 import { loadMoreMedia } from "@/src/features/media/media-item";
-import { IMedia, LoadMoreMediaCursor } from "@/src/types";
+import { IMedia, LoadMoreMediaCursor, WatchingStatus } from "@/src/types";
 import { StatusCodes } from "http-status-codes";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -69,7 +69,9 @@ export default function MediaList(props: MediaListProps) {
             key={item.id}
             {...item}
             deleteSelfAction={deleteItem}
-            setSelfSelectedAction={() => setSelectedItem(item)}
+            setSelfSelectedAction={(status: WatchingStatus) =>
+              setSelectedItem({ ...item, status })
+            }
           />
         ))}
         {!isLoading ? (

@@ -4,16 +4,9 @@ import Image from "next/image";
 import { IMedia } from "../types";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "./ui/dialog";
 import { useState } from "react";
-import { Edit, Ellipsis, Info, Play, Star } from "lucide-react";
+import { Edit, Info, Play, Star } from "lucide-react";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "./ui/dropdown-menu";
 
 type MediaItemInfoModalProps = {
   item: IMedia;
@@ -61,43 +54,11 @@ export default function MideItemInfoModal({
                 </span>
               </div>
             )}
-            <div className="flex">
-              <Button
-                variant={`${item.status === "watching" ? "default" : "secondary"}`}
-                className="grow rounded-none rounded-bl-lg border-none text-xs tracking-wide"
-              >
-                Watching
-              </Button>
-              <Button
-                variant={`${item.status === "completed" ? "default" : "secondary"}`}
-                className="grow rounded-none border-none text-xs tracking-wide"
-              >
-                Completed
-              </Button>
-              <DropdownMenu>
-                <DropdownMenuTrigger className="bg-secondary hover:bg-foreground/10 rounded-br-lg transition">
-                  <Ellipsis />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuGroup>
-                    <DropdownMenuItem
-                      className={`${item.status === "planned" && "bg-primary hover:bg-primary/80! transition"}`}
-                    >
-                      Planned
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className={`${item.status === "delayed" && "bg-primary hover:bg-primary/80! transition"}`}
-                    >
-                      Delayed
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className={`${item.status === "dropped" && "bg-primary hover:bg-primary/80! transition"}`}
-                    >
-                      Dropped
-                    </DropdownMenuItem>
-                  </DropdownMenuGroup>
-                </DropdownMenuContent>
-              </DropdownMenu>
+            {/* Status */}
+            <div
+              className={`${item.status === "completed" ? "bg-primary" : item.status === "watching" ? "bg-muted-foreground" : item.status === "dropped" ? "bg-destructive" : "bg-accent"} rounded-b-2xl py-1 text-center tracking-widest uppercase`}
+            >
+              {item.status}
             </div>
           </div>
 
@@ -117,7 +78,7 @@ export default function MideItemInfoModal({
 
             {/* TYPE */}
             <p>
-              <span className="text-primary mr-1 font-semibold tracking-wider">
+              <span className="text-primary mr-1 text-xs font-semibold tracking-wider">
                 Type:
               </span>
               <span className="capitalize">{item.type}</span>
@@ -128,7 +89,7 @@ export default function MideItemInfoModal({
               <span className="text-primary mr-1 text-xs font-semibold tracking-wider">
                 Genre:
               </span>
-              <span>{item.genre}</span>
+              <span className="capitalize">{item.genre}</span>
             </p>
 
             {/* AGE */}
@@ -136,7 +97,7 @@ export default function MideItemInfoModal({
               <span className="text-primary mr-1 text-xs font-semibold tracking-wider">
                 Age rating:
               </span>
-              <span>{item.ageRating || "None"}</span>
+              <span className="capitalize">{item.ageRating || "None"}</span>
             </p>
 
             {/* Duration */}
@@ -144,7 +105,7 @@ export default function MideItemInfoModal({
               <span className="text-primary mr-1 text-xs font-semibold tracking-wider">
                 Duration:
               </span>
-              <span>{item.duration}m</span>
+              <span className="capitalize">{item.duration}m</span>
             </p>
 
             {/* CREATED AT */}
