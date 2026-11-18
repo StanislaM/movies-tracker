@@ -7,7 +7,8 @@ import { IMedia, LoadMoreMediaCursor, WatchingStatus } from "@/src/types";
 import { StatusCodes } from "http-status-codes";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useInView } from "react-intersection-observer";
 import { toast } from "sonner";
 
 type MediaListProps = {
@@ -18,6 +19,7 @@ type MediaListProps = {
 
 export default function MediaList(props: MediaListProps) {
   const router = useRouter();
+  const { ref, inView } = useInView();
   const [items, setItems] = useState(props.mediaItems);
   const [cursor, setCursor] = useState(props.cursor);
   const [hasMore, setHasMore] = useState(props.hasMore);
@@ -56,6 +58,14 @@ export default function MediaList(props: MediaListProps) {
     setItems(items.filter((item) => item.id !== id));
   };
 
+  useEffect(() => {
+    if (inView) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      loadMore();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [inView]);
+
   if (!items || items.length === 0) {
     return <div>No items</div>;
   }
@@ -74,17 +84,20 @@ export default function MediaList(props: MediaListProps) {
             }
           />
         ))}
-        {!isLoading ? (
-          <div
-            className="bg-muted/15 hover:bg-muted/35 flex aspect-3/4 w-full cursor-pointer items-center justify-center rounded-2xl uppercase transition"
-            onClick={loadMore}
-          >
-            Load more
-          </div>
-        ) : (
+        {isLoading ? (
           <div className="flex aspect-3/4 w-full cursor-pointer items-center justify-center">
             <Loader className="h-20 w-20 animate-spin" />
           </div>
+        ) : (
+          hasMore && (
+            <div
+              className="bg-muted/15 hover:bg-muted/35 flex aspect-3/4 w-full cursor-pointer items-center justify-center rounded-2xl uppercase transition"
+              onClick={loadMore}
+              ref={ref}
+            >
+              Load more
+            </div>
+          )
         )}
       </div>
 

@@ -417,7 +417,7 @@ export async function saveForLater(
 export async function loadMoreMedia(
   cursor: LoadMoreMediaCursor,
 ): Promise<FeatureResponse<LoadMoreMediaResponseData>> {
-  const PAGE_LIMIT = 1;
+  const PAGE_LIMIT = 10;
 
   // Session validation
   const session = await getSession();

@@ -29,7 +29,7 @@ const MediaListWrapperContent = async () => {
   }
 
   // Initial fetch
-  const PAGE_LIMIT = 1;
+  const PAGE_LIMIT = 10;
   let mediaItems = null;
   try {
     mediaItems = await db.orm.public.MediaItem.where({
