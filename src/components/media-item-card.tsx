@@ -35,7 +35,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog";
-import { deleteMedia } from "../features/media/media-item";
+import { deleteMedia, saveForLater } from "../features/media/media-item";
 import { toast } from "sonner";
 
 type MediaItemProps = {
@@ -68,6 +68,24 @@ export default function MediaItemCard({
   const [img, setImg] = useState(imgUrl);
   const [watchinStatus, setWatchinStatus] = useState(status);
   const [isOpen, setIsOpen] = useState(false);
+  const [isSaved, setIsSaved] = useState(saved);
+  const [isSaving, setIsSaving] = useState(false);
+
+  const saveForLaterHandler = async () => {
+    setIsSaving(true);
+
+    const res = await saveForLater(id, !isSaved);
+
+    if (!res.isOk) {
+      toast.warning(res.errorMessage);
+      setIsSaving(false);
+      return;
+    }
+
+    toast.success(res.data ? "Saved" : "Removed from saved");
+    setIsSaved(res.data!);
+    setIsSaving(false);
+  };
 
   const deleteMediaHandler = async () => {
     const res = await deleteMedia(id);
@@ -148,11 +166,13 @@ export default function MediaItemCard({
         {/* Save for later */}
         <Button
           size="icon-lg"
-          className={`bg-background/30 hover:bg-background/50 absolute top-4 right-4 h-12 w-12 rounded-full hover:scale-110 ${!saved && "opacity-55"} hover:opacity-100`}
+          className={`bg-background/30 hover:bg-background/50 absolute top-4 right-4 h-12 w-12 rounded-full hover:scale-110 ${!isSaved && "opacity-45"} hover:opacity-100`}
+          onClick={saveForLaterHandler}
+          disabled={isSaving}
         >
           <Bookmark
-            fill={`${saved ? "var(--primary)" : "none"}`}
-            stroke={`${!saved ? "var(--primary)" : "none"}`}
+            fill={`${isSaved ? "var(--primary)" : "none"}`}
+            stroke={`${!isSaved ? "var(--primary)" : "none"}`}
           />
         </Button>
       </div>
