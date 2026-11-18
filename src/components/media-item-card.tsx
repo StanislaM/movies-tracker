@@ -11,6 +11,7 @@ import {
   Info,
   Play,
   SquarePen,
+  Star,
   Trash,
 } from "lucide-react";
 import { Button } from "./ui/button";
@@ -52,6 +53,7 @@ type MediaItemProps = {
   status: WatchingStatus;
   saved: boolean;
   className?: string;
+  userScore: number | null;
   deleteSelfAction?: (id: string) => void;
   setSelfSelectedAction?: (status: WatchingStatus) => void;
 };
@@ -66,6 +68,7 @@ export default function MediaItemCard({
   status,
   saved,
   className,
+  userScore,
   deleteSelfAction,
   setSelfSelectedAction,
 }: MediaItemProps) {
@@ -152,6 +155,15 @@ export default function MediaItemCard({
         </DialogContent>
       </Dialog>
       <div className="group relative mb-2 aspect-3/4 overflow-hidden rounded-2xl border">
+        {/* Score */}
+        <div className="bg-accent-foreground/45 absolute top-4 left-4 z-10 flex h-12 w-12 items-center justify-center rounded-full text-2xl font-semibold">
+          <span className="relative z-2">{userScore ?? "N/A"}</span>
+          <Star
+            className="absolute z-1 h-10 w-10 opacity-70"
+            fill="var(--primary)"
+            stroke="var(--primary)"
+          />
+        </div>
         {/* Image */}
         {img ? (
           <Image
