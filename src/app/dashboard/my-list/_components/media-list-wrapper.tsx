@@ -8,10 +8,10 @@ import { Skeleton } from "@/src/components/ui/skeleton";
 
 const MediaListWrapperSkeleton = async () => {
   return (
-    <div className="flex flex-wrap gap-5">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(220px,1fr))] gap-5">
       {Array.from({ length: 10 }).map((_, i) => (
         <div key={i}>
-          <Skeleton className="mb-3 aspect-3/4 w-60 rounded-2xl" />
+          <Skeleton className="mb-3 aspect-3/4 w-full rounded-2xl" />
           <div className="flex flex-col gap-y-1">
             <Skeleton className="h-4 w-10" />
             <Skeleton className="h-4 w-20" />
