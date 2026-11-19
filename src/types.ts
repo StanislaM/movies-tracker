@@ -52,11 +52,14 @@ export type LoadMoreMediaCursor = {
   id: string;
   createdAt: Date;
 };
+
 export type LoadMoreMediaResponseData = {
   cursor: LoadMoreMediaCursor;
   mediaItems: IMedia[];
   hasMore: boolean;
 };
+
+export type GetContinueWatchingResponseData = {} & IMedia;
 
 export type SqlQueryError = {
   kind: "sql_query";
@@ -91,8 +94,8 @@ export interface IMedia {
 export type MediaItemType = "movie" | "series" | "anime" | "short movie";
 export const mediaItemTypes = ["movie", "series", "anime", "short movie"];
 
-export type AgeRating = "G" | "PG" | "PG-13" | "R" | "NC-17" | "None";
-export const ageRatings = ["G", "PG", "PG-13", "R", "NC-17", "None"];
+export type AgeRating = "G" | "PG" | "PG-13" | "R" | "NC-17" | "none";
+export const ageRatings = ["G", "PG", "PG-13", "R", "NC-17", "none"];
 
 export type Genre =
   | "action"

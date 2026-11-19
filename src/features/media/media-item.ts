@@ -5,6 +5,7 @@ import { db } from "@/src/prisma/db";
 import {
   CreateMediaItemData,
   FeatureResponse,
+  GetContinueWatchingResponseData,
   IMedia,
   LoadMoreMediaCursor,
   LoadMoreMediaResponseData,
@@ -436,7 +437,7 @@ export async function loadMoreMedia(
     let mediaItems = await db.orm.public.MediaItem.where({
       userId: session.userId,
     })
-      .orderBy([(p) => p.createdAt.desc()])
+      .orderBy([(media) => media.createdAt.desc()])
       .cursor({
         id: cursor.id,
         createdAt: Temporal.Instant.from(cursor.createdAt.toISOString()),
@@ -459,6 +460,67 @@ export async function loadMoreMedia(
       isOk: true,
       status: StatusCodes.OK,
       data: { mediaItems: convertedItems, cursor: newCursor, hasMore },
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
+      data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
+// #endregion
+//#region Get Continue Watching
+export async function getContinueWatching(): Promise<
+  FeatureResponse<GetContinueWatchingResponseData>
+> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  try {
+    // Counting media items
+    const { total } = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+      status: "watching",
+    }).aggregate((agg) => ({ total: agg.count() }));
+
+    // If no items
+    if (total === 0) {
+      return {
+        isOk: true,
+        data: null,
+        status: StatusCodes.OK,
+      };
+    }
+
+    const offset = Math.floor(Math.random() * total);
+
+    const [mediaItem] = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+      status: "watching",
+    })
+      .orderBy((media) => media.id.asc())
+      .offset(offset)
+      .limit(1)
+      .all();
+
+    const [convertedItem] = convertMediaItems([mediaItem]);
+
+    return {
+      isOk: true,
+      data: convertedItem,
+      status: StatusCodes.OK,
     };
   } catch (err) {
     console.error(err);

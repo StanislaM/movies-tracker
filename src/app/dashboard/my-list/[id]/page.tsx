@@ -5,6 +5,7 @@ import Link from "next/link";
 import UpdateMedia from "./_components/update-media";
 import { Suspense } from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
+import { redirect } from "next/navigation";
 
 type MediaItemPageProps = {
   params: Promise<{ id: string }>;
@@ -55,7 +56,7 @@ async function MediaItemPageContent({ params }: MediaItemPageProps) {
   const res = await getMedia(id);
 
   if (!res.isOk || !res.data) {
-    return <div>Something went wrong</div>;
+    redirect("/404");
   }
 
   const mediaItem = res.data;
