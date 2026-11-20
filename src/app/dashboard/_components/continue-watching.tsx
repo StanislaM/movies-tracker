@@ -21,10 +21,10 @@ async function ContinueWatchingContent() {
 
   if (res.data === null) {
     return (
-      <div className="mb-4 flex flex-col items-start">
+      <div className="flex flex-col items-start">
         <h3 className="mb-1 font-serif text-4xl">Continue watching</h3>
         <h4 className="text-muted-foreground mb-2 font-serif text-2xl">
-          Nothing here yet. Pick something to watch!
+          Nothing here yet. Pick something to watch
         </h4>
         <div className="bg-muted/75 flex items-center gap-x-1 rounded-xl px-3 py-1.5">
           <Button

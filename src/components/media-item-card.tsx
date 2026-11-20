@@ -223,16 +223,16 @@ export default function MediaItemCard({
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuGroup>
-              <DropdownMenuItem
-                onClick={() => {
-                  if (setSelfSelectedAction) {
+              {setSelfSelectedAction && (
+                <DropdownMenuItem
+                  onClick={() => {
                     setSelfSelectedAction(watchingStatus);
-                  }
-                }}
-              >
-                <Info />
-                Details
-              </DropdownMenuItem>
+                  }}
+                >
+                  <Info />
+                  Details
+                </DropdownMenuItem>
+              )}
               <DropdownMenuItem
                 render={
                   <Link href={`/dashboard/my-list/${id}`}>
