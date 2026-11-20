@@ -1,73 +1,73 @@
 import MediaItemCard from "@/src/components/media-item-card";
-import { Genre, WatchingStatus } from "@/src/types";
+import { Button } from "@/src/components/ui/button";
+import { getSession } from "@/src/features/auth/session";
+import { convertMediaItems } from "@/src/lib/utils";
+import { db } from "@/src/prisma/db";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export default async function SavedForLater() {
-  // HARDCODED DATA===================
-  const savedItems: {
-    id: string;
-    title: string;
-    releaseYear: number;
-    genre: Genre;
-    imgUrl: string | null;
-    watchUrl: string | null;
-    status: WatchingStatus;
-  }[] = [
-    {
-      id: "123456",
-      title: "The ",
-      releaseYear: 2024,
-      genre: "drama",
-      imgUrl: null,
-      watchUrl: "https://yummyanime.tv/index-6",
-      status: "planned",
-    },
-    {
-      id: "123457",
-      title: "The Quiet Hour",
-      releaseYear: 2024,
-      genre: "drama",
-      imgUrl:
-        "https://images.pexels.com/photos/39886343/pexels-photo-39886343.jpeg",
-      watchUrl: "https://yummyanime.tv/index-6",
-      status: "planned",
-    },
-    {
-      id: "123458",
-      title: "The Quiet Hour",
-      releaseYear: 2024,
-      genre: "drama",
-      imgUrl: null,
-      watchUrl: null,
-      status: "planned",
-    },
-    {
-      id: "123459",
-      title: "The Quiet Hour",
-      releaseYear: 2024,
-      genre: "drama",
-      imgUrl: null,
-      watchUrl: null,
-      status: "planned",
-    },
-    {
-      id: "123450",
-      title: "The Quiet Hour",
-      releaseYear: 2024,
-      genre: "drama",
-      imgUrl: null,
-      watchUrl: null,
-      status: "planned",
-    },
-  ];
-  // HARDCODED DATA===================
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  let savedItems = null;
+  try {
+    savedItems = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+      saved: true,
+    })
+      .orderBy([(media) => media.savedAt.desc()])
+      .limit(6)
+      .all();
+  } catch (err) {
+    console.error(err);
+    return <div>Something went wrong</div>;
+  }
+
+  if (!savedItems || savedItems.length === 0) {
+    return (
+      <div className="flex flex-col items-start">
+        <h3 className="mb-1 font-serif text-4xl">Saved for later</h3>
+        <h4 className="text-muted-foreground mb-2 font-serif text-2xl">
+          Nothing here yet. Save something for right night
+        </h4>
+        <div className="bg-muted/75 flex items-center gap-x-1 rounded-xl px-3 py-1.5">
+          <Button
+            nativeButton={false}
+            className="px-4 font-bold tracking-widest uppercase"
+            size="lg"
+            role="link"
+            render={<Link href="/dashboard/my-list">My List</Link>}
+            variant="outline"
+          />
+        </div>
+      </div>
+    );
+  }
+  const hasMore = savedItems.length > 5;
+  savedItems = convertMediaItems(savedItems.slice(0, 5));
 
   return (
     <>
-      <div className="mb-4">
-        <h3 className="mb-1 font-serif text-4xl">Saved for later</h3>
-        <span className="text-muted-foreground text-xs">
-          5 films waiting for the right night
-        </span>
+      <div className="mb-4 flex flex-wrap items-center justify-between">
+        <div>
+          <h3 className="mb-1 font-serif text-4xl">Saved for later</h3>
+          <span className="text-muted-foreground text-xs">
+            {savedItems.length} films waiting for the right night
+          </span>
+        </div>
+        {hasMore && (
+          <Link
+            href="/dashboard/my-list/?saved=1"
+            className="text-accent-foreground flex opacity-45 transition hover:opacity-100"
+          >
+            See all <ChevronRight />
+          </Link>
+        )}
       </div>
 
       {/* Wrapper */}
