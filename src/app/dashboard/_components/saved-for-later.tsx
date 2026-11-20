@@ -3,6 +3,7 @@ import { Button } from "@/src/components/ui/button";
 import { getSession } from "@/src/features/auth/session";
 import { convertMediaItems } from "@/src/lib/utils";
 import { db } from "@/src/prisma/db";
+import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 
@@ -20,7 +21,7 @@ export default async function SavedForLater() {
       saved: true,
     })
       .orderBy([(media) => media.savedAt.desc()])
-      .limit(5)
+      .limit(6)
       .all();
   } catch (err) {
     console.error(err);
@@ -47,16 +48,26 @@ export default async function SavedForLater() {
       </div>
     );
   }
-
-  savedItems = convertMediaItems(savedItems);
+  const hasMore = savedItems.length > 5;
+  savedItems = convertMediaItems(savedItems.slice(0, 5));
 
   return (
     <>
-      <div className="mb-4">
-        <h3 className="mb-1 font-serif text-4xl">Saved for later</h3>
-        <span className="text-muted-foreground text-xs">
-          {savedItems.length} films waiting for the right night
-        </span>
+      <div className="mb-4 flex flex-wrap items-center justify-between">
+        <div>
+          <h3 className="mb-1 font-serif text-4xl">Saved for later</h3>
+          <span className="text-muted-foreground text-xs">
+            {savedItems.length} films waiting for the right night
+          </span>
+        </div>
+        {hasMore && (
+          <Link
+            href="/dashboard/my-list/?saved=1"
+            className="text-accent-foreground flex opacity-45 transition hover:opacity-100"
+          >
+            See all <ChevronRight />
+          </Link>
+        )}
       </div>
 
       {/* Wrapper */}
