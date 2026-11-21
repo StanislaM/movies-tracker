@@ -1,5 +1,9 @@
 import { Card, CardContent } from "@/src/components/ui/card";
+import { getSession } from "@/src/features/auth/session";
+import { convertMinutesToHours } from "@/src/lib/utils";
+import { db } from "@/src/prisma/db";
 import { Clock, Grid2x2, Play } from "lucide-react";
+import { redirect } from "next/navigation";
 
 type StatCardPops = {
   stat: string;
@@ -26,30 +30,62 @@ const StatCard = async ({ icon, stat, title }: StatCardPops) => {
 };
 
 export default async function PersonalStats() {
-  // HARDCODED DATA==============
-  const stats = {
-    watched: 12,
-    timeSpent: 26.3,
-    collectionsCount: 3,
-  };
+  const session = await getSession();
+
+  if (!session) {
+    redirect("/login");
+  }
+
+  let groups = null;
+
+  try {
+    // Get media items grouped by status
+    groups = await db.orm.public.MediaItem.where({ userId: session.userId })
+      .groupBy("status")
+      .aggregate((agg) => ({
+        count: agg.count(),
+        duration: agg.sum("duration"),
+      }));
+  } catch (err) {
+    console.error(err);
+    return <div>Something went wrong</div>;
+  }
+
+  // Stats calculation
+  const stats = groups.reduce(
+    (acc, group) => ({
+      itemsCount: acc.itemsCount + group.count,
+      totalDuration: acc.totalDuration + (group.duration ?? 0),
+      watchedCount:
+        acc.watchedCount + (group.status === "completed" ? group.count : 0),
+    }),
+    {
+      itemsCount: 0,
+      totalDuration: 0,
+      watchedCount: 0,
+    },
+  );
+
   const iconColor = "var(--primary)";
+
+  const convertedDuration = convertMinutesToHours(stats.totalDuration);
 
   return (
     <div className="flex flex-wrap gap-5">
       <StatCard
+        title="Media items"
+        stat={`${stats.itemsCount}`}
+        icon={<Grid2x2 color={iconColor} />}
+      />
+      <StatCard
         title="Total views"
-        stat={`${stats.watched}`}
+        stat={`${stats.watchedCount}`}
         icon={<Play color={iconColor} />}
       />
       <StatCard
         title="Time well spent"
-        stat={`${stats.timeSpent}h`}
+        stat={`${convertedDuration.hours !== 0 ? convertedDuration.hours + "h" : convertedDuration.hours === 0 && convertedDuration.minutes === 0 ? "0h" : ""}${convertedDuration.minutes !== 0 ? convertedDuration.minutes + "m" : ""}`}
         icon={<Clock color={iconColor} />}
-      />
-      <StatCard
-        title="Collections"
-        stat={`${stats.collectionsCount}`}
-        icon={<Grid2x2 color={iconColor} />}
       />
     </div>
   );
