@@ -34,9 +34,9 @@ const StatCard = async ({ icon, stat, title }: StatCardPops) => {
 const PersonalStatsSkeleton = async () => {
   return (
     <div className="flex flex-wrap gap-5">
-      <Skeleton className="h-20 grow" />
-      <Skeleton className="h-20 grow" />
-      <Skeleton className="h-20 grow" />
+      <Skeleton className="h-20 grow rounded-2xl" />
+      <Skeleton className="h-20 grow rounded-2xl" />
+      <Skeleton className="h-20 grow rounded-2xl" />
     </div>
   );
 };
