@@ -5,11 +5,13 @@ import { db } from "@/src/prisma/db";
 import {
   CreateMediaItemData,
   FeatureResponse,
+  Filters,
   GetContinueWatchingResponseData,
   IMedia,
   LoadMoreMediaCursor,
   LoadMoreMediaResponseData,
   updateMediaItemData,
+  WatchingStatus,
 } from "@/src/types";
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "../auth/session";
@@ -417,6 +419,7 @@ export async function saveForLater(
 //#region Load More Media
 export async function loadMoreMedia(
   cursor: LoadMoreMediaCursor,
+  filters: Filters,
 ): Promise<FeatureResponse<LoadMoreMediaResponseData>> {
   const PAGE_LIMIT = 10;
 
@@ -436,6 +439,9 @@ export async function loadMoreMedia(
 
     let mediaItems = await db.orm.public.MediaItem.where({
       userId: session.userId,
+      ...(filters?.type ? { type: filters.type } : {}),
+      ...(filters?.genre ? { genre: filters.genre } : {}),
+      ...(filters?.status ? { status: filters.status as WatchingStatus } : {}),
     })
       .orderBy([(media) => media.createdAt.desc()])
       .cursor({

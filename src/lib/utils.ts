@@ -5,6 +5,7 @@ import {
   IMedia,
   MediaItemType,
   SqlQueryError,
+  watchingStatuses,
 } from "../types";
 import { Contract } from "../prisma/contract";
 
@@ -55,4 +56,23 @@ export const convertMediaItems = (
     ageRating: item.ageRating as AgeRating,
     createdAt: new Date(item.createdAt.epochMilliseconds),
   })) as IMedia[];
+};
+
+export const parseFilters = (
+  params: Record<string, string | string[] | undefined>,
+) => {
+  if (!params) {
+    return null;
+  }
+
+  return {
+    ...(Object.hasOwn(params, "type") ? { type: params.type as string } : {}),
+    ...(Object.hasOwn(params, "genre")
+      ? { genre: params.genre as string }
+      : {}),
+    ...(Object.hasOwn(params, "status") &&
+    watchingStatuses.includes(params.status as string)
+      ? { status: params.status as string }
+      : {}),
+  };
 };

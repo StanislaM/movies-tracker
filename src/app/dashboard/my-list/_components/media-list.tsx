@@ -3,7 +3,12 @@
 import MediaItemCard from "@/src/components/media-item-card";
 import MideItemInfoModal from "@/src/components/media-item-info-modal";
 import { loadMoreMedia } from "@/src/features/media/media-item";
-import { IMedia, LoadMoreMediaCursor, WatchingStatus } from "@/src/types";
+import {
+  Filters,
+  IMedia,
+  LoadMoreMediaCursor,
+  WatchingStatus,
+} from "@/src/types";
 import { StatusCodes } from "http-status-codes";
 import { Loader } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -15,6 +20,7 @@ type MediaListProps = {
   mediaItems: IMedia[];
   cursor: LoadMoreMediaCursor | null;
   hasMore: boolean;
+  filters: Filters;
 };
 
 export default function MediaList(props: MediaListProps) {
@@ -34,7 +40,7 @@ export default function MediaList(props: MediaListProps) {
 
     setIsLoading(true);
 
-    const res = await loadMoreMedia(cursor);
+    const res = await loadMoreMedia(cursor, props.filters);
 
     if (res.isOk && res.data) {
       setCursor(res.data.cursor);

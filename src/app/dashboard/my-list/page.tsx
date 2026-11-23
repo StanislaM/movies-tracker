@@ -1,7 +1,15 @@
+import { parseFilters } from "@/src/lib/utils";
 import Filters from "./_components/filters";
 import MediaListWrapper from "./_components/media-list-wrapper";
 
-export default async function MyListPage() {
+export default async function MyListPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  // Get filters
+  const filters = parseFilters(await searchParams);
+
   return (
     <div className="px-6 lg:px-12">
       {/* Heading */}
@@ -27,7 +35,7 @@ export default async function MyListPage() {
 
       {/* Media items list */}
       <section className="py-7">
-        <MediaListWrapper />
+        <MediaListWrapper filters={filters} />
       </section>
     </div>
   );
