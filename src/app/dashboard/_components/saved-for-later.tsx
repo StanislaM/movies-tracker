@@ -84,7 +84,7 @@ async function SavedForLaterContent() {
         </div>
         {hasMore && (
           <Link
-            href="/dashboard/my-list/?saved=1"
+            href="/dashboard/my-list/?saved=true"
             className="text-accent-foreground flex opacity-45 transition hover:opacity-100"
           >
             See all <ChevronRight />
