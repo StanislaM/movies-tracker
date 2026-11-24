@@ -14,7 +14,7 @@ export default async function MyListPage({
     <div className="px-6 lg:px-12">
       {/* Heading */}
       <section className="pt-8 md:pt-12">
-        <div className="flex items-end justify-between">
+        <div className="flex flex-wrap items-end justify-between gap-y-2">
           <div>
             <span className="text-primary mb-2 block text-xs font-semibold tracking-widest uppercase">
               Personal library
