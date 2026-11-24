@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { convertMediaItems } from "@/src/lib/utils";
 import { Suspense } from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
+import { Filters } from "@/src/types";
 
 const MediaListWrapperSkeleton = async () => {
   return (
@@ -22,7 +23,11 @@ const MediaListWrapperSkeleton = async () => {
   );
 };
 
-const MediaListWrapperContent = async () => {
+type MediaListWrapperProps = {
+  filters: Filters;
+};
+
+async function MediaListWrapperContent({ filters }: MediaListWrapperProps) {
   const session = await getSession();
   if (!session) {
     redirect("/login");
@@ -34,6 +39,7 @@ const MediaListWrapperContent = async () => {
   try {
     mediaItems = await db.orm.public.MediaItem.where({
       userId: session.userId,
+      ...filters,
     })
       .orderBy([(p) => p.createdAt.desc()])
       .limit(PAGE_LIMIT + 1)
@@ -60,19 +66,24 @@ const MediaListWrapperContent = async () => {
   return (
     <>
       <MediaList
-        key={mediaItems.map((item) => item.id).join("-")}
+        key={
+          mediaItems.map((item) => item.id).join("-") + JSON.stringify(filters)
+        }
         mediaItems={convertedItems}
         cursor={cursor}
         hasMore={hasMore}
+        filters={filters}
       />
     </>
   );
-};
+}
 
-export default async function MediaListWrapper() {
+export default async function MediaListWrapper({
+  filters,
+}: MediaListWrapperProps) {
   return (
     <Suspense fallback={<MediaListWrapperSkeleton />}>
-      <MediaListWrapperContent />
+      <MediaListWrapperContent filters={filters} />
     </Suspense>
   );
 }

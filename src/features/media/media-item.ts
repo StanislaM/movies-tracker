@@ -5,6 +5,7 @@ import { db } from "@/src/prisma/db";
 import {
   CreateMediaItemData,
   FeatureResponse,
+  Filters,
   GetContinueWatchingResponseData,
   IMedia,
   LoadMoreMediaCursor,
@@ -417,6 +418,7 @@ export async function saveForLater(
 //#region Load More Media
 export async function loadMoreMedia(
   cursor: LoadMoreMediaCursor,
+  filters: Filters,
 ): Promise<FeatureResponse<LoadMoreMediaResponseData>> {
   const PAGE_LIMIT = 10;
 
@@ -436,6 +438,7 @@ export async function loadMoreMedia(
 
     let mediaItems = await db.orm.public.MediaItem.where({
       userId: session.userId,
+      ...filters,
     })
       .orderBy([(media) => media.createdAt.desc()])
       .cursor({

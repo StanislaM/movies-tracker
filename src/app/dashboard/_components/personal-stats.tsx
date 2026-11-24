@@ -1,9 +1,11 @@
 import { Card, CardContent } from "@/src/components/ui/card";
+import { Skeleton } from "@/src/components/ui/skeleton";
 import { getSession } from "@/src/features/auth/session";
 import { convertMinutesToHours } from "@/src/lib/utils";
 import { db } from "@/src/prisma/db";
 import { Clock, Grid2x2, Play } from "lucide-react";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
 type StatCardPops = {
   stat: string;
@@ -29,7 +31,17 @@ const StatCard = async ({ icon, stat, title }: StatCardPops) => {
   );
 };
 
-export default async function PersonalStats() {
+const PersonalStatsSkeleton = async () => {
+  return (
+    <div className="flex flex-wrap gap-5">
+      <Skeleton className="h-20 grow rounded-2xl" />
+      <Skeleton className="h-20 grow rounded-2xl" />
+      <Skeleton className="h-20 grow rounded-2xl" />
+    </div>
+  );
+};
+
+async function PersonalStatsContent() {
   const session = await getSession();
 
   if (!session) {
@@ -88,5 +100,13 @@ export default async function PersonalStats() {
         icon={<Clock color={iconColor} />}
       />
     </div>
+  );
+}
+
+export default async function PersonalStats() {
+  return (
+    <Suspense fallback={<PersonalStatsSkeleton />}>
+      <PersonalStatsContent />
+    </Suspense>
   );
 }

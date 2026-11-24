@@ -66,6 +66,12 @@ export type SqlQueryError = {
   sqlState: string;
 };
 
+export type Filters = {
+  type?: string;
+  genre?: string;
+  status?: WatchingStatus;
+} | null;
+
 export interface IUser {
   name: string;
   email: string;

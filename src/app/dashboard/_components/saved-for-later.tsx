@@ -1,13 +1,35 @@
 import MediaItemCard from "@/src/components/media-item-card";
 import { Button } from "@/src/components/ui/button";
+import { Skeleton } from "@/src/components/ui/skeleton";
 import { getSession } from "@/src/features/auth/session";
 import { convertMediaItems } from "@/src/lib/utils";
 import { db } from "@/src/prisma/db";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { redirect } from "next/navigation";
+import { Suspense } from "react";
 
-export default async function SavedForLater() {
+const SavedForLaterSkeleton = async () => {
+  return (
+    <>
+      <div>
+        <Skeleton className="mb-4 h-10 w-full max-w-[320px]" />
+        <Skeleton className="mb-3 h-6 w-full max-w-50" />
+      </div>
+      <div className="scrollbar-thumb-primary scrollbar-track-muted-foreground w-full min-w-0 overflow-x-auto pb-3 xl:pb-0">
+        <div className="flex w-max gap-x-5 xl:w-full">
+          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+        </div>
+      </div>
+    </>
+  );
+};
+
+async function SavedForLaterContent() {
   const session = await getSession();
 
   if (!session) {
@@ -62,7 +84,7 @@ export default async function SavedForLater() {
         </div>
         {hasMore && (
           <Link
-            href="/dashboard/my-list/?saved=1"
+            href="/dashboard/my-list/?saved=true"
             className="text-accent-foreground flex opacity-45 transition hover:opacity-100"
           >
             See all <ChevronRight />
@@ -83,5 +105,13 @@ export default async function SavedForLater() {
         </div>
       </div>
     </>
+  );
+}
+
+export default async function SavedForLater() {
+  return (
+    <Suspense fallback={<SavedForLaterSkeleton />}>
+      <SavedForLaterContent />
+    </Suspense>
   );
 }
