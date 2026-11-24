@@ -75,5 +75,6 @@ export const parseFilters = (
     watchingStatuses.includes(params.status as string)
       ? { status: params.status as WatchingStatus }
       : {}),
+    ...(Object.hasOwn(params, "saved") ? { saved: true } : {}),
   };
 };
