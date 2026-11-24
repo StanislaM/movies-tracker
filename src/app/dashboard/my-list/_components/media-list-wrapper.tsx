@@ -5,7 +5,7 @@ import { redirect } from "next/navigation";
 import { convertMediaItems } from "@/src/lib/utils";
 import { Suspense } from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
-import { Filters, WatchingStatus } from "@/src/types";
+import { Filters } from "@/src/types";
 
 const MediaListWrapperSkeleton = async () => {
   return (
@@ -39,9 +39,7 @@ async function MediaListWrapperContent({ filters }: MediaListWrapperProps) {
   try {
     mediaItems = await db.orm.public.MediaItem.where({
       userId: session.userId,
-      ...(filters?.type ? { type: filters.type } : {}),
-      ...(filters?.genre ? { genre: filters.genre } : {}),
-      ...(filters?.status ? { status: filters.status as WatchingStatus } : {}),
+      ...filters,
     })
       .orderBy([(p) => p.createdAt.desc()])
       .limit(PAGE_LIMIT + 1)

@@ -69,7 +69,7 @@ export type SqlQueryError = {
 export type Filters = {
   type?: string;
   genre?: string;
-  status?: string;
+  status?: WatchingStatus;
 } | null;
 
 export interface IUser {

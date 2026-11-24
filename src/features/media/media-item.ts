@@ -11,7 +11,6 @@ import {
   LoadMoreMediaCursor,
   LoadMoreMediaResponseData,
   updateMediaItemData,
-  WatchingStatus,
 } from "@/src/types";
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "../auth/session";
@@ -439,9 +438,7 @@ export async function loadMoreMedia(
 
     let mediaItems = await db.orm.public.MediaItem.where({
       userId: session.userId,
-      ...(filters?.type ? { type: filters.type } : {}),
-      ...(filters?.genre ? { genre: filters.genre } : {}),
-      ...(filters?.status ? { status: filters.status as WatchingStatus } : {}),
+      ...filters,
     })
       .orderBy([(media) => media.createdAt.desc()])
       .cursor({

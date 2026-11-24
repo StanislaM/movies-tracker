@@ -5,6 +5,7 @@ import {
   IMedia,
   MediaItemType,
   SqlQueryError,
+  WatchingStatus,
   watchingStatuses,
 } from "../types";
 import { Contract } from "../prisma/contract";
@@ -72,7 +73,7 @@ export const parseFilters = (
       : {}),
     ...(Object.hasOwn(params, "status") &&
     watchingStatuses.includes(params.status as string)
-      ? { status: params.status as string }
+      ? { status: params.status as WatchingStatus }
       : {}),
   };
 };
