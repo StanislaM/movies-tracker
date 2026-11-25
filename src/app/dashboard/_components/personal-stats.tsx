@@ -67,7 +67,9 @@ async function PersonalStatsContent() {
   const stats = groups.reduce(
     (acc, group) => ({
       itemsCount: acc.itemsCount + group.count,
-      totalDuration: acc.totalDuration + (group.duration ?? 0),
+      totalDuration:
+        acc.totalDuration +
+        (group.status === "completed" ? group.duration || 0 : 0),
       watchedCount:
         acc.watchedCount + (group.status === "completed" ? group.count : 0),
     }),
