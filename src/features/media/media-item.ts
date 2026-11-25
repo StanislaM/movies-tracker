@@ -15,8 +15,9 @@ import {
 import { StatusCodes } from "http-status-codes";
 import { getSession } from "../auth/session";
 import { Temporal } from "@js-temporal/polyfill";
-import { convertMediaItems } from "@/src/lib/utils";
+import { buildTitleSearchPattern, convertMediaItems } from "@/src/lib/utils";
 import { createMediaSchema, updateMediaSchema } from "./validation";
+import z from "zod";
 
 //#region Create Media Item
 export async function createMediaItem(
@@ -631,6 +632,70 @@ export async function getMedia(id: string): Promise<FeatureResponse<IMedia>> {
       isOk: false,
       status: StatusCodes.INTERNAL_SERVER_ERROR,
       data: null,
+      errorMessage: "Something went wrong",
+    };
+  }
+}
+// #endregion
+// #region Seacrh Media
+export async function searchMedia(
+  title: string,
+): Promise<FeatureResponse<IMedia[]>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
+  // Validation
+  const searchStringSchema = z
+    .string()
+    .trim()
+    .min(1, "Search string cannot be empty")
+    .max(128, "Search string must be at most 128 characters");
+
+  const validationResult = searchStringSchema.safeParse(title);
+
+  if (!validationResult.success) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.BAD_REQUEST,
+      errorMessage: "Wrong search string",
+    };
+  }
+
+  try {
+    // Building search pattern
+    const pattern = buildTitleSearchPattern(title);
+
+    const mediaItems = await db.orm.public.MediaItem.where({
+      userId: session.userId,
+    })
+      .where((media) => media.title.ilike(pattern))
+      .orderBy((media) => media.title.asc())
+      .limit(20)
+      .all();
+
+    const convertedItems = convertMediaItems(mediaItems);
+
+    return {
+      isOk: true,
+      status: StatusCodes.OK,
+      data: convertedItems,
+    };
+  } catch (err) {
+    console.error(err);
+
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.INTERNAL_SERVER_ERROR,
       errorMessage: "Something went wrong",
     };
   }

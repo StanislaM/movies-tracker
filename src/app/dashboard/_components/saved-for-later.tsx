@@ -18,11 +18,11 @@ const SavedForLaterSkeleton = async () => {
       </div>
       <div className="scrollbar-thumb-primary scrollbar-track-muted-foreground w-full min-w-0 overflow-x-auto pb-3 xl:pb-0">
         <div className="flex w-max gap-x-5 xl:w-full">
-          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
-          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
-          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
-          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
-          <Skeleton className="h-200 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-100 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-100 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-100 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-100 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
+          <Skeleton className="h-100 w-60 shrink-0 rounded-2xl xl:w-[calc(20%-16px)]" />
         </div>
       </div>
     </>

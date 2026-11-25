@@ -78,3 +78,9 @@ export const parseFilters = (
     ...(Object.hasOwn(params, "saved") ? { saved: true } : {}),
   };
 };
+
+export const buildTitleSearchPattern = (searchString: string): string => {
+  const escaped = searchString.replace(/[\\%_]/g, "\\$&");
+
+  return escaped.length < 3 ? `${escaped}%` : `%${escaped}%`;
+};
