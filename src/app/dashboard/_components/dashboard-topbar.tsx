@@ -7,11 +7,14 @@ import {
 } from "@/src/components/ui/input-group";
 import { Kbd } from "@/src/components/ui/kbd";
 import { SearchIcon } from "lucide-react";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import AddMediaModal from "./add-media-modal";
+import { useDebounce } from "@/src/hooks/use-debounce";
 
 export default function DashboardTopbar() {
   const inputRef = useRef<HTMLInputElement>(null);
+  const [searchString, setSearchString] = useState("");
+  const debouncedSearchString = useDebounce(searchString);
 
   useEffect(() => {
     const handleKeyPress = (e: globalThis.KeyboardEvent) => {
@@ -30,6 +33,15 @@ export default function DashboardTopbar() {
     };
   }, [inputRef]);
 
+  useEffect(() => {
+    if (!debouncedSearchString) {
+      return;
+    }
+    console.log(debouncedSearchString);
+    // Handle Search
+    // search(debouncedSearchString);
+  }, [debouncedSearchString]);
+
   return (
     <nav className="flex w-full items-center justify-between gap-x-4 border-b px-3 py-3 sm:px-7 md:gap-x-0 lg:px-12">
       {/* Search movie input */}
@@ -38,6 +50,8 @@ export default function DashboardTopbar() {
           placeholder="Search your movies"
           className="w-full text-sm md:w-sm"
           ref={inputRef}
+          value={searchString}
+          onChange={(e) => setSearchString(e.currentTarget.value)}
         />
         <InputGroupAddon>
           <SearchIcon className="text-muted-foreground" />
