@@ -33,6 +33,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 import z, { ZodError } from "zod";
+import NewPasswordForm from "./new-password-form";
 
 type UserItem = {
   name: string;
@@ -42,13 +43,17 @@ type UserItem = {
 export default function UserItem({ email, name }: UserItem) {
   const router = useRouter();
   const isMobile = useIsMobile();
+  // Name
   const [isNameModalOpen, setIsNameModalOpen] = useState(false);
   const [newName, setNewName] = useState("");
   const [isNamePending, setIsNamePending] = useState(false);
   const [newNameError, setNewNameError] = useState<ZodError<string> | null>(
     null,
   );
-
+  // Password
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
+  const [isPasswordPending, setIsPasswordPending] = useState(false);
+  // Log out
   const [isLogoutPending, setIsLogoutPending] = useState(false);
 
   // Update name
@@ -79,8 +84,6 @@ export default function UserItem({ email, name }: UserItem) {
     setIsNamePending(false);
     router.refresh();
   };
-
-  // Update password
 
   // Logout
   const logoutHandler = async () => {
@@ -137,7 +140,11 @@ export default function UserItem({ email, name }: UserItem) {
                 >
                   <Pen /> Change name
                 </DropdownMenuItem>
-                <DropdownMenuItem className="mb-1">
+                <DropdownMenuItem
+                  className="mb-1"
+                  onClick={() => setIsPasswordModalOpen(true)}
+                  disabled={isPasswordPending}
+                >
                   <Lock /> Change password
                 </DropdownMenuItem>
                 <Separator />
@@ -197,6 +204,22 @@ export default function UserItem({ email, name }: UserItem) {
               {isNamePending ? <Loader className="animate-spin" /> : "Change"}
             </Button>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Change password dialog */}
+      <Dialog open={isPasswordModalOpen} onOpenChange={setIsPasswordModalOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Change password</DialogTitle>
+          </DialogHeader>
+          {/* New password form */}
+
+          <NewPasswordForm
+            setIsPasswordModalOpenAction={setIsPasswordModalOpen}
+            isPasswordPending={isPasswordPending}
+            setIsPasswordPendingAction={setIsPasswordPending}
+          />
         </DialogContent>
       </Dialog>
     </SidebarGroup>

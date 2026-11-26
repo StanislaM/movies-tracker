@@ -18,7 +18,10 @@ import z from "zod";
 
 const loginFormSchema = z.object({
   email: z.email("Enter a valid email address"),
-  password: z.string().min(1, "Please enter password"),
+  password: z
+    .string()
+    .min(1, "Please enter password")
+    .max(255, "To many symbols"),
 });
 
 export default function LoginForm() {
@@ -33,7 +36,6 @@ export default function LoginForm() {
   });
 
   async function onSubmit(data: z.infer<typeof loginFormSchema>) {
-    console.log(data);
     const body: LoginData = {
       email: data.email,
       password: data.password,
