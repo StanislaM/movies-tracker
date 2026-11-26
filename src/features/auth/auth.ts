@@ -13,7 +13,7 @@ import {
 import { db } from "@/src/prisma/db";
 import { isSqlQueryError } from "@/src/lib/utils";
 import { cookies } from "next/headers";
-import { createSession } from "./session";
+import { createSession, getSession } from "./session";
 
 //#region Register
 export async function register(
@@ -36,13 +36,13 @@ export async function register(
   });
 
   // Validating
-  const validatedFields = registerFormSchema.safeParse(data);
+  const validationResult = registerFormSchema.safeParse(data);
 
   // If fields failed vaidation
-  if (!validatedFields.success) {
+  if (!validationResult.success) {
     return {
       isOk: false,
-      status: 400,
+      status: StatusCodes.BAD_REQUEST,
       errorMessage: "Validation error",
       data: null,
     };
@@ -171,6 +171,17 @@ export async function login(
 // #endregion
 //#region Logout
 export async function logout(): Promise<FeatureResponse<null>> {
+  // Session validation
+  const session = await getSession();
+  if (!session) {
+    return {
+      isOk: false,
+      data: null,
+      status: StatusCodes.UNAUTHORIZED,
+      errorMessage: "Unauthorized",
+    };
+  }
+
   // Get session token
   const cookieStore = await cookies();
   const sessionToken = cookieStore.get("session")?.value;
@@ -188,6 +199,7 @@ export async function logout(): Promise<FeatureResponse<null>> {
   // Remove session from db
   try {
     await db.orm.public.Session.where({
+      userId: session.userId,
       tokenHash: sessionToken,
     }).delete();
 

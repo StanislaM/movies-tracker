@@ -56,7 +56,6 @@ export default function RegisterForm() {
   });
 
   async function onSubmit(data: z.infer<typeof registerFormSchema>) {
-    console.log(data);
     const body: RegisterData = {
       email: data.email,
       name: data.name,

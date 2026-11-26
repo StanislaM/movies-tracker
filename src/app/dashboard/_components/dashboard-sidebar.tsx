@@ -77,7 +77,7 @@ export default function DashboardSidebar({ user }: { user: IUser }) {
         </SidebarGroup>
       </SidebarContent>
       <Separator className="mx-5 w-[calc(100%-40px)]!" />
-      <SidebarFooter>
+      <SidebarFooter className="px-0">
         <UserItem {...user} />
       </SidebarFooter>
     </Sidebar>
