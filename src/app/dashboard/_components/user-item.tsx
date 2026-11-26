@@ -53,6 +53,10 @@ export default function UserItem({ email, name }: UserItem) {
 
   // Update name
   const updateNameHandler = async () => {
+    if (newName === name) {
+      toast.warning("This is your current name");
+      return;
+    }
     // Validation
     const validationResult = updateUserNameSchema.safeParse(newName);
     if (!validationResult.success) {
