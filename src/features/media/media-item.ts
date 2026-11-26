@@ -35,10 +35,10 @@ export async function createMediaItem(
   }
 
   // Validating
-  const validatedFields = createMediaSchema.safeParse(data);
+  const validationResult = createMediaSchema.safeParse(data);
 
   // If fields failed vaidation
-  if (!validatedFields.success) {
+  if (!validationResult.success) {
     return {
       isOk: false,
       status: 400,

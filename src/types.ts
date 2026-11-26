@@ -26,6 +26,11 @@ export type updateMediaItemData = Omit<Partial<CreateMediaItemData>, "img"> & {
   userScore?: number | null;
 };
 
+export type updatePasswordData = {
+  oldPassword: string;
+  newPassword: string;
+};
+
 export type FeatureResponse<T> = {
   isOk: boolean;
   status: number | string;
