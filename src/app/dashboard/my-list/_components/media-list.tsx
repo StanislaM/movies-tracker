@@ -2,6 +2,7 @@
 
 import MediaItemCard from "@/src/components/media-item-card";
 import MideItemInfoModal from "@/src/components/media-item-info-modal";
+import NoItems from "@/src/components/no-items";
 import { loadMoreMedia } from "@/src/features/media/media-item";
 import {
   Filters,
@@ -73,7 +74,7 @@ export default function MediaList(props: MediaListProps) {
   }, [inView]);
 
   if (!items || items.length === 0) {
-    return <div>No items</div>;
+    return <NoItems />;
   }
 
   return (
