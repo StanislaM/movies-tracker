@@ -6,6 +6,7 @@ import { convertMediaItems } from "@/src/lib/utils";
 import { Suspense } from "react";
 import { Skeleton } from "@/src/components/ui/skeleton";
 import { Filters } from "@/src/types";
+import Error from "@/src/components/error";
 
 const MediaListWrapperSkeleton = async () => {
   return (
@@ -46,7 +47,7 @@ async function MediaListWrapperContent({ filters }: MediaListWrapperProps) {
       .all();
   } catch (err) {
     console.error(err);
-    return <div>Something went wrong</div>;
+    return <Error />;
   }
 
   const hasMore = mediaItems.length > PAGE_LIMIT;

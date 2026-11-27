@@ -115,7 +115,7 @@ export default function DashboardTopbar() {
         </InputGroup>
 
         <ComboboxContent>
-          <ComboboxEmpty>No items found.</ComboboxEmpty>
+          {searchString && <ComboboxEmpty>No items found</ComboboxEmpty>}
           <ComboboxList>
             {(item: IMedia) => (
               <ComboboxItem key={item.id} value={item} className="py-1.5">

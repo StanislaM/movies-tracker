@@ -18,7 +18,7 @@ export async function encryptToken(userId: string) {
     .setIssuedAt()
     .setIssuer(ISSUER)
     .setAudience(AUDIENCE)
-    .setExpirationTime("1d")
+    .setExpirationTime("30d")
     .sign(new TextEncoder().encode(jwtSecret));
 }
 

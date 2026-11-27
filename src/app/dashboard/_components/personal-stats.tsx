@@ -1,3 +1,4 @@
+import Error from "@/src/components/error";
 import { Card, CardContent } from "@/src/components/ui/card";
 import { Skeleton } from "@/src/components/ui/skeleton";
 import { getSession } from "@/src/features/auth/session";
@@ -60,7 +61,7 @@ async function PersonalStatsContent() {
       }));
   } catch (err) {
     console.error(err);
-    return <div>Something went wrong</div>;
+    return <Error />;
   }
 
   // Stats calculation

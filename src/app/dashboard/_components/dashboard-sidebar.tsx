@@ -13,7 +13,7 @@ import {
   SidebarMenuItem,
 } from "@/src/components/ui/sidebar";
 import { IUser } from "@/src/types";
-import { Bookmark, Check, House, Settings } from "lucide-react";
+import { Bookmark, House } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
 import UserItem from "./user-item";
 
@@ -27,11 +27,6 @@ const menuItems = [
     title: "My list",
     icon: <Bookmark />,
     link: "/dashboard/my-list",
-  },
-  {
-    title: "Watched",
-    icon: <Check />,
-    link: "/dashboard/watched",
   },
 ];
 
@@ -61,20 +56,7 @@ export default function DashboardSidebar({ user }: { user: IUser }) {
           </SidebarMenu>
         </SidebarGroup>
 
-        {/* Collections */}
-
-        <SidebarGroup className="mt-auto">
-          <SidebarMenu className="px-3">
-            <SidebarMenuItem>
-              <SidebarMenuButton
-                className={`${currentUrl.includes("/dashboard/settings") ? "bg-muted" : "opacity-70"} px-5 py-6`}
-                onClick={() => router.push("/dashboard/settings")}
-              >
-                <Settings /> Settings
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroup>
+        {/* User menu item */}
       </SidebarContent>
       <Separator className="mx-5 w-[calc(100%-40px)]!" />
       <SidebarFooter className="px-0">
