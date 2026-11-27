@@ -1,3 +1,4 @@
+import Error from "@/src/components/error";
 import MediaItemCard from "@/src/components/media-item-card";
 import { Button } from "@/src/components/ui/button";
 import { Skeleton } from "@/src/components/ui/skeleton";
@@ -47,7 +48,7 @@ async function SavedForLaterContent() {
       .all();
   } catch (err) {
     console.error(err);
-    return <div>Something went wrong</div>;
+    return <Error />;
   }
 
   if (!savedItems || savedItems.length === 0) {
