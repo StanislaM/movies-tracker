@@ -42,6 +42,7 @@ import {
   updateMedia,
 } from "../features/media/media-item";
 import { toast } from "sonner";
+import { usePathname, useRouter } from "next/navigation";
 
 type MediaItemProps = {
   id: string;
@@ -72,6 +73,8 @@ export default function MediaItemCard({
   deleteSelfAction,
   setSelfSelectedAction,
 }: MediaItemProps) {
+  const router = useRouter();
+  const pathname = usePathname();
   const [img, setImg] = useState(imgUrl);
   const [isOpen, setIsOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(saved);
@@ -118,6 +121,9 @@ export default function MediaItemCard({
       return;
     }
 
+    if (pathname === "/dashboard") {
+      router.refresh();
+    }
     toast.success("Successfully deleted");
     setIsOpen(false);
     if (deleteSelfAction) {
